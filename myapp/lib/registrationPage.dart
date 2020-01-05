@@ -166,7 +166,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 				onTap: (){
 					if (_formKey.currentState.validate()) {
 						_formKey.currentState.save();
-						AppData().loginUser.login(AppData().tempRegistration);
+						AppData().loginUser().login(AppData().tempRegistration);
 						Navigator.push(
 							context,
 							MaterialPageRoute(builder: (context) => CheckoutPage()),

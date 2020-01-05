@@ -28,7 +28,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 	}
 
 	Widget buildBody() {
-		bool isLogin = AppData().loginUser.isLoggedIn;
+		bool isLogin = AppData().loginUser().isLoggedIn;
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: ListView(
@@ -74,7 +74,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 	}
 
 	Widget buildUserAvatar() {
-		bool isLogin = AppData().loginUser.isLoggedIn;
+		bool isLogin = AppData().loginUser().isLoggedIn;
 		return Container(
 			height: 50,
 			padding: EdgeInsets.symmetric(horizontal: 16),
@@ -85,7 +85,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 						child: Icon(Icons.person),
 					),
 					SizedBox(width: 16),
-					isLogin ? Text(AppData().loginUser.loginPhoneNumber) :
+					isLogin ? Text(AppData().loginUser().loginPhoneNumber) :
 					OutlineButton(
 						borderSide: BorderSide(
 							color: Colors.grey,
@@ -119,11 +119,11 @@ class UserProfilePageState extends State <UserProfilePage> {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("我的共创积分: ${AppData().loginUser.credits}"),
+							Text("我的共创积分: ${AppData().loginUser().credits}"),
 							OutlineButton(
 								child: Text("提现"),
 								onPressed: (){
-									if(!AppData().loginUser.isLoggedIn) {
+									if(!AppData().loginUser().isLoggedIn) {
 										Navigator.push(
 											context,
 											MaterialPageRoute(builder: (context) => WithdrawView()),
@@ -135,9 +135,9 @@ class UserProfilePageState extends State <UserProfilePage> {
 							),
 						],
 					),
-					Text("我的总算力: ${AppData().loginUser.totalCalculatorPower} U"),
+					Text("我的总算力: ${AppData().loginUser().totalCalculatorPower} U"),
 					SizedBox(height: 16),
-					Text("每天可以挖矿生产约 ${AppData().loginUser.creditsCanGenerateToday} 共创积分"),
+					Text("每天可以挖矿生产约 ${AppData().loginUser().creditsCanGenerateToday} 共创积分"),
 				],
 			),
 		);
@@ -162,7 +162,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 
 	Widget buildBottomLogoutButtons() {
 		var width = MediaQuery.of(context).size.width - 32;
-		bool isLogin = AppData().loginUser.isLoggedIn;
+		bool isLogin = AppData().loginUser().isLoggedIn;
 		return isLogin ?  Align(
 			alignment: Alignment.bottomCenter,
 			child: Container(
@@ -172,7 +172,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 					color: Colors.red,
 					onPressed: (){
 						setState(() {
-							AppData().loginUser.logout();
+							AppData().loginUser().logout();
 						});
 					}, child: Text("退出")
 				),

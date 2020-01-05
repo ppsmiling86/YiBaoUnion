@@ -1,19 +1,24 @@
-class AppData {
+import 'dart:html';
 
-	User loginUser;
+class AppData {
 	Registration tempRegistration = Registration("", "", "");
 	WithdrawRequest withdrawRequest = WithdrawRequest("", 0);
 
 	static final AppData sharedInstance = AppData._internal();
 
 	factory AppData() {
-		if(sharedInstance.loginUser == null) {
-			sharedInstance.loginUser = User(false, "","", 0, 0, 0, []);
-		}
 		return sharedInstance;
 	}
 
 	AppData._internal();
+
+	User loginUser() {
+		Storage localStorage = window.localStorage;
+		if(localStorage["loginPhoneNumber"] != null && localStorage["loginPhoneNumber"].isNotEmpty) {
+			return User(true, localStorage["loginPhoneNumber"], localStorage["inviteCode"], 1000, 1000, 1000, []);
+		}
+		return User(false, "", "", 0, 0, 0, []);
+	}
 
 }
 
@@ -38,15 +43,15 @@ class User {
 		);
 
 	void login(Registration reg) {
-		this.loginPhoneNumber = reg.mobile;
-		this.isLoggedIn = true;
-		this.inviteCode = reg.inviteCode;
+		Storage localStorage = window.localStorage;
+		localStorage["loginPhoneNumber"] = reg.mobile;
+		localStorage["inviteCode"] = reg.inviteCode;
 	}
 
 	void logout() {
-		this.loginPhoneNumber = "";
-		this.isLoggedIn = false;
-		this.inviteCode = "";
+		Storage localStorage = window.localStorage;
+		localStorage["loginPhoneNumber"] = "";
+		localStorage["inviteCode"] = "";
 	}
 }
 

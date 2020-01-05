@@ -36,8 +36,7 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 
 	Widget buildWithdrawRecord(WithdrawRecord record) {
 		return Container(
-			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-			height: 100,
+			height: 99,
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				children: <Widget>[

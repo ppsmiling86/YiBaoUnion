@@ -67,7 +67,7 @@ class HomeViewState extends State<HomeView> {
 						  	color: ColorTools.green1AAD19,
 						  	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
 						  	onPressed: (){
-						  		if (AppData().loginUser.isLoggedIn) {
+						  		if (AppData().loginUser().isLoggedIn) {
 						  			Navigator.push(
 						  				context,
 						  				MaterialPageRoute(builder: (context) => CheckoutPage()),
