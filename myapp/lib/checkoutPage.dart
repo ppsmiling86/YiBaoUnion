@@ -6,6 +6,7 @@ import 'waiverPage.dart';
 import 'userProfile.dart';
 import 'AppData.dart';
 import 'registrationPage.dart';
+import 'center_view.dart';
 
 class CheckoutPage extends StatefulWidget {
 	@override
@@ -17,48 +18,24 @@ class CheckoutPage extends StatefulWidget {
 class CheckoutPageState extends State <CheckoutPage> {
 	@override
   void initState() {
-    if(AppData().loginUser == null) {
-		AppData().loginUser = User(false, "","", 0, 0, 0, []);
-	}
     super.initState();
   }
 
 	@override
 	Widget build(BuildContext context) {
-		var width = MediaQuery.of(context).size.width - 32;
 		return Scaffold(
 			appBar: AppBar(
 				leading:
 				Builder(builder: (context) =>
 					IconButton(
-						icon: CircleAvatar(
-							child: Icon(Icons.person),
-						),
+						icon: Icon(Icons.arrow_left),
 						onPressed: (){
-							Scaffold.of(context).openDrawer();
+							Navigator.of(context).pop();
 						})
 				),
 			),
 			drawer: UserProfilePage(),
-			body: ListView(
-				children: <Widget>[
-					Image(
-						width: width,
-						fit: BoxFit.fill,
-						image: AssetImage(ImageTools.placeholder1)
-					),
-					Image(
-						width: width,
-						fit: BoxFit.fill,
-						image: AssetImage(ImageTools.placeholder2)
-					),
-					Image(
-						width: width,
-						fit: BoxFit.fill,
-						image: AssetImage(ImageTools.placeholder3)
-					),
-				],
-			),
+			body: CenterView(),
 			bottomNavigationBar: buildProductDetail(),
 		);
 	}
@@ -205,17 +182,10 @@ class CheckoutPageState extends State <CheckoutPage> {
 								color: ColorTools.green1AAD19,
 								shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
 								onPressed: (){
-									if (AppData().loginUser.isLoggedIn) {
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => WaiverPage()),
-										);
-									} else {
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => RegistrationPage()),
-										);
-									}
+									Navigator.push(
+										context,
+										MaterialPageRoute(builder: (context) => WaiverPage()),
+									);
 								},
 								child: Text("确认租赁",style: TextStyle(color: Colors.white),)
 							)

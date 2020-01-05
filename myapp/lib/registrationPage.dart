@@ -7,7 +7,6 @@ import 'AppData.dart';
 class RegistrationPage extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
-		// TODO: implement createState
 		return RegistrationPageState();
 	}
 }
