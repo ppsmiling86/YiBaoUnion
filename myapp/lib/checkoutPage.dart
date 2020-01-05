@@ -4,8 +4,7 @@ import 'imageTools.dart';
 import 'colorTools.dart';
 import 'waiverPage.dart';
 import 'userProfile.dart';
-import 'AppData.dart';
-import 'registrationPage.dart';
+import 'stringTools.dart';
 import 'center_view.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -16,10 +15,12 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class CheckoutPageState extends State <CheckoutPage> {
+	final amountController = TextEditingController();
 	@override
-  void initState() {
-    super.initState();
-  }
+	void initState() {
+		super.initState();
+		amountController.text = "1000";
+	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 					IconButton(
 						icon: Icon(Icons.arrow_left),
 						onPressed: (){
-							Navigator.of(context).pop();
+							Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 						})
 				),
 			),
@@ -102,25 +103,38 @@ class CheckoutPageState extends State <CheckoutPage> {
 											GestureDetector(
 												child: Text("   -   ",style: TextStyle(color: Colors.grey)),
 												onTap: (){
-
+													var current = int.parse(amountController.text);
+													if (current > 0) {
+														var sub = current-1;
+														amountController.text = "$sub";
+													}
 												},
 											),
 											Container(
 												width: 40,
 												child: TextFormField(
+													controller: amountController,
 													textAlign: TextAlign.center,
 													onSaved: (String value) {
 
 													},
 													validator: (String value) {
-														return value.contains('@') ? 'Do not use the @ char.' : null;
+														value = value.trim();
+														if (!StringTools.ValidateNumber(value)) {
+															return "请输入正确的数字";
+														}
+														return null;
 													},
 												),
 											),
 											GestureDetector(
 												child: Text("   +   ",style: TextStyle(color: Colors.grey)),
 												onTap: (){
-
+													var current = int.parse(amountController.text);
+													if (current < 1000000) {
+														var add = current+1;
+														amountController.text = "$add";
+													}
 												},
 											),
 										],
@@ -171,7 +185,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 							textColor: Colors.grey,
 							child: Text("取消"),
 							onPressed: (){
-								Navigator.of(context).pop();
+								Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 							},
 						),
 					),

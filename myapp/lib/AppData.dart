@@ -1,5 +1,3 @@
-
-
 class AppData {
 
 	User loginUser;
@@ -15,7 +13,6 @@ class AppData {
 	}
 
 	AppData._internal();
-
 
 }
 

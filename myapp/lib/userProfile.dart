@@ -83,6 +83,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 					CircleAvatar(
 						child: Icon(Icons.person),
 					),
+					isLogin ? Text(AppData().loginUser.loginPhoneNumber) :
 					OutlineButton(
 						borderSide: BorderSide(
 							color: Colors.grey,
@@ -90,12 +91,10 @@ class UserProfilePageState extends State <UserProfilePage> {
 							width: 2,
 						),
 						onPressed: (){
-							if (!isLogin) {
-								gotoRegistrationPage();
-							}
+							gotoRegistrationPage();
 						},
-						child: Text(isLogin ? AppData().loginUser.loginPhoneNumber : "未登录")),
-
+						child: Text("未登录")
+					),
 				],
 			),
 		);

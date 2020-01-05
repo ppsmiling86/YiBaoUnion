@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'waiverPage.dart';
+import 'checkoutPage.dart';
 import 'stringTools.dart';
 import 'AppData.dart';
 
@@ -13,7 +13,15 @@ class RegistrationPage extends StatefulWidget {
 
 class RegistrationPageState extends State <RegistrationPage> {
 	final _formKey = GlobalKey<FormState>();
+	var phoneController = TextEditingController();
 
+	DateTime lastSendSmsTime;
+
+	@override
+  void dispose() {
+    super.dispose();
+	phoneController.dispose();
+  }
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
@@ -25,17 +33,15 @@ class RegistrationPageState extends State <RegistrationPage> {
 					},
 				),
 				centerTitle: true,
-				title: Text("注册"),
+				title: Text("登陆"),
 			),
 			body: Container(
-				height: 400,
+				height: 500,
 				child: Form(
 					key: _formKey,
 					child: ListView(
 						children: <Widget>[
-							SizedBox(height: 40),
 							buildPhoneTextField(),
-							SizedBox(height: 40),
 							buildSendVerifyCodeField(),
 						],
 					),
@@ -45,10 +51,12 @@ class RegistrationPageState extends State <RegistrationPage> {
 		);
 	}
 
+
+
 	Widget buildPhoneTextField() {
 		var width = MediaQuery.of(context).size.width - 32;
 		return Container(
-			height: 60,
+			height: 110,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,6 +64,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 					Container(
 						width: width,
 						child: TextFormField(
+							controller: phoneController,
 							decoration: InputDecoration(
 								icon: Icon(Icons.phone),
 								labelText: '手机号:',
@@ -80,7 +89,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 	Widget buildSendVerifyCodeField() {
 		var width = MediaQuery.of(context).size.width - 150;
 		return Container(
-			height: 60,
+			height: 110,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,7 +116,42 @@ class RegistrationPageState extends State <RegistrationPage> {
 					OutlineButton(
 						child: Text("发送验证码"),
 						onPressed: (){
+							if (!StringTools.ValidateSmsCode(phoneController.value.text)) {
+								showDialog(
+									context: context,
+									builder: (BuildContext context){
+										return AlertDialog(
+											content: Text("请输入正确的手机号码"),
+										);
+									}
+								);
+								return;
+							}
 
+							if (lastSendSmsTime != null) {
+								var oneMinutesAgo = DateTime.now().subtract( Duration(seconds: 60));
+								if (!lastSendSmsTime.isBefore(oneMinutesAgo)) {
+									showDialog(
+										context: context,
+										builder: (BuildContext context){
+											return AlertDialog(
+												content: Text("1分钟之内请勿连续操作"),
+											);
+										}
+									);
+									return;
+								}
+							}
+
+							lastSendSmsTime = DateTime.now();
+							showDialog(
+								context: context,
+								builder: (BuildContext context){
+									return AlertDialog(
+										content: Text("验证码发送成功"),
+									);
+								}
+							);
 						}),
 				],
 			),
@@ -125,7 +169,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 						AppData().loginUser.login(AppData().tempRegistration);
 						Navigator.push(
 							context,
-							MaterialPageRoute(builder: (context) => WaiverPage()),
+							MaterialPageRoute(builder: (context) => CheckoutPage()),
 						);
 					}
 				},

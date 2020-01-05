@@ -49,7 +49,7 @@ class HomeViewState extends State<HomeView> {
 						  mainAxisAlignment: MainAxisAlignment.spaceBetween,
 					  	crossAxisAlignment: CrossAxisAlignment.start,
 					  	children: <Widget>[
-					  		Text("今日人组: 30%"),
+					  		Text("今日认租: 30%"),
 					  		LinearPercentIndicator(
 					  			width: 100.0,
 					  			lineHeight: 8.0,

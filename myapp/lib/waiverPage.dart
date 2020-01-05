@@ -57,7 +57,7 @@ class WaiverPageState extends State <WaiverPage> {
 					height: 50,
 					color: Colors.blueAccent,
 					child: Center(
-						child: Text("下单",style: TextStyle(color: Colors.white)),
+						child: Text("同意",style: TextStyle(color: Colors.white)),
 					),
 				),
 			),
