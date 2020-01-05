@@ -5,6 +5,7 @@ import 'orderlist_view.dart';
 import 'registrationPage.dart';
 import 'withdraw_view.dart';
 import 'inviteFriends.dart';
+import 'withdraw_history_view.dart';
 
 class UserProfilePage extends StatefulWidget {
 	@override
@@ -50,7 +51,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 						if(isLogin) {
 							Navigator.push(
 								context,
-								MaterialPageRoute(builder: (context) => WithdrawView()),
+								MaterialPageRoute(builder: (context) => WithdrawHistoryView()),
 							);
 						} else {
 							gotoRegistrationPage();
@@ -78,11 +79,12 @@ class UserProfilePageState extends State <UserProfilePage> {
 			height: 50,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Row(
-				mainAxisAlignment: MainAxisAlignment.spaceBetween,
+				mainAxisAlignment: MainAxisAlignment.start,
 				children: <Widget>[
 					CircleAvatar(
 						child: Icon(Icons.person),
 					),
+					SizedBox(width: 16),
 					isLogin ? Text(AppData().loginUser.loginPhoneNumber) :
 					OutlineButton(
 						borderSide: BorderSide(
@@ -109,30 +111,40 @@ class UserProfilePageState extends State <UserProfilePage> {
 
 	Widget buildUserSummary() {
 		return Container(
-			height: 100,
+			height: 110,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Column(
+				crossAxisAlignment: CrossAxisAlignment.start,
 				children: <Widget>[
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("我的总算力: ${AppData().loginUser.totalCalculatorPower}U"),
+							Text("我的共创积分: ${AppData().loginUser.credits}"),
 							OutlineButton(
 								child: Text("提现"),
 								onPressed: (){
-
+									if(!AppData().loginUser.isLoggedIn) {
+										Navigator.push(
+											context,
+											MaterialPageRoute(builder: (context) => WithdrawView()),
+										);
+									} else {
+										gotoRegistrationPage();
+									}
 								},
 							),
 						],
 					),
-					Text("每天可以挖矿生产约${AppData().loginUser.creditsCanGenerateToday}共创积分"),
+					Text("我的总算力: ${AppData().loginUser.totalCalculatorPower} U"),
+					SizedBox(height: 16),
+					Text("每天可以挖矿生产约 ${AppData().loginUser.creditsCanGenerateToday} 共创积分"),
 				],
 			),
 		);
 	}
 
 	Widget buildSingleRow(String title,Function onTap) {
-		return GestureDetector(
+		return InkWell(
 			onTap: onTap,
 			child: Container(
 				height: 40,

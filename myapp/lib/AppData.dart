@@ -2,6 +2,7 @@ class AppData {
 
 	User loginUser;
 	Registration tempRegistration = Registration("", "", "");
+	WithdrawRequest withdrawRequest = WithdrawRequest("", 0);
 
 	static final AppData sharedInstance = AppData._internal();
 
@@ -96,4 +97,13 @@ class WithdrawRecord {
 		}
 		return "";
 	}
+}
+
+class WithdrawRequest {
+	String walletAddress;
+	double amount;
+	WithdrawRequest(
+		this.walletAddress,
+		this.amount,
+		);
 }

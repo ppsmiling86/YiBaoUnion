@@ -43,8 +43,8 @@ class HomeViewState extends State<HomeView> {
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				children: <Widget>[
-					Container(
-						width: 150,
+					Expanded(
+						flex: 1,
 					  child: Column(
 						  mainAxisAlignment: MainAxisAlignment.spaceBetween,
 					  	crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,26 +59,28 @@ class HomeViewState extends State<HomeView> {
 					  	],
 					  ),
 					),
-					Container(
-						width: 200,
-						height: 50,
-						child: FlatButton(
-							color: ColorTools.green1AAD19,
-							shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
-							onPressed: (){
-								if (AppData().loginUser.isLoggedIn) {
-									Navigator.push(
-										context,
-										MaterialPageRoute(builder: (context) => CheckoutPage()),
-									);
-								} else {
-									Navigator.push(
-										context,
-										MaterialPageRoute(builder: (context) => RegistrationPage()),
-									);
-								}
-							},
-							child: Text("立即租赁算力",style: TextStyle(color: Colors.white))
+					Expanded(
+						flex: 2,
+						child: SizedBox(
+							height: 60,
+						  child: FlatButton(
+						  	color: ColorTools.green1AAD19,
+						  	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
+						  	onPressed: (){
+						  		if (AppData().loginUser.isLoggedIn) {
+						  			Navigator.push(
+						  				context,
+						  				MaterialPageRoute(builder: (context) => CheckoutPage()),
+						  			);
+						  		} else {
+						  			Navigator.push(
+						  				context,
+						  				MaterialPageRoute(builder: (context) => RegistrationPage()),
+						  			);
+						  		}
+						  	},
+						  	child: Text("立即租赁算力",style: TextStyle(color: Colors.white))
+						  ),
 						),
 					),
 				],
