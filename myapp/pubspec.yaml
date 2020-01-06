@@ -26,8 +26,13 @@ dependencies:
   percent_indicator: ^2.1.1+1
   ant_icons: ^1.0.0
   http: ^0.12.0+3
+  json_annotation: ^3.0.0
+  dio: ^3.0.4
+  rxdart: ^0.22.6
 
 dev_dependencies:
+  json_serializable: ^3.2.3
+  build_runner: ^1.7.0
   flutter_test:
     sdk: flutter
 
