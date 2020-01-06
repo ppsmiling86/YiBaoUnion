@@ -26,40 +26,76 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 				title: Text("提现记录"),
 				centerTitle: true,
 			),
-			body: ListView.builder(
+			body: ListView.separated(
+				itemBuilder: (contest,index) => buildWithdrawRecord(withdrawDataList[index]),
+				separatorBuilder: (context, index) => Divider(color: Colors.black),
 				itemCount: withdrawDataList.length,
-				itemBuilder: (context, index) {
-				return buildWithdrawRecord(withdrawDataList[index]);
-			}),
+			)
 		);
 	}
 
 	Widget buildWithdrawRecord(WithdrawRecord record) {
-		return Container(
-			height: 99,
-			child: Row(
-				mainAxisAlignment: MainAxisAlignment.spaceBetween,
-				children: <Widget>[
-					Expanded(
-						flex: 1,
-						child: Column(
-							mainAxisAlignment: MainAxisAlignment.spaceBetween,
-							crossAxisAlignment: CrossAxisAlignment.start,
-							children: <Widget>[
-								Text("共创积分: ${record.credits}"),
-								Text(record.dateTime),
-							],
+		return SizedBox(
+			width: double.infinity,
+			height: 90,
+			child: Container(
+				padding: EdgeInsets.symmetric(horizontal: 16),
+				child: Row(
+					mainAxisAlignment: MainAxisAlignment.spaceBetween,
+					children: <Widget>[
+						Expanded(
+							flex: 1,
+							child: SizedBox(
+								height: 50,
+								child: Column(
+									mainAxisAlignment: MainAxisAlignment.spaceBetween,
+									crossAxisAlignment: CrossAxisAlignment.start,
+									children: <Widget>[
+										Text("共创积分: ${record.credits}"),
+										Text(record.dateTime),
+									],
+								),
+							),
 						),
-					),
-					Expanded(
-						flex: 1,
-						child: Container(
-							height: 60,
-							child: Center(child: Text(record.buildStatusStr()))
+						Expanded(
+							flex: 1,
+							child: SizedBox(
+								height: 50,
+								child: Container(
+									child: Center(child: Text(record.buildStatusStr()))
+								),
+							),
 						),
-					),
-				],
-			),
+					],
+				),
+			)
+
+//		  Container(
+//		  	height: 99,
+//		  	child: Row(
+//		  		mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//		  		children: <Widget>[
+//		  			Expanded(
+//		  				flex: 1,
+//		  				child: Column(
+//		  					mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//		  					crossAxisAlignment: CrossAxisAlignment.start,
+//		  					children: <Widget>[
+//		  						Text("共创积分: ${record.credits}"),
+//		  						Text(record.dateTime),
+//		  					],
+//		  				),
+//		  			),
+//		  			Expanded(
+//		  				flex: 1,
+//		  				child: Container(
+//		  					height: 60,
+//		  					child: Center(child: Text(record.buildStatusStr()))
+//		  				),
+//		  			),
+//		  		],
+//		  	),
+//		  ),
 		);
 	}
 }

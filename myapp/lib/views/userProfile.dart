@@ -123,7 +123,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 							OutlineButton(
 								child: Text("提现"),
 								onPressed: (){
-									if(!AppData().loginUser().isLoggedIn) {
+									if(AppData().loginUser().isLoggedIn) {
 										Navigator.push(
 											context,
 											MaterialPageRoute(builder: (context) => WithdrawView()),

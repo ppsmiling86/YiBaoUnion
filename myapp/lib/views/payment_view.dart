@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/tools/imageTools.dart';
-
+import 'package:ant_icons/ant_icons.dart';
 
 class PaymentView extends StatefulWidget {
 	@override
@@ -108,8 +108,17 @@ class PaymentViewState extends State {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-//							Icon(AntIcons.alipay_square,size: 25),
-							Text("支付宝"),
+							SizedBox(
+								width: 200,
+							  child: Row(
+								  mainAxisAlignment: MainAxisAlignment.start,
+							  	children: <Widget>[
+							  		Icon(AntIcons.alipay_square,size: 25),
+							  		SizedBox(width: 16),
+							  		Text("支付宝"),
+							  	],
+							  ),
+							),
 							Checkbox(
 								value: selectPaymentType == PaymentType.aliPay,
 								onChanged: (bool value) {
@@ -126,8 +135,16 @@ class PaymentViewState extends State {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-//							Icon(AntIcons.wechat,size: 25),
-							Text("微信支付"),
+							SizedBox(
+								width: 200,
+							  child: Row(
+							  	children: <Widget>[
+							  		Icon(AntIcons.wechat,size: 25),
+							  		SizedBox(width: 16),
+							  		Text("微信支付"),
+							  	],
+							  ),
+							),
 							Checkbox(
 								value: selectPaymentType == PaymentType.wechatPay,
 								onChanged: (bool value) {

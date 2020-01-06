@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+part 'Response.g.dart';
 // flutter packages pub run build_runner watch --delete-conflicting-outputs
 
 @JsonSerializable()
@@ -34,8 +35,9 @@ class CatalogEntity extends Object {
 	final int type;
 	final String url;
 	final int state;
+
 	CatalogEntity(this.id, this.enName, this.chName, this.rank, this.type,
-		this.url, this.state);
+		this.url, this.state,);
 
 	factory CatalogEntity.fromJson(Map<String, dynamic> json) =>
 		_$CatalogEntityFromJson(json);

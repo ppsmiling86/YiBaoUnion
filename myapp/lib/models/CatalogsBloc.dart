@@ -7,6 +7,7 @@ class CatalogsBloc {
 	final BehaviorSubject<CatalogResponse> _subject =
 	BehaviorSubject<CatalogResponse>();
 	void getCatalogs() async {
+		print("start get catalogs");
 		CatalogResponse response = await _repository.getCatalogs();
 		_subject.sink.add(response);
 	}
