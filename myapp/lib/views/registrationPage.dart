@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'checkoutPage.dart';
-import 'stringTools.dart';
-import 'AppData.dart';
+import 'package:myapp/tools/stringTools.dart';
+import 'package:myapp/models/AppData.dart';
 
 class RegistrationPage extends StatefulWidget {
 	@override

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'imageTools.dart';
-import 'colorTools.dart';
-import 'waiverPage.dart';
-import 'userProfile.dart';
-import 'stringTools.dart';
-import 'center_view.dart';
+import 'package:myapp/tools/imageTools.dart';
+import 'package:myapp/tools/colorTools.dart';
+import 'package:myapp/views/waiverPage.dart';
+import 'package:myapp/views/userProfile.dart';
+import 'package:myapp/tools/stringTools.dart';
+import 'package:myapp/custom_views/center_view.dart';
 
 class CheckoutPage extends StatefulWidget {
 	@override

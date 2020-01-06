@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'AppData.dart';
-import 'colorTools.dart';
-import 'stringTools.dart';
-import 'center_view.dart';
-import 'imageTools.dart';
+import 'package:myapp/models/AppData.dart';
+import 'package:myapp/tools/colorTools.dart';
+import 'package:myapp/tools/stringTools.dart';
+import 'package:myapp/custom_views/center_view.dart';
+import 'package:myapp/tools/imageTools.dart';
 class WithdrawView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {

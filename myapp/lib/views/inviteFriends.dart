@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'imageTools.dart';
-import 'colorTools.dart';
+import 'package:myapp/tools/imageTools.dart';
+import 'package:myapp/tools/colorTools.dart';
 
 class InviteFriendsView extends StatefulWidget {
 	@override

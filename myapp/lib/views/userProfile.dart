@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/AppData.dart';
+import 'package:myapp/models/AppData.dart';
 import 'orderlist_view.dart';
 import 'registrationPage.dart';
 import 'withdraw_view.dart';

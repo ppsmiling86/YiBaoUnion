@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/center_view.dart';
+import 'package:myapp/custom_views/center_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'userProfile.dart';
 import 'registrationPage.dart';
-import 'AppData.dart';
+import 'package:myapp/models/AppData.dart';
 import 'checkoutPage.dart';
-import 'colorTools.dart';
+import 'package:myapp/tools/colorTools.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class HomeView extends StatefulWidget {
 	@override
@@ -16,6 +19,11 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> {
+	@override
+  void initState() {
+    super.initState();
+  }
+
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(

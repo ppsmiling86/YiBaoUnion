@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'imageTools.dart';
+import 'package:myapp/tools/imageTools.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'colorTools.dart';
+import 'package:myapp/tools/colorTools.dart';
 import 'payment_view.dart';
 
 class OrderListView extends StatefulWidget {

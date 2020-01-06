@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'imageTools.dart';
+import 'package:myapp/tools/imageTools.dart';
 
 class CenterView extends StatefulWidget {
 	@override
