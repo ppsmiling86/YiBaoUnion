@@ -6,44 +6,34 @@ part of 'Response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CatalogResponse _$CatalogResponseFromJson(Map<String, dynamic> json) {
-  return CatalogResponse(
-    json['message'] as String,
-    json['code'] as int,
-    (json['data'] as List)
-        ?.map((e) => e == null
-            ? null
-            : CatalogEntity.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+UserLoginResponse _$UserLoginResponseFromJson(Map<String, dynamic> json) {
+  return UserLoginResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : UserEntity.fromJson(json['data'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$CatalogResponseToJson(CatalogResponse instance) =>
+Map<String, dynamic> _$UserLoginResponseToJson(UserLoginResponse instance) =>
     <String, dynamic>{
-      'message': instance.message,
+      'msg': instance.msg,
       'code': instance.code,
-      'data': instance.catalogEntities,
+      'data': instance.data,
     };
 
-CatalogEntity _$CatalogEntityFromJson(Map<String, dynamic> json) {
-  return CatalogEntity(
-    json['id'] as String,
-    json['enName'] as String,
-    json['chName'] as String,
-    json['rank'] as int,
-    json['type'] as int,
-    json['url'] as String,
-    json['state'] as int,
+UserEntity _$UserEntityFromJson(Map<String, dynamic> json) {
+  return UserEntity(
+    json['uid'] as String,
+    json['name'] as String,
+    json['upperId'] as String,
   );
 }
 
-Map<String, dynamic> _$CatalogEntityToJson(CatalogEntity instance) =>
+Map<String, dynamic> _$UserEntityToJson(UserEntity instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'enName': instance.enName,
-      'chName': instance.chName,
-      'rank': instance.rank,
-      'type': instance.type,
-      'url': instance.url,
-      'state': instance.state,
+      'uid': instance.uid,
+      'name': instance.name,
+      'upperId': instance.upperId,
     };

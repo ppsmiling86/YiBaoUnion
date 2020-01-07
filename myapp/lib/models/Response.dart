@@ -4,41 +4,34 @@ part 'Response.g.dart';
 // flutter packages pub run build_runner watch --delete-conflicting-outputs
 
 @JsonSerializable()
-class CatalogResponse extends Object {
-	final String message;
-	final int code;
+class UserLoginResponse extends Object {
+	final String msg;
+	final String code;
+	final UserEntity data;
 
-	@JsonKey(name: 'data')
-	final List<CatalogEntity> catalogEntities;
-
-	CatalogResponse(
-		this.message,
+	UserLoginResponse(
+		this.msg,
 		this.code,
-		this.catalogEntities,
+		this.data,
 		);
 
-	factory CatalogResponse.fromJson(Map<String, dynamic> json) =>
-		_$CatalogResponseFromJson(json);
+	factory UserLoginResponse.fromJson(Map<String, dynamic> json) =>
+		_$UserLoginResponseFromJson(json);
 
-	CatalogResponse.withError(String error)
-		: catalogEntities = List(),
-			code = -1,
-			message = error;
+	UserLoginResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
 }
 
 @JsonSerializable()
-class CatalogEntity extends Object {
-	final String id;
-	final String enName;
-	final String chName;
-	final int rank;
-	final int type;
-	final String url;
-	final int state;
+class UserEntity extends Object {
+	final String uid;
+	final String name;
+	final String upperId;
 
-	CatalogEntity(this.id, this.enName, this.chName, this.rank, this.type,
-		this.url, this.state,);
+	UserEntity(this.uid, this.name, this.upperId);
 
-	factory CatalogEntity.fromJson(Map<String, dynamic> json) =>
-		_$CatalogEntityFromJson(json);
+	factory UserEntity.fromJson(Map<String, dynamic> json) =>
+		_$UserEntityFromJson(json);
 }

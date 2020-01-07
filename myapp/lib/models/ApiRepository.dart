@@ -3,7 +3,7 @@ import 'ApiProvider.dart';
 
 class ApiRepository {
 	ApiProvider _apiProvider = ApiProvider();
-	Future<CatalogResponse> getCatalogs() {
-		return _apiProvider.getAllCatalogs();
+	Future<UserLoginResponse> userLogin() {
+		return _apiProvider.userLogin();
 	}
 }

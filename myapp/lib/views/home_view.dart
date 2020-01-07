@@ -8,7 +8,7 @@ import 'registrationPage.dart';
 import 'package:myapp/models/AppData.dart';
 import 'checkoutPage.dart';
 import 'package:myapp/tools/colorTools.dart';
-import 'package:myapp/models/CatalogsBloc.dart';
+import 'package:myapp/models/UserBloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeView extends StatefulWidget {
@@ -19,11 +19,11 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> {
-	final bloc = CatalogsBloc();
+	final bloc = UserBloc();
 	@override
 	void initState() {
 		super.initState();
-		bloc.getCatalogs();
+		bloc.userLogin();
 	}
 
 	@override
@@ -63,7 +63,7 @@ class HomeViewState extends State<HomeView> {
 		);
 	}
 
-	Widget buildCatalogResponse(CatalogResponse response) {
+	Widget buildCatalogResponse(UserLoginResponse response) {
 		print(response);
 		return Container(
 			child: Center(child: Text("test:)")),
