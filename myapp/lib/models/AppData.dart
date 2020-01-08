@@ -2,7 +2,7 @@ import 'dart:html';
 
 class AppData {
 	Registration tempRegistration = Registration("", "", "");
-	WithdrawRequest withdrawRequest = WithdrawRequest("", 0);
+	WithdrawRequest withdrawRequest = WithdrawRequest("", 0,"");
 
 	static final AppData sharedInstance = AppData._internal();
 
@@ -107,8 +107,10 @@ class WithdrawRecord {
 class WithdrawRequest {
 	String walletAddress;
 	double amount;
+	String verifyCode;
 	WithdrawRequest(
 		this.walletAddress,
 		this.amount,
+		this.verifyCode,
 		);
 }

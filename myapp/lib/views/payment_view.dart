@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'package:ant_icons/ant_icons.dart';
+import 'package:myapp/views/orderlist_view.dart';
+import 'contact_customer_service.dart';
+import 'package:flutter/cupertino.dart';
 
 class PaymentView extends StatefulWidget {
 	@override
@@ -203,7 +206,85 @@ class PaymentViewState extends State {
 										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
 										color: Colors.red,
 										onPressed: (){
-
+											showDialog(context: context,
+												barrierDismissible: false,
+												builder: (_) => AlertDialog(
+													title: Text("等待支付结果"),
+													content: SizedBox(
+														width: 40,
+														height: 40,
+														child: Center(
+														  child: Container(
+														  	width: 20,
+														  	height: 20,
+														  	child: CircularProgressIndicator(),
+														  ),
+														),
+													),
+													actions: <Widget>[
+														FlatButton(onPressed: (){
+															Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+															Navigator.push(context,
+																MaterialPageRoute(builder: (context) => OrderListView())
+															);
+														}, child: Text("支付成功")),
+														FlatButton(onPressed: (){
+															Navigator.push(context,
+																MaterialPageRoute(builder: (context) => ContactCustomerServiceView())
+															);
+														}, child: Text("支付遇到问题?")),
+													],
+												),
+											);
+//											showDialog(
+//												context: context,
+//												barrierDismissible: false,
+//												builder: (BuildContext context) {
+//													return Center(
+//													  child: SizedBox(
+//													  	width: 300,
+//													    height: 100,
+//													    child: Container(
+//													    	child: Column(
+//																mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//													    		children: <Widget>[
+//													    			Row(
+//													    				children: <Widget>[
+//													    					Text("等待支付结果",style: TextStyle(fontSize: 16)),
+//													    				],
+//													    			),
+//													    			Row(
+//													    				children: <Widget>[
+//																			SizedBox(
+//																				width:24,
+//																				height: 24,
+//																				child: Container(
+//																					child: CircularProgressIndicator()
+//																				)
+//																			),
+//													    				],
+//													    			),
+//													    			Row(
+//													    				children: <Widget>[
+//													    					FlatButton(onPressed: (){
+//
+//													    					}, child: Text("等待支付结果")),
+//													    					OutlineButton(onPressed: (){
+//													    						Navigator.push(
+//													    							context,
+//													    							MaterialPageRoute(builder: (context) => ContactCustomerServiceView()),
+//													    						);
+//													    					},
+//													    					child: Text("支付遇到问题?"),),
+//													    				],
+//													    			),
+//
+//													    		],
+//													    	),
+//													    ),
+//													  ),
+//													);
+//												});
 										},
 										child: Text("立即支付",style: TextStyle(color: Colors.white)),
 									),

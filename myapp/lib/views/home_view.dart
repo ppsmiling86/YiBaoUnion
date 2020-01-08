@@ -78,23 +78,6 @@ class HomeViewState extends State<HomeView> {
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				children: <Widget>[
 					Expanded(
-						flex: 1,
-						child: Column(
-							mainAxisAlignment: MainAxisAlignment.spaceBetween,
-							crossAxisAlignment: CrossAxisAlignment.start,
-							children: <Widget>[
-								Text("今日认租: 30%"),
-								LinearPercentIndicator(
-									width: 100.0,
-									lineHeight: 8.0,
-									percent: 0.3,
-									progressColor: Colors.blue,
-								),
-							],
-						),
-					),
-					Expanded(
-						flex: 2,
 						child: SizedBox(
 							height: 60,
 							child: FlatButton(

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'checkoutPage.dart';
 import 'package:myapp/tools/stringTools.dart';
 import 'package:myapp/models/AppData.dart';
+import 'package:myapp/models/UserBloc.dart';
+
 
 class RegistrationPage extends StatefulWidget {
 	@override

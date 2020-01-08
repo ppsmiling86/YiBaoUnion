@@ -5,6 +5,10 @@ import 'package:myapp/tools/colorTools.dart';
 import 'package:myapp/tools/stringTools.dart';
 import 'package:myapp/custom_views/center_view.dart';
 import 'package:myapp/tools/imageTools.dart';
+import 'package:myapp/tools/stringTools.dart';
+import 'manage_address_view.dart';
+import 'package:toast/toast.dart';
+
 class WithdrawView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -13,7 +17,19 @@ class WithdrawView extends StatefulWidget {
 }
 
 class WithdrawViewState extends State <WithdrawView> {
+	final _mainFormKey = GlobalKey<FormState>();
+	final _dialogFormKey = GlobalKey<FormState>();
 	final walletController = TextEditingController();
+	final amountController = TextEditingController();
+	final verifyController = TextEditingController();
+
+	@override
+  void dispose() {
+    walletController.dispose();
+    amountController.dispose();
+    verifyController.dispose();
+    super.dispose();
+  }
 
 	@override
 	Widget build(BuildContext context) {
@@ -23,84 +39,189 @@ class WithdrawViewState extends State <WithdrawView> {
 					Navigator.of(context).pop();
 				}),
 				title: Text("提现"),
+				centerTitle: true,
+				actions: <Widget>[
+					GestureDetector(
+						onTap: (){
+							Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => ManageAddressView()),
+							);
+						},
+					  child: SizedBox(
+					  	width: 80,
+					    child: Container(
+					    	child: Center(child: Text("管理地址")),
+					    ),
+					  ),
+					),
+				],
 			),
 			body: buildBody(),
-			bottomNavigationBar: buildBottomLogoutButtons(),
+			bottomNavigationBar: buildBottomWithdrawButton(),
 		);
 	}
 
 	Widget buildWallet() {
 		return SizedBox(
 			width: double.infinity,
-		  height: 120,
+			height: 120,
+			child: Container(
+				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+				child: Column(
+					children: <Widget>[
+						Row(
+							mainAxisAlignment: MainAxisAlignment.start,
+							children: <Widget>[
+								Expanded(
+								  child: TextFormField(
+								  	controller: walletController,
+								  	decoration: InputDecoration(
+								  		icon: Icon(Icons.account_balance_wallet),
+								  		labelText: '共创钱包地址:',
+								  		hintText: "请输入或长按粘贴地址"
+								  	),
+								  	onSaved: (String value) {
+								  		AppData().withdrawRequest.walletAddress = value;
+								  	},
+								  	validator: (String value) {
+								  		if (value.isEmpty) {
+								  			return '请输入提币地址';
+								  		}
+								  		return null;
+								  	},
+								  ),
+								),
+								SizedBox(
+									width: 80,
+									height: 30,
+									child: Container(child: Center(child: OutlineButton(onPressed: (){
+										showDialog(
+											barrierDismissible: false,
+											context: context,
+											builder: (BuildContext context){
+												return AlertDialog(
+													title: Text("请选择提现地址"),
+													content: Center(
+													  child: SizedBox(
+													  	width: 300,
+													    height: 300,
+													    child: Container(
+													  	  padding: EdgeInsets.symmetric(horizontal: 16),
+													    	child: ListView.separated(
+													    		itemBuilder: (contest,index) => buildAddressItem(),
+													    		separatorBuilder: (context, index) => Divider(color: Colors.black),
+													    		itemCount: 2,
+													    	),
+													    ),
+													  ),
+													),
+												);
+											}
+										);
+									},child: Text("选择"))))
+								),
+							],
+						),
+					],
+				),
+			),
+		);
+	}
+
+	Widget buildAddressItem() {
+		return InkWell(
+			onTap: (){
+				Navigator.pop(context);
+				setState(() {
+					walletController.text = "xxxxxxxxxxxx";
+				});
+			},
 		  child: Container(
-		  	padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-		  	child: Column(
+		  	child: Row(
+		  		mainAxisAlignment: MainAxisAlignment.start,
 		  		children: <Widget>[
-		  			TextFormField(
-		  				controller: walletController,
-		  				decoration: InputDecoration(
-		  					icon: Icon(Icons.account_balance_wallet),
-		  					labelText: '共创钱包地址:',
-		  					hintText: "请输入或长按粘贴地址"
-		  				),
-		  				onSaved: (String value) {
-		  					AppData().withdrawRequest.walletAddress = value;
-		  				},
-		  				validator: (String value) {
-		  					if (value.isEmpty) {
-		  						return '请输入提币地址';
-		  					}
-		  					return null;
-		  				},
-		  			),
+		  			Expanded(
+		  				flex: 1,
+		  				child: buildListColumn("备注", "我的提现地址")),
+		  			Expanded(
+		  				flex: 1,
+		  				child: buildListColumn("地址", "xxxxxxxxxxxx")),
 		  		],
 		  	),
 		  ),
 		);
 	}
 
-	Widget buildBody() {
-		return ListView(
+	Widget buildListColumn(String title, String value) {
+		return Column(
+			crossAxisAlignment: CrossAxisAlignment.start,
 			children: <Widget>[
-				buildWallet(),
-				buildAmount(),
-				buildDescription(),
+				Text(title),
+				Text(value,style: TextStyle(color: Colors.grey)),
 			],
+		);
+	}
+
+	Widget buildBody() {
+		return Form(
+			key: _mainFormKey,
+		  child: ListView(
+		  	children: <Widget>[
+		  		buildWallet(),
+		  		buildAmount(),
+		  		buildDescription(),
+		  	],
+		  ),
 		);
 	}
 
 	Widget buildAmount() {
 		return SizedBox(
 			width: double.infinity,
-		  height: 120,
-		  child: Container(
-		  	padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-		  	child: Column(
-		  		mainAxisAlignment: MainAxisAlignment.spaceBetween,
-		  		crossAxisAlignment: CrossAxisAlignment.start,
-		  		children: <Widget>[
-		  			TextFormField(
-		  				decoration: InputDecoration(
-		  					icon: Icon(Icons.account_balance_wallet),
-		  					labelText: '数量:',
-		  					hintText: "最小提现积分数量为10"
-		  				),
-		  				onSaved: (String value) {
-		  					AppData().withdrawRequest.walletAddress = value;
-		  				},
-		  				validator: (String value) {
-		  					if (value.isEmpty) {
-		  						return '请输入提现积分数量';
-		  					}
-		  					return null;
-		  				},
-		  			),
-
-		  			Text("可提现积分: 1000"),
-		  		],
-		  	),
-		  ),
+			height: 150,
+			child: Container(
+				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.spaceBetween,
+					crossAxisAlignment: CrossAxisAlignment.start,
+					children: <Widget>[
+						Row(
+							children: <Widget>[
+								Expanded(
+								  child: TextFormField(
+									  controller: amountController,
+								  	decoration: InputDecoration(
+								  		icon: Icon(Icons.monetization_on),
+								  		labelText: '数量:',
+								  		hintText: "最小提现积分数量为10"
+								  	),
+								  	onSaved: (String value) {
+								  		AppData().withdrawRequest.walletAddress = value;
+								  	},
+								  	validator: (String value) {
+								  		if (value.isEmpty) {
+								  			return '请输入提现积分数量';
+								  		}
+								  		return null;
+								  	},
+								  ),
+								),
+								SizedBox(
+									width: 80,
+									height: 30,
+									child: Container(child: Center(child: OutlineButton(onPressed: (){
+										setState(() {
+											amountController.text = "1000";
+										});
+									},child: Text("全部"))))
+								),
+							],
+						),
+						Text("可提现积分: 1000"),
+					],
+				),
+			),
 		);
 	}
 
@@ -119,96 +240,119 @@ class WithdrawViewState extends State <WithdrawView> {
 		);
 	}
 
+	Widget buildBottomWithdrawButton() {
+		return SizedBox(
+			width: double.infinity,
+			height: 72,
+			child: Container(
+				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+				child: FlatButton(
+					color: ColorTools.green1AAD19,
+					onPressed: (){
+						if (_mainFormKey.currentState.validate()) {
+							showModalBottomSheet(context: context, builder: (BuildContext context) => buildBottomLogoutButtons());
+						}
+					},
+					child: Text("提现",style: TextStyle(color: Colors.white))
+				),
+			),
+		);
+	}
+
 	Widget buildBottomLogoutButtons() {
 		return SizedBox(
 			width: double.infinity,
-		  height: 250,
-		  child: Container(
-			  padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-			  child: Column(
-				  children: <Widget>[
-				  	Divider(),
-				  	SizedBox(height: 16),
-				  	Row(
-						mainAxisAlignment: MainAxisAlignment.start,
-						children: <Widget>[
-							Text("短信验证码"),
-						],
-					),
-					  SizedBox(height: 16),
-					  Row(
-						  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						  children: <Widget>[
-							  Expanded(
-							    child: TextFormField(
-								  decoration: InputDecoration(
-									  icon: Icon(Icons.account_balance_wallet),
-									  hintText: "6位数字验证码"
-								  ),
-								  onSaved: (String value) {
-									  AppData().withdrawRequest.walletAddress = value;
-								  },
-								  validator: (String value) {
-									  if (value.isEmpty) {
-										  return '请输入提币地址';
-									  }
-									  return null;
-								  },
-							    ),
-							  ),
-							  SizedBox(
-								  width: 100,
-							    height: 40,
-							    child: Container(
-									padding: EdgeInsets.only(left: 16,right: 16),
-							      child: FlatButton(
-								  color: ColorTools.blue5677FC,
-								  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-								  onPressed: (){
-
-								  },
-								  child: Text("发送",style: TextStyle(color: Colors.white),)
-							      ),
-							    ),
-							  ),
-						  ],
-					  ),
-					  SizedBox(height: 16),
-					  Row(
-						  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-						  children: <Widget>[
-							  Expanded(
-								  flex: 1,
-							    child: Container(
-								  height: 40,
-								  padding: EdgeInsets.only(right: 8),
-								  child: OutlineButton(
-									  borderSide: BorderSide(
-										  color: ColorTools.green1AAD19,
-										  style: BorderStyle.solid,
-										  width: 2,
-									  ),
-									  child: Text("取消",style: TextStyle(color: ColorTools.green1AAD19)),
-									  onPressed: (){
-
-									  }),
-							    ),
-							  ),
-							  Expanded(
-								  flex: 1,
-							    child: Container(
-								  height: 40,
-								  padding: EdgeInsets.only(left: 8),
-								  child: FlatButton(
-									  color: ColorTools.green1AAD19,
-									  onPressed: (){}, child: Text("确认",style: TextStyle(color: Colors.white),))
-							    ),
-							  ),
-						  ],
-					  ),
-				  ],
-			  ),
-		  ),
+			height: 250,
+			child: Container(
+				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+				child: Column(
+					children: <Widget>[
+						Divider(),
+						SizedBox(height: 16),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.start,
+							children: <Widget>[
+								Text("短信验证码"),
+							],
+						),
+						SizedBox(height: 16),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.spaceBetween,
+							children: <Widget>[
+								Expanded(
+									child: TextFormField(
+										controller: verifyController,
+										decoration: InputDecoration(
+											icon: Icon(Icons.account_balance_wallet),
+											hintText: "6位数字验证码"
+										),
+										onSaved: (String value) {
+											AppData().withdrawRequest.verifyCode = value;
+										},
+										validator: (String value) {
+											if (!StringTools.ValidateSmsCode(value)) {
+												return '请输入6位数字验证码';
+											}
+											return null;
+										},
+									),
+								),
+								SizedBox(
+									width: 100,
+									height: 40,
+									child: Container(
+										padding: EdgeInsets.only(left: 16,right: 16),
+										child: FlatButton(
+											color: ColorTools.blue5677FC,
+											shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+											onPressed: (){
+												Toast.show("复制成功", context,
+													duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+											},
+											child: Text("发送",style: TextStyle(color: Colors.white),)
+										),
+									),
+								),
+							],
+						),
+						SizedBox(height: 16),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+							children: <Widget>[
+								Expanded(
+									flex: 1,
+									child: Container(
+										height: 40,
+										padding: EdgeInsets.only(right: 8),
+										child: OutlineButton(
+											borderSide: BorderSide(
+												color: ColorTools.green1AAD19,
+												style: BorderStyle.solid,
+												width: 2,
+											),
+											child: Text("取消",style: TextStyle(color: ColorTools.green1AAD19)),
+											onPressed: (){
+												Navigator.pop(context);
+											}),
+									),
+								),
+								Expanded(
+									flex: 1,
+									child: Container(
+										height: 40,
+										padding: EdgeInsets.only(left: 8),
+										child: FlatButton(
+											color: ColorTools.green1AAD19,
+											onPressed: (){
+												Navigator.pop(context);
+											}, child: Text("确认",style: TextStyle(color: Colors.white),))
+									),
+								),
+							],
+						),
+					],
+				),
+			),
 		);
 	}
 }

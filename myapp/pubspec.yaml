@@ -29,6 +29,8 @@ dependencies:
   json_annotation: ^3.0.0
   dio: ^3.0.4
   rxdart: ^0.22.6
+  toast: ^0.1.5
+  clippy: ^1.0.0
 
 dev_dependencies:
   json_serializable: ^3.2.3

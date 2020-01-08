@@ -6,6 +6,7 @@ import 'registrationPage.dart';
 import 'withdraw_view.dart';
 import 'inviteFriends.dart';
 import 'withdraw_history_view.dart';
+import 'my_friends_view.dart';
 
 class UserProfilePage extends StatefulWidget {
 	@override
@@ -63,6 +64,17 @@ class UserProfilePageState extends State <UserProfilePage> {
 							Navigator.push(
 								context,
 								MaterialPageRoute(builder: (context) => InviteFriendsView()),
+							);
+						} else {
+							gotoRegistrationPage();
+						}
+					}),
+					Divider(),
+					buildSingleRow("我的好友", (){
+						if(isLogin) {
+							Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => MyFriendsView()),
 							);
 						} else {
 							gotoRegistrationPage();

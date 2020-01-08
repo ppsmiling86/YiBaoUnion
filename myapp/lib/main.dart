@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/views/home_view.dart';
 
+//flutter run -d chrome
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
