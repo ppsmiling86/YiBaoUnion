@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/tools/imageTools.dart';
+import 'package:myapp/tools/common_widget_tools.dart';
 class ContactCustomerServiceView extends StatefulWidget {
 	@override
   State<StatefulWidget> createState() {
@@ -12,13 +13,7 @@ class ContactCustomerServiceViewState extends State<ContactCustomerServiceView> 
 	@override
   Widget build(BuildContext context) {
     return Scaffold(
-		appBar: AppBar(
-			leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-				Navigator.of(context).pop();
-			}),
-			title: Text("联系客服"),
-			centerTitle: true,
-		),
+		appBar: CommonWidgetTools.appBarWithTitle(context, "联系客服"),
 		body: SizedBox(
 			width: double.infinity,
 		  child: Container(

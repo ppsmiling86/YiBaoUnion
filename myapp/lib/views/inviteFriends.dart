@@ -6,6 +6,7 @@ import 'my_friends_view.dart';
 import 'package:toast/toast.dart';
 import 'package:clippy/browser.dart' as clippy;
 import 'prize_rule_view.dart';
+import 'package:myapp/tools/common_widget_tools.dart';
 class InviteFriendsView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -17,29 +18,22 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-					Navigator.of(context).pop();
-				}),
-				title: Text("邀请好友"),
-				centerTitle: true,
-				actions: <Widget>[
-					Center(
-					  child: SizedBox(
-					  	width: 120,
-					    height: 40,
-					    child: Container(
-							padding: EdgeInsets.symmetric(horizontal: 16),
-					    	child: OutlineButton(onPressed: (){
-					    		Navigator.push(context, MaterialPageRoute(builder: (context) => PrizeRuleView())
-								);
-					    	},
-					    	child: Text("佣金规则"),),
-					    ),
-					  ),
-					)
-				],
+			appBar: CommonWidgetTools.appBarWithTitleActions(context, "邀请好友", [
+				Center(
+				child: SizedBox(
+					width: 120,
+					height: 40,
+					child: Container(
+						padding: EdgeInsets.symmetric(horizontal: 16),
+						child: OutlineButton(onPressed: (){
+							Navigator.push(context, MaterialPageRoute(builder: (context) => PrizeRuleView())
+							);
+						},
+							child: Text("佣金规则"),),
+					),
+				),
 			),
+			]),
 
 			body: Container(
 				child:   Center(

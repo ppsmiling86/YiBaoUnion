@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:myapp/tools/common_widget_tools.dart';
 class PrizeRuleView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
-		// TODO: implement createState
 		return PrizeRuleViewState();
 	}
 }
@@ -13,13 +12,7 @@ class PrizeRuleViewState extends State<PrizeRuleView> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-					Navigator.of(context).pop();
-				}),
-				title: Text( "佣金规则"),
-				centerTitle: true,
-			),
+			appBar: CommonWidgetTools.appBarWithTitle(context, "佣金规则"),
 			body: Container(
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				child: Column(

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'payment_view.dart';
+import 'package:myapp/tools/common_widget_tools.dart';
 class WaiverPage extends StatefulWidget {
 	@override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return WaiverPageState();
   }
 }
@@ -13,13 +13,7 @@ class WaiverPageState extends State <WaiverPage> {
 	@override
   Widget build(BuildContext context) {
     return Scaffold(
-		appBar: AppBar(
-			title: Text("租赁合同"),
-			centerTitle: true,
-			leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-				Navigator.of(context).pop();
-			}),
-		),
+		appBar: CommonWidgetTools.appBarWithTitle(context, "租赁合同"),
 		body: buildWaiverPage(),
 		bottomNavigationBar: buildOrderButton(),
 	);

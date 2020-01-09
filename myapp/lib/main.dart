@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/views/home_view.dart';
-
+import 'dart:html';
+import 'models/AppData.dart';
 //flutter run -d chrome
 
 void main() => runApp(MyApp());
@@ -9,6 +10,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    saveInviteCode();
     return MaterialApp(
       title: '共创医保',
       theme: ThemeData(
@@ -26,4 +28,14 @@ class MyApp extends StatelessWidget {
       home: HomeView(),
     );
   }
+
+  void saveInviteCode() {
+    var url = window.location.href;
+    print("url is $url");
+    Uri uri = Uri.dataFromString("url");
+    var inviteCode = uri.queryParameters["inviteCode"];
+    Storage localStorage = window.localStorage;
+    localStorage[kInviteCode] = inviteCode;
+  }
+
 }

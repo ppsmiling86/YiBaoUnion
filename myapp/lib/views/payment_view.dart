@@ -5,11 +5,14 @@ import 'package:ant_icons/ant_icons.dart';
 import 'package:myapp/views/orderlist_view.dart';
 import 'contact_customer_service.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:myapp/tools/common_widget_tools.dart';
+import 'package:myapp/models/placeOrderBloc.dart';
+import 'package:myapp/models/Response.dart';
+import 'package:myapp/tools/dateTools.dart';
+import 'package:myapp/models/AppData.dart';
 class PaymentView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
-		// TODO: implement createState
 		return PaymentViewState();
 	}
 }
@@ -20,28 +23,29 @@ enum PaymentType {
 }
 
 
-class PaymentViewState extends State {
+class PaymentViewState extends State <PaymentView> {
+	final bloc = PlaceOrderBloc();
 	PaymentType selectPaymentType = PaymentType.aliPay;
+	@override
+  void initState() {
+    super.initState();
+    bloc.placeOrder(AppData().orderRequest.amount);
+  }
+
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-					Navigator.of(context).pop();
-				}),
-				title: Text("订单支付",style: TextStyle(fontWeight: FontWeight.w500),),
-				centerTitle: true,
-			),
+			appBar: CommonWidgetTools.appBarWithTitle(context, "订单支付"),
 			body: ListView(
 				children: <Widget>[
-					buildOrderPendingToPay(),
+					buildStreamBuilderView()
 				],
 			),
 			bottomNavigationBar: buildBottomButton(),
 		);
 	}
 
-	Widget buildOrderPendingToPay() {
+	Widget buildOrderPendingToPay(PlaceOrderEntity placeOrderEntity) {
 		return Container(
 			height: 400,
 			padding: EdgeInsets.symmetric(horizontal: 16),
@@ -75,7 +79,7 @@ class PaymentViewState extends State {
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ 100", style: TextStyle(color: Colors.red)),
+											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
 											Text("x 1000 U")
 										],
 									)
@@ -87,14 +91,14 @@ class PaymentViewState extends State {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("订单号: 123456789"),
+							Text("订单号: ${placeOrderEntity.id}"),
 							Text("总计"),
 						],
 					),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("2020.10.20 12:30:30"),
+							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
 							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
 						],
 					),
@@ -163,6 +167,29 @@ class PaymentViewState extends State {
 				],
 			),
 		);
+	}
+
+	StreamBuilder buildStreamBuilderView() {
+		return StreamBuilder<PlaceOrderResponse>(
+			stream: bloc.subject.stream,
+			builder: (context, AsyncSnapshot<PlaceOrderResponse> snapshot) {
+				print(snapshot);
+				if (snapshot.hasData) {
+					return buildOrderPendingToPay(snapshot.data.data);
+				} else if (snapshot.hasError) {
+					print("hasError");
+					return Container();
+				} else {
+					print("loading");
+					return SizedBox(
+						width: double.infinity,
+						height: 100,
+						child: Container(
+							child: Center(child: CircularProgressIndicator()),
+						),
+					);
+				}
+			});
 	}
 
 	String paymentTypeStringByType(PaymentType type) {

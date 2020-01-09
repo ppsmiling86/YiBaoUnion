@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:myapp/tools/common_widget_tools.dart';
 class MyFriendsView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -12,12 +12,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-					Navigator.of(context).pop();
-				}),
-				title: Text("我的好友"),
-			),
+			appBar: CommonWidgetTools.appBarWithTitle(context, "我的好友"),
 			body: ListView.separated(
 				itemBuilder: (contest,index) {
 					if (index == 0) {

@@ -1,8 +1,16 @@
 import 'dart:html';
+import 'package:myapp/models/ApiProvider.dart';
+import 'package:myapp/models/Response.dart';
+import 'ServerConfig.dart';
+
+final kLoginPhoneNumber = "loginPhoneNumber";
+final kInviteCode = "inviteCode";
+final kToken = "yibao_token";
 
 class AppData {
 	Registration tempRegistration = Registration("", "", "");
 	WithdrawRequest withdrawRequest = WithdrawRequest("", 0,"");
+	OrderRequest orderRequest = OrderRequest();
 
 	static final AppData sharedInstance = AppData._internal();
 
@@ -14,49 +22,66 @@ class AppData {
 
 	User loginUser() {
 		Storage localStorage = window.localStorage;
-		if(localStorage["loginPhoneNumber"] != null && localStorage["loginPhoneNumber"].isNotEmpty) {
-			return User(true, localStorage["loginPhoneNumber"], localStorage["inviteCode"], 1000, 1000, 1000, []);
+		if(localStorage[kLoginPhoneNumber] != null && localStorage[kLoginPhoneNumber].isNotEmpty &&
+			localStorage[kToken] != null && localStorage[kToken].isNotEmpty &&
+			localStorage[kInviteCode] != null && localStorage[kInviteCode].isNotEmpty) {
+			return User(localStorage[kToken],true, localStorage[kLoginPhoneNumber], localStorage[kInviteCode]);
 		}
-		return User(false, "", "", 0, 0, 0, []);
+		return User("", false, "", "");
 	}
 
 }
 
 class User {
+	final _apiProvider = ApiProvider();
 	bool isLoggedIn;
-	String loginPhoneNumber;
+	String mobile;
 	String inviteCode;
-	double credits;
-	double totalCalculatorPower;
-	double creditsCanGenerateToday;
-
-	List<Order>orderList;
+	String token;
+	UserEntity userEntity;
 
 	User(
+		this.token,
 		this.isLoggedIn,
-		this.loginPhoneNumber,
+		this.mobile,
 		this.inviteCode,
-		this.credits,
-		this.creditsCanGenerateToday,
-		this.totalCalculatorPower,
-		this.orderList
 		);
 
-	void login(Registration reg) {
+	Future<SMSResponse> sms(Registration reg) async {
+		SMSResponse response = await _apiProvider.sms(reg.mobile);
+		return response;
+	}
+
+	Future<UserLoginResponse> login(Registration reg) async {
+		UserLoginResponse response = await _apiProvider.userLogin(reg.mobile, reg.verifyCode, reg.inviteCode);
+		if (response.data != null) {
+			this.token = response.data.token;
+			this.inviteCode = response.data.invite_code;
+			this.mobile = response.data.uid;
+			this.isLoggedIn = true;
+			this.userEntity = response.data;
+			this.save();
+		}
+		return response;
+	}
+
+	void save() {
 		Storage localStorage = window.localStorage;
-		localStorage["loginPhoneNumber"] = reg.mobile;
-		localStorage["inviteCode"] = reg.inviteCode;
+		localStorage[kLoginPhoneNumber] = this.mobile;
+		localStorage[kInviteCode] = this.inviteCode;
+		localStorage[kToken] = this.token;
 	}
 
 	void logout() {
 		Storage localStorage = window.localStorage;
-		localStorage["loginPhoneNumber"] = "";
-		localStorage["inviteCode"] = "";
+		localStorage[kLoginPhoneNumber] = "";
+		localStorage[kInviteCode] = "";
+		localStorage[kToken] = "";
 	}
 }
 
-class Order {
-	String orderId;
+class OrderRequest {
+	int amount;
 }
 
 class Registration {

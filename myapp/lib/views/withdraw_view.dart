@@ -8,7 +8,7 @@ import 'package:myapp/tools/imageTools.dart';
 import 'package:myapp/tools/stringTools.dart';
 import 'manage_address_view.dart';
 import 'package:toast/toast.dart';
-
+import 'package:myapp/tools/common_widget_tools.dart';
 class WithdrawView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -34,31 +34,28 @@ class WithdrawViewState extends State <WithdrawView> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-					Navigator.of(context).pop();
-				}),
-				title: Text("提现"),
-				centerTitle: true,
-				actions: <Widget>[
-					GestureDetector(
-						onTap: (){
-							Navigator.push(
-								context,
-								MaterialPageRoute(builder: (context) => ManageAddressView()),
-							);
-						},
-					  child: SizedBox(
-					  	width: 80,
-					    child: Container(
-					    	child: Center(child: Text("管理地址")),
-					    ),
-					  ),
+			appBar: CommonWidgetTools.appBarWithTitleActions(context, "提现", [
+				GestureDetector(
+					onTap: (){
+						Navigator.push(
+							context,
+							MaterialPageRoute(builder: (context) => ManageAddressView()),
+						);
+					},
+					child: SizedBox(
+						width: 80,
+						child: Container(
+							child: Center(child: Text("管理地址")),
+						),
 					),
-				],
-			),
+				),
+			]),
 			body: buildBody(),
-			bottomNavigationBar: buildBottomWithdrawButton(),
+			bottomNavigationBar: CommonWidgetTools.buildBottomButton("提现", (){
+				if (_mainFormKey.currentState.validate()) {
+					showModalBottomSheet(context: context, builder: (BuildContext context) => buildBottomLogoutButtons());
+				}
+			}),
 		);
 	}
 
@@ -240,24 +237,7 @@ class WithdrawViewState extends State <WithdrawView> {
 		);
 	}
 
-	Widget buildBottomWithdrawButton() {
-		return SizedBox(
-			width: double.infinity,
-			height: 72,
-			child: Container(
-				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-				child: FlatButton(
-					color: ColorTools.green1AAD19,
-					onPressed: (){
-						if (_mainFormKey.currentState.validate()) {
-							showModalBottomSheet(context: context, builder: (BuildContext context) => buildBottomLogoutButtons());
-						}
-					},
-					child: Text("提现",style: TextStyle(color: Colors.white))
-				),
-			),
-		);
-	}
+
 
 	Widget buildBottomLogoutButtons() {
 		return SizedBox(

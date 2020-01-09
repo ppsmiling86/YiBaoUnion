@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/custom_views/center_view.dart';
@@ -10,7 +11,7 @@ import 'checkoutPage.dart';
 import 'package:myapp/tools/colorTools.dart';
 import 'package:myapp/models/UserBloc.dart';
 import 'package:rxdart/rxdart.dart';
-
+import 'package:myapp/tools/common_widget_tools.dart';
 class HomeView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -19,54 +20,18 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> {
-	final bloc = UserBloc();
 	@override
 	void initState() {
 		super.initState();
-		bloc.userLogin();
 	}
 
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				leading: Builder(builder: (context) =>
-					IconButton(
-						icon: CircleAvatar(
-							child: Icon(Icons.person),
-						),
-						onPressed: (){
-							Scaffold.of(context).openDrawer();
-						})
-				),
-			),
+			appBar: CommonWidgetTools.appBarWithBuilder(context, "首页"),
 			drawer: UserProfilePage(),
 			body: CenterView(),
-//			body: StreamBuilder<CatalogResponse>(
-//				stream: bloc.subject.stream,
-//				builder: (context, AsyncSnapshot<CatalogResponse> snapshot) {
-//					print(snapshot);
-//					if (snapshot.hasData) {
-//						if (snapshot.data.code != 200 && snapshot.data.message.length > 0) {
-//							return Container();
-//						}
-//						return buildCatalogResponse(snapshot.data);
-//					} else if (snapshot.hasError) {
-//						return Container();
-//					} else {
-//						return Container(
-//							child: Center(child: Text("test:)")),
-//						);
-//					}
-//				}),
 			bottomNavigationBar: buildBottomButtons(),
-		);
-	}
-
-	Widget buildCatalogResponse(UserLoginResponse response) {
-		print(response);
-		return Container(
-			child: Center(child: Text("test:)")),
 		);
 	}
 

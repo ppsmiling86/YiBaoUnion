@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/models/AppData.dart';
-
+import 'package:myapp/tools/common_widget_tools.dart';
 
 class WithdrawHistoryView extends StatefulWidget {
 	@override
@@ -19,13 +19,7 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-					Navigator.of(context).pop();
-				}),
-				title: Text("提现记录"),
-				centerTitle: true,
-			),
+			appBar: CommonWidgetTools.appBarWithTitle(context, "提现记录"),
 			body: ListView.separated(
 				itemBuilder: (contest,index) => buildWithdrawRecord(withdrawDataList[index]),
 				separatorBuilder: (context, index) => Divider(color: Colors.black),

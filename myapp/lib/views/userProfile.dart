@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/models/AppData.dart';
+import 'package:myapp/tools/colorTools.dart';
 import 'orderlist_view.dart';
 import 'registrationPage.dart';
 import 'withdraw_view.dart';
 import 'inviteFriends.dart';
 import 'withdraw_history_view.dart';
 import 'my_friends_view.dart';
-
+import 'package:ant_icons/ant_icons.dart';
+import 'about_us_view.dart';
+import 'contact_customer_service.dart';
 class UserProfilePage extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -70,11 +73,33 @@ class UserProfilePageState extends State <UserProfilePage> {
 						}
 					}),
 					Divider(),
-					buildSingleRow("我的好友", (){
+					buildSingleRow("我的团队", (){
 						if(isLogin) {
 							Navigator.push(
 								context,
 								MaterialPageRoute(builder: (context) => MyFriendsView()),
+							);
+						} else {
+							gotoRegistrationPage();
+						}
+					}),
+					Divider(),
+					buildSingleRow("关于我们", (){
+						if(isLogin) {
+							Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => AboutUsView()),
+							);
+						} else {
+							gotoRegistrationPage();
+						}
+					}),
+					Divider(),
+					buildSingleRow("联系客服", (){
+						if(isLogin) {
+							Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => ContactCustomerServiceView()),
 							);
 						} else {
 							gotoRegistrationPage();
@@ -97,7 +122,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 						child: Icon(Icons.person),
 					),
 					SizedBox(width: 16),
-					isLogin ? Text(AppData().loginUser().loginPhoneNumber) :
+					isLogin ? Text(AppData().loginUser().mobile) :
 					OutlineButton(
 						borderSide: BorderSide(
 							color: Colors.grey,
@@ -131,7 +156,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("我的共创积分: ${AppData().loginUser().credits}"),
+							Text("我的共创积分: 0"),
 							OutlineButton(
 								child: Text("提现"),
 								onPressed: (){
@@ -147,9 +172,9 @@ class UserProfilePageState extends State <UserProfilePage> {
 							),
 						],
 					),
-					Text("我的总算力: ${AppData().loginUser().totalCalculatorPower} U"),
+					Text("我的总算力: xxxxx U"),
 					SizedBox(height: 16),
-					Text("每天可以挖矿生产约 ${AppData().loginUser().creditsCanGenerateToday} 共创积分"),
+					Text("每天可以挖矿生产约 xxxx 共创积分"),
 				],
 			),
 		);
@@ -165,7 +190,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 					mainAxisAlignment: MainAxisAlignment.spaceBetween,
 					children: <Widget>[
 						Text(title),
-						Icon(Icons.arrow_right),
+						Icon(AntIcons.right_outline,color: ColorTools.greyA1A6B3,size: 12,),
 					],
 				),
 			),

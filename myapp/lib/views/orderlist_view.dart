@@ -3,6 +3,20 @@ import 'package:myapp/tools/imageTools.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:myapp/tools/colorTools.dart';
 import 'payment_view.dart';
+import 'package:myapp/tools/common_widget_tools.dart';
+import 'package:myapp/models/Response.dart';
+import 'package:myapp/models/getOrderBloc.dart';
+import 'package:myapp/tools/dateTools.dart';
+
+
+class OrderStatus  {
+	static final pendingToPay = 0;
+	static final completed = 1;
+	static final working = 2;
+	static final canceled = 3;
+}
+
+
 
 class OrderListView extends StatefulWidget {
 	@override
@@ -12,29 +26,64 @@ class OrderListView extends StatefulWidget {
 }
 
 class OrderListViewState extends State <OrderListView>{
+	final bloc = GetOrderBloc();
+
+	@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bloc.getOrder();
+  }
+
 	@override
   Widget build(BuildContext context) {
     return Scaffold(
-		appBar: AppBar(
-			leading: IconButton(icon: Icon(Icons.arrow_left), onPressed: (){
-				Navigator.of(context).pop();
-			}),
-			title: Text("订单列表"),
-		),
-		body: ListView(
-			children: <Widget>[
-				SizedBox(height: 16),
-				buildOrderInProgress(),
-				buildOrderCompleted(),
-				buildOrderPendingToPay(),
-				buildOrderCanceled(),
-				SizedBox(height: 16),
-			],
-		),
+		appBar: CommonWidgetTools.appBarWithTitle(context, "订单列表"),
+		body: buildStreamBuilderView(),
 	);
   }
 
-  Widget buildOrderInProgress() {
+	StreamBuilder buildStreamBuilderView() {
+		return StreamBuilder<GetOrderResponse>(
+			stream: bloc.subject.stream,
+			builder: (context, AsyncSnapshot<GetOrderResponse> snapshot) {
+				print(snapshot);
+				if (snapshot.hasData) {
+					return Container(
+						child: ListView.builder(
+							itemCount: snapshot.data.data.length,
+							itemBuilder: (context,index) {
+							PlaceOrderEntity placeOrderEntity = snapshot.data.data[index];
+							if (placeOrderEntity.status == OrderStatus.working) {
+								return buildOrderInProgress(placeOrderEntity);
+							} else if (placeOrderEntity.status == OrderStatus.completed) {
+								return buildOrderCompleted(placeOrderEntity);
+							} else if (placeOrderEntity.status == OrderStatus.pendingToPay) {
+								return buildOrderPendingToPay(placeOrderEntity);
+							} else if (placeOrderEntity.status == OrderStatus.canceled) {
+								return buildOrderCanceled(placeOrderEntity);
+							} else {
+								return Container();
+							}
+						}),
+					);
+				} else if (snapshot.hasError) {
+					print("hasError");
+					return Container();
+				} else {
+					print("loading");
+					return SizedBox(
+						width: double.infinity,
+						height: 100,
+						child: Container(
+							child: Center(child: CircularProgressIndicator()),
+						),
+					);
+				}
+			});
+	}
+
+  Widget buildOrderInProgress(PlaceOrderEntity placeOrderEntity) {
 		return Container(
 			height: 200,
 			padding: EdgeInsets.symmetric(horizontal: 16),
@@ -68,8 +117,8 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ 100", style: TextStyle(color: Colors.red)),
-											Text("x 1000 U")
+											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
+											Text("x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -80,14 +129,14 @@ class OrderListViewState extends State <OrderListView>{
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("订单号: 123456789"),
+							Text("订单号: ${placeOrderEntity.id}"),
 							Text("总计"),
 						],
 					),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("2020.10.20 12:30:30"),
+							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
 							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
 						],
 					),
@@ -110,10 +159,10 @@ class OrderListViewState extends State <OrderListView>{
 							LinearPercentIndicator(
 								width: 100.0,
 								lineHeight: 8.0,
-								percent: 0.5,
+								percent: placeOrderEntity.progress,
 								progressColor: Colors.blue,
 							),
-							Text("50%"),
+							Text("${placeOrderEntity.progress * 100}%"),
 						],
 					),
 				],
@@ -121,7 +170,7 @@ class OrderListViewState extends State <OrderListView>{
 		);
   }
 
-	Widget buildOrderCompleted() {
+	Widget buildOrderCompleted(PlaceOrderEntity placeOrderEntity) {
 		return Container(
 			height: 200,
 			padding: EdgeInsets.symmetric(horizontal: 16),
@@ -155,8 +204,8 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ 100", style: TextStyle(color: Colors.red)),
-											Text("x 1000 U")
+											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
+											Text("x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -167,14 +216,14 @@ class OrderListViewState extends State <OrderListView>{
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("订单号: 123456789"),
+							Text("订单号: ${placeOrderEntity.id}"),
 							Text("总计"),
 						],
 					),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("2020.10.20 12:30:30"),
+							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
 							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
 						],
 					),
@@ -197,10 +246,10 @@ class OrderListViewState extends State <OrderListView>{
 							LinearPercentIndicator(
 								width: 100.0,
 								lineHeight: 8.0,
-								percent: 1.0,
+								percent: placeOrderEntity.progress,
 								progressColor: Colors.blue,
 							),
-							Text("100%"),
+							Text("${placeOrderEntity.progress * 100}%"),
 						],
 					),
 				],
@@ -208,7 +257,7 @@ class OrderListViewState extends State <OrderListView>{
 		);
 	}
 
-	Widget buildOrderPendingToPay() {
+	Widget buildOrderPendingToPay(PlaceOrderEntity placeOrderEntity) {
 		return Container(
 			height: 200,
 			padding: EdgeInsets.symmetric(horizontal: 16),
@@ -242,8 +291,8 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ 100", style: TextStyle(color: Colors.red)),
-											Text("x 1000 U")
+											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
+											Text("x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -254,14 +303,14 @@ class OrderListViewState extends State <OrderListView>{
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("订单号: 123456789"),
+							Text("订单号: ${placeOrderEntity.id}"),
 							Text("总计"),
 						],
 					),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("2020.10.20 12:30:30"),
+							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
 							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
 						],
 					),
@@ -289,7 +338,7 @@ class OrderListViewState extends State <OrderListView>{
 		);
 	}
 
-	Widget buildOrderCanceled() {
+	Widget buildOrderCanceled(PlaceOrderEntity placeOrderEntity) {
 		return Container(
 			height: 200,
 			padding: EdgeInsets.symmetric(horizontal: 16),
@@ -323,8 +372,8 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ 100", style: TextStyle(color: Colors.red)),
-											Text("x 1000 U")
+											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
+											Text("x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -335,14 +384,14 @@ class OrderListViewState extends State <OrderListView>{
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("订单号: 123456789"),
+							Text("订单号: ${placeOrderEntity.id}"),
 							Text("总计"),
 						],
 					),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("2020.10.20 12:30:30"),
+							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
 							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
 						],
 					),
