@@ -6,6 +6,7 @@ import 'package:myapp/models/AppData.dart';
 import 'package:myapp/models/UserBloc.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/Response.dart';
+import 'package:myapp/tools/localStorageTools.dart';
 class RegistrationPage extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -169,6 +170,9 @@ class RegistrationPageState extends State <RegistrationPage> {
 						}
 
 						CommonWidgetTools.showLoading(context);
+						var upperInviteCode = LocalStorageTools.getUpperInviteCode();
+						print("use upper invite code:${upperInviteCode}");
+						AppData().tempRegistration.inviteCode = upperInviteCode;
 						AppData().loginUser().login(AppData().tempRegistration).then((value){
 							Navigator.pop(context);
 							if(value.data != null) {

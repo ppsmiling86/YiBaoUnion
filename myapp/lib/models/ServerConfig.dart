@@ -1,5 +1,5 @@
 class ServerConfig {
-	static const String baseUrl = 'http://34.92.152.68:28080';
+	static const String baseUrl = 'http://34.92.152.68/api';
 //	static const String baseUrl = 'http://192.168.99.248:28080';
 
 	static const String userLogin =

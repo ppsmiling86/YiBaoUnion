@@ -1,7 +1,7 @@
-import 'dart:html';
+
 import 'package:myapp/models/ApiProvider.dart';
 import 'package:myapp/models/Response.dart';
-import 'ServerConfig.dart';
+import 'package:myapp/tools/localStorageTools.dart';
 
 final kLoginPhoneNumber = "loginPhoneNumber";
 final kInviteCode = "inviteCode";
@@ -21,11 +21,14 @@ class AppData {
 	AppData._internal();
 
 	User loginUser() {
-		Storage localStorage = window.localStorage;
-		if(localStorage[kLoginPhoneNumber] != null && localStorage[kLoginPhoneNumber].isNotEmpty &&
-			localStorage[kToken] != null && localStorage[kToken].isNotEmpty &&
-			localStorage[kInviteCode] != null && localStorage[kInviteCode].isNotEmpty) {
-			return User(localStorage[kToken],true, localStorage[kLoginPhoneNumber], localStorage[kInviteCode]);
+		var loginPhoneNumber = LocalStorageTools.object(kLoginPhoneNumber);
+		var token = LocalStorageTools.object(kToken);
+		var inviteCode = LocalStorageTools.object(kInviteCode);
+
+		if(loginPhoneNumber != null && loginPhoneNumber.isNotEmpty &&
+			token != null && token.isNotEmpty &&
+			inviteCode != null && inviteCode.isNotEmpty) {
+			return User(token,true, loginPhoneNumber, inviteCode);
 		}
 		return User("", false, "", "");
 	}
@@ -66,17 +69,15 @@ class User {
 	}
 
 	void save() {
-		Storage localStorage = window.localStorage;
-		localStorage[kLoginPhoneNumber] = this.mobile;
-		localStorage[kInviteCode] = this.inviteCode;
-		localStorage[kToken] = this.token;
+		LocalStorageTools.setObject(this.mobile, kLoginPhoneNumber);
+		LocalStorageTools.setObject(this.inviteCode, kInviteCode);
+		LocalStorageTools.setObject(this.token, kToken);
 	}
 
 	void logout() {
-		Storage localStorage = window.localStorage;
-		localStorage[kLoginPhoneNumber] = "";
-		localStorage[kInviteCode] = "";
-		localStorage[kToken] = "";
+		LocalStorageTools.setObject("", kLoginPhoneNumber);
+		LocalStorageTools.setObject("", kToken);
+		LocalStorageTools.setObject("", kInviteCode);
 	}
 }
 
