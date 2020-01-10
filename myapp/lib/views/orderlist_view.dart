@@ -325,7 +325,7 @@ class OrderListViewState extends State <OrderListView>{
 									onPressed: (){
 										Navigator.push(
 											context,
-											MaterialPageRoute(builder: (context) => PaymentView()),
+											MaterialPageRoute(builder: (context) => PaymentView(placeOrderEntity)),
 										);
 									},
 									child: Text("去支付",style: TextStyle(color: Colors.white)),

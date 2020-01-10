@@ -12,24 +12,24 @@ class CenterViewState extends State <CenterView> {
 	@override
 	Widget build(BuildContext context) {
 		var width = MediaQuery.of(context).size.width - 32;
-		return ListView(
-			children: <Widget>[
-				Image(
-					width: width,
-					fit: BoxFit.fill,
-					image: AssetImage(ImageTools.placeholder1)
-				),
-				Image(
-					width: width,
-					fit: BoxFit.fill,
-					image: AssetImage(ImageTools.placeholder2)
-				),
-				Image(
-					width: width,
-					fit: BoxFit.fill,
-					image: AssetImage(ImageTools.placeholder3)
-				),
-			],
+		List<String>images = [];
+		images.add(ImageTools.placeholder1);
+		images.add(ImageTools.placeholder2);
+		images.add(ImageTools.placeholder3);
+		images.add(ImageTools.placeholder4);
+		images.add(ImageTools.placeholder5);
+		images.add(ImageTools.placeholder6);
+		return ListView.builder(
+			itemCount: images.length,
+			itemBuilder: (context,index) => buildImage(images[index], width),
+		);
+	}
+
+	Widget buildImage(String imgStr, double width) {
+		return Image(
+			width: width,
+			fit: BoxFit.fill,
+			image: AssetImage(imgStr)
 		);
 	}
 }

@@ -229,3 +229,40 @@ Map<String, dynamic> _$GetOrderResponseToJson(GetOrderResponse instance) =>
       'code': instance.code,
       'data': instance.data,
     };
+
+DownlinkUserResponse _$DownlinkUserResponseFromJson(Map<String, dynamic> json) {
+  return DownlinkUserResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    (json['data'] as List)
+        ?.map((e) => e == null
+            ? null
+            : DownlinkUserEntity.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$DownlinkUserResponseToJson(
+        DownlinkUserResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+DownlinkUserEntity _$DownlinkUserEntityFromJson(Map<String, dynamic> json) {
+  return DownlinkUserEntity(
+    json['invitor_id'] as String,
+    json['uid'] as String,
+    json['invite_code'] as String,
+    (json['balance'] as num)?.toDouble(),
+  );
+}
+
+Map<String, dynamic> _$DownlinkUserEntityToJson(DownlinkUserEntity instance) =>
+    <String, dynamic>{
+      'invitor_id': instance.invitor_id,
+      'uid': instance.uid,
+      'invite_code': instance.invite_code,
+      'balance': instance.balance,
+    };

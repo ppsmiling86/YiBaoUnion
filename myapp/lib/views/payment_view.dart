@@ -6,11 +6,13 @@ import 'package:myapp/views/orderlist_view.dart';
 import 'contact_customer_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
-import 'package:myapp/models/placeOrderBloc.dart';
 import 'package:myapp/models/Response.dart';
 import 'package:myapp/tools/dateTools.dart';
 import 'package:myapp/models/AppData.dart';
 class PaymentView extends StatefulWidget {
+	final PlaceOrderEntity placeOrderEntity;
+
+	PaymentView(this.placeOrderEntity);
 	@override
 	State<StatefulWidget> createState() {
 		return PaymentViewState();
@@ -24,13 +26,7 @@ enum PaymentType {
 
 
 class PaymentViewState extends State <PaymentView> {
-	final bloc = PlaceOrderBloc();
 	PaymentType selectPaymentType = PaymentType.aliPay;
-	@override
-  void initState() {
-    super.initState();
-    bloc.placeOrder(AppData().orderRequest.amount);
-  }
 
 	@override
 	Widget build(BuildContext context) {
@@ -38,7 +34,7 @@ class PaymentViewState extends State <PaymentView> {
 			appBar: CommonWidgetTools.appBarWithTitle(context, "订单支付"),
 			body: ListView(
 				children: <Widget>[
-					buildStreamBuilderView()
+					buildOrderPendingToPay(this.widget.placeOrderEntity),
 				],
 			),
 			bottomNavigationBar: buildBottomButton(),
@@ -167,29 +163,6 @@ class PaymentViewState extends State <PaymentView> {
 				],
 			),
 		);
-	}
-
-	StreamBuilder buildStreamBuilderView() {
-		return StreamBuilder<PlaceOrderResponse>(
-			stream: bloc.subject.stream,
-			builder: (context, AsyncSnapshot<PlaceOrderResponse> snapshot) {
-				print(snapshot);
-				if (snapshot.hasData) {
-					return buildOrderPendingToPay(snapshot.data.data);
-				} else if (snapshot.hasError) {
-					print("hasError");
-					return Container();
-				} else {
-					print("loading");
-					return SizedBox(
-						width: double.infinity,
-						height: 100,
-						child: Container(
-							child: Center(child: CircularProgressIndicator()),
-						),
-					);
-				}
-			});
 	}
 
 	String paymentTypeStringByType(PaymentType type) {

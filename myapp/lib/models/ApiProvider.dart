@@ -43,17 +43,6 @@ class ApiProvider {
 		}
 	}
 
-	Future<SMSResponse> downlinkUser() async {
-		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.downlinkUser);
-			print(response);
-			return SMSResponse.fromJson(response.data);
-		} catch (error, stacktrace) {
-			print('Exception occured:$error stackTrace: $stacktrace');
-			return SMSResponse.withError('$error');
-		}
-	}
-
 	Future<ProductResponse> productInfo() async {
 		try {
 			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.productInfo);
@@ -90,6 +79,19 @@ class ApiProvider {
 		} catch (error, stacktrace) {
 			print('Exception occured:$error stackTrace: $stacktrace');
 			return GetOrderResponse.withError('$error');
+		}
+	}
+
+	Future<DownlinkUserResponse> downlinkUser() async {
+		try {
+			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.downlinkUser);
+			print(response);
+			var pr = DownlinkUserResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return DownlinkUserResponse.withError('$error');
 		}
 	}
 

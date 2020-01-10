@@ -214,3 +214,39 @@ class GetOrderResponse extends Object {
 			code = "-1",
 			msg = error;
 }
+
+
+@JsonSerializable()
+class DownlinkUserResponse extends Object {
+	final String msg;
+	final String code;
+	final List<DownlinkUserEntity> data;
+
+	DownlinkUserResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory DownlinkUserResponse.fromJson(Map<String, dynamic> json) =>
+		_$DownlinkUserResponseFromJson(json);
+
+	DownlinkUserResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class DownlinkUserEntity extends Object {
+	final String invitor_id;
+	final String uid;
+	final String invite_code;
+	final double balance; // 发奖时间
+
+
+	DownlinkUserEntity(this.invitor_id, this.uid, this.invite_code, this.balance);
+
+	factory DownlinkUserEntity.fromJson(Map<String, dynamic> json) =>
+		_$DownlinkUserEntityFromJson(json);
+}

@@ -22,4 +22,9 @@ class ApiRepository {
 	Future<GetOrderResponse> getOrder() {
 		return _apiProvider.getOrder();
 	}
+
+	Future<DownlinkUserResponse> downlinkUser() {
+		return _apiProvider.downlinkUser();
+	}
+
 }

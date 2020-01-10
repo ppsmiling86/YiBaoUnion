@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/models/AppData.dart';
 import 'payment_view.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
+import 'package:myapp/models/ApiProvider.dart';
+import 'package:myapp/models/Response.dart';
 class WaiverPage extends StatefulWidget {
 	@override
   State<StatefulWidget> createState() {
@@ -10,6 +13,8 @@ class WaiverPage extends StatefulWidget {
 }
 
 class WaiverPageState extends State <WaiverPage> {
+
+	final _apiProvider = ApiProvider();
 	@override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,10 +47,19 @@ class WaiverPageState extends State <WaiverPage> {
 			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 			child: GestureDetector(
 				onTap: (){
-					Navigator.push(
-						context,
-						MaterialPageRoute(builder: (context) => PaymentView()),
-					);
+					CommonWidgetTools.showLoading(context);
+					_apiProvider.placeOrder(AppData().orderRequest.amount).then((value){
+						Navigator.pop(context);
+						print("place order success, order id is: ${value.data.id}");
+						if (value.data is PlaceOrderEntity) {
+							Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => PaymentView(value.data)),
+							);
+						} else {
+							CommonWidgetTools.showAlertController(context, value.msg);
+						}
+					});
 				},
 				child: Container(
 					height: 50,
