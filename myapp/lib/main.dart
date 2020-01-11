@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LocalStorageTools.saveUpperInviteCode();
+    print("upper invite code is :${LocalStorageTools.getUpperInviteCode()}");
     return MaterialApp(
       title: '龙门算力租赁',
       theme: ThemeData(

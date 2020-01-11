@@ -92,10 +92,10 @@ class User {
 
 		print("clear local data...");
 
-
 		LocalStorageTools.setObject("", kLoginPhoneNumber);
 		LocalStorageTools.setObject("", kToken);
 		LocalStorageTools.setObject("", kInviteCode);
+		LocalStorageTools.clearUpperInviteCode();
 
 		print("must no login phone number: ${LocalStorageTools.object(kLoginPhoneNumber)}");
 		print("must no token: ${LocalStorageTools.object(kToken)}");

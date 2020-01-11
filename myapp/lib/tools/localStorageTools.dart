@@ -23,13 +23,19 @@ class LocalStorageTools {
 	static void saveUpperInviteCode() {
 		var url = window.location.href;
 		print("url is $url");
-		Uri uri = Uri.dataFromString("url");
-		var inviteCode = uri.queryParameters["invite_code"];
+		Uri uri = Uri.dataFromString(url);
+		var inviteCode = uri.queryParameters["invite_code"].replaceAll("#/", "");
+		print(uri.queryParameters.toString());
+		print("parsed inviteCode is ${inviteCode}");
 		LocalStorageTools.setObject(inviteCode, kUpperInviteCode);
 	}
 
 	static String getUpperInviteCode() {
 		return LocalStorageTools.object(kUpperInviteCode);
+	}
+
+	static void clearUpperInviteCode() {
+		LocalStorageTools.setObject("", kUpperInviteCode);
 	}
 
 }
