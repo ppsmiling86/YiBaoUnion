@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/downlinkUserBloc.dart';
 import 'package:myapp/models/Response.dart';
+import 'package:myapp/tools/dateTools.dart';
 class MyFriendsView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -80,8 +81,8 @@ class MyFriendsViewState extends State<MyFriendsView> {
 			mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 			children: <Widget>[
 				buildListElement("用户", "${downlinkUserEntity.uid}"),
-				buildListElement("层级", "${downlinkUserEntity.uid}"),
-				buildListElement("注册时间", "${downlinkUserEntity.uid}"),
+				buildListElement("层级", "${downlinkUserEntity.level}级"),
+				buildListElement("注册时间", "${DateTools.ConvertDateToString(downlinkUserEntity.created_at)}"),
 			],
 		);
 	}
@@ -91,9 +92,9 @@ class MyFriendsViewState extends State<MyFriendsView> {
 			crossAxisAlignment: CrossAxisAlignment.start,
 			mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 			children: <Widget>[
-				buildListElement("总挖矿", "${downlinkUserEntity.balance}"),
-				buildListElement("佣金比例", "${downlinkUserEntity.balance * 100}%"),
-				buildListElement("我的佣金", "${downlinkUserEntity.balance}"),
+				buildListElement("总挖矿", "${downlinkUserEntity.total_buy_score}"),
+				buildListElement("佣金比例", "${downlinkUserEntity.ratio}"),
+				buildListElement("我的佣金", "${downlinkUserEntity.commission}"),
 			],
 		);
 	}

@@ -137,7 +137,7 @@ class OrderListViewState extends State <OrderListView>{
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
 							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
+							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
 						],
 					),
 					Row(
@@ -224,7 +224,7 @@ class OrderListViewState extends State <OrderListView>{
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
 							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
+							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
 						],
 					),
 					Row(
@@ -311,7 +311,7 @@ class OrderListViewState extends State <OrderListView>{
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
 							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
+							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
 						],
 					),
 					Row(
@@ -392,7 +392,7 @@ class OrderListViewState extends State <OrderListView>{
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
 							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
+							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
 						],
 					),
 				],

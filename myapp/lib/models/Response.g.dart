@@ -252,17 +252,78 @@ Map<String, dynamic> _$DownlinkUserResponseToJson(
 
 DownlinkUserEntity _$DownlinkUserEntityFromJson(Map<String, dynamic> json) {
   return DownlinkUserEntity(
-    json['invitor_id'] as String,
     json['uid'] as String,
-    json['invite_code'] as String,
-    (json['balance'] as num)?.toDouble(),
+    (json['total_buy_score'] as num)?.toDouble(),
+    json['created_at'] as int,
+    (json['commission'] as num)?.toDouble(),
+    json['level'] as int,
+    json['ratio'] as String,
   );
 }
 
 Map<String, dynamic> _$DownlinkUserEntityToJson(DownlinkUserEntity instance) =>
     <String, dynamic>{
-      'invitor_id': instance.invitor_id,
       'uid': instance.uid,
-      'invite_code': instance.invite_code,
-      'balance': instance.balance,
+      'total_buy_score': instance.total_buy_score,
+      'created_at': instance.created_at,
+      'commission': instance.commission,
+      'level': instance.level,
+      'ratio': instance.ratio,
+    };
+
+WithdrawAddressListResponse _$WithdrawAddressListResponseFromJson(
+    Map<String, dynamic> json) {
+  return WithdrawAddressListResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    (json['data'] as List)
+        ?.map((e) => e == null
+            ? null
+            : WithdrawAddressEntity.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$WithdrawAddressListResponseToJson(
+        WithdrawAddressListResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+WithdrawAddressEntity _$WithdrawAddressEntityFromJson(
+    Map<String, dynamic> json) {
+  return WithdrawAddressEntity(
+    json['id'] as String,
+    json['tag'] as String,
+    json['address'] as String,
+  );
+}
+
+Map<String, dynamic> _$WithdrawAddressEntityToJson(
+        WithdrawAddressEntity instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'tag': instance.tag,
+      'address': instance.address,
+    };
+
+WithdrawAddressResponse _$WithdrawAddressResponseFromJson(
+    Map<String, dynamic> json) {
+  return WithdrawAddressResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : WithdrawAddressEntity.fromJson(json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$WithdrawAddressResponseToJson(
+        WithdrawAddressResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
     };

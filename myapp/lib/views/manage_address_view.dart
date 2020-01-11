@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
+import 'package:myapp/models/WithdrawAddressListBloc.dart';
+import 'package:myapp/models/Response.dart';
+import 'package:myapp/tools/stringTools.dart';
+import 'package:myapp/models/ApiRepository.dart';
 class ManageAddressView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -9,16 +13,34 @@ class ManageAddressView extends StatefulWidget {
 }
 
 class ManageAddressViewState extends State<ManageAddressView> {
+	final _apiRepository = ApiRepository();
+	final editAddressController = TextEditingController();
+	final editTagController = TextEditingController();
+	final _formKey = GlobalKey<FormState>();
 	var isEditingMode = false;
+	final listBloc = WithdrawAddressListBloc();
+	@override
+	void dispose() {
+		super.dispose();
+		editAddressController.dispose();
+		editTagController.dispose();
+		listBloc.dispose();
+	}
+
+	@override
+	void initState() {
+		super.initState();
+	}
 
 	@override
 	Widget build(BuildContext context) {
+		listBloc.getWithdrawAddress();
 		return Scaffold(
 			appBar: CommonWidgetTools.appBarWithTitleActions(context, "管理地址", [
 				GestureDetector(
 					onTap: (){
 						setState(() {
-						  isEditingMode = !isEditingMode;
+							isEditingMode = !isEditingMode;
 						});
 					},
 					child: SizedBox(
@@ -29,39 +51,63 @@ class ManageAddressViewState extends State<ManageAddressView> {
 					),
 				),
 			]),
-			body: SizedBox(
-				width: double.infinity,
-				child: Container(
-					padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-					child: ListView.separated(
-						itemBuilder: (contest,index) => buildAddressItem(MockAddress()),
-						separatorBuilder: (context, index) => Divider(),
-						itemCount: 2,
-					),
-				),
-			),
+			body: buildStreamBuilderView(),
 			bottomNavigationBar: CommonWidgetTools.buildBottomButton("新增", (){
+
 				showDialog(
 					context: context,
 					builder: (BuildContext context){
-						return buildEditAddressDialog(MockAddress());
+						return buildEditAddressDialog(WithdrawAddressEntity(" "," "," "));
 					}
 				);
 			}),
 		);
 	}
 
-	Widget buildAddressItem(AddressInterface address) {
+	StreamBuilder buildStreamBuilderView() {
+		return StreamBuilder<WithdrawAddressListResponse>(
+			stream: listBloc.subject.stream,
+			builder: (context, AsyncSnapshot<WithdrawAddressListResponse> snapshot) {
+				print(snapshot);
+				if (snapshot.hasData) {
+					return SizedBox(
+						width: double.infinity,
+						child: Container(
+							padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+							child: ListView.separated(
+								itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
+								separatorBuilder: (context, index) => Divider(),
+								itemCount: snapshot.data.data is List ?  snapshot.data.data.length : 0,
+							),
+						),
+					);
+				} else if (snapshot.hasError) {
+					print("hasError");
+					return Container();
+				} else {
+					print("loading");
+					return SizedBox(
+						width: double.infinity,
+						height: 100,
+						child: Container(
+							child: Center(child: CircularProgressIndicator()),
+						),
+					);
+				}
+			});
+	}
+
+	Widget buildAddressItem(WithdrawAddressEntity withdrawAddressEntity) {
 		List<Widget>list = []..add(Expanded(
 			flex: 3,
-			child: buildListColumn("备注", address.remark())));
+			child: buildListColumn("备注", withdrawAddressEntity.tag)));
 		list.add(Expanded(
 			flex: 3,
-			child: buildListColumn("地址", address.address())));
+			child: buildListColumn("地址", withdrawAddressEntity.address)));
 		if (isEditingMode) {
 			list.add(Expanded(
 				flex: 2,
-				child: buildEditAndDelete()));
+				child: buildEditAndDelete(withdrawAddressEntity)));
 		}
 		return Container(
 			child: Row(
@@ -71,19 +117,31 @@ class ManageAddressViewState extends State<ManageAddressView> {
 		);
 	}
 
-	Widget buildEditAndDelete() {
+	Widget buildEditAndDelete(WithdrawAddressEntity withdrawAddressEntity) {
 		return Row(
 			children: <Widget>[
 				IconButton(icon: Icon(Icons.edit), onPressed: (){
 					showDialog(
 						context: context,
 						builder: (BuildContext context){
-							return buildEditAddressDialog(MockAddress());
+							return buildEditAddressDialog(withdrawAddressEntity);
 						}
 					);
 				}),
 				IconButton(icon: Icon(Icons.delete), onPressed: (){
-
+					CommonWidgetTools.showConfirmAlertController(context, "确认删除？", (){
+						CommonWidgetTools.showLoading(context);
+						_apiRepository.deleteWithdrawAddress(withdrawAddressEntity).then((value){
+							CommonWidgetTools.dismissLoading(context);
+							if (value.code != "0") {
+								CommonWidgetTools.showToastView(context, "删除失败");
+							} else {
+								CommonWidgetTools.showToastView(context,"删除成功");
+								setState(() {
+								});
+							}
+						});
+					});
 				}),
 			],
 		);
@@ -98,48 +156,49 @@ class ManageAddressViewState extends State<ManageAddressView> {
 			],
 		);
 	}
-	
-	Widget buildEditAddressDialog(AddressInterface address) {
+
+	Widget buildEditAddressDialog(WithdrawAddressEntity withdrawAddressEntity) {
+		editTagController.text = withdrawAddressEntity.tag;
+		editAddressController.text = withdrawAddressEntity.address;
 		return AlertDialog(
 			content: SizedBox(
 				width: 300,
 				height: 200,
 				child: Container(
-					child: Column(
-						children: <Widget>[
-							TextFormField(
-								initialValue: address.remark(),
-								decoration: InputDecoration(
-									icon: Icon(Icons.bookmark),
-									labelText: '备注:',
-									hintText: "请输入备注"
+					child: Form(
+						key: _formKey,
+						child: Column(
+							children: <Widget>[
+								TextFormField(
+									controller: editTagController,
+									decoration: InputDecoration(
+										icon: Icon(Icons.bookmark),
+										labelText: '备注:',
+										hintText: "请输入备注"
+									),
+									validator: (String value) {
+										if (value.isEmpty) {
+											return '请输入备注';
+										}
+										return null;
+									},
 								),
-								onSaved: (String value) {
-								},
-								validator: (String value) {
-									if (value.isEmpty) {
-										return '请输入备注';
-									}
-									return null;
-								},
-							),
-							TextFormField(
-								initialValue: address.address(),
-								decoration: InputDecoration(
-									icon: Icon(Icons.account_balance_wallet),
-									labelText: '共创钱包地址:',
-									hintText: "请输入或长按粘贴地址"
-								),
-								onSaved: (String value) {
-								},
-								validator: (String value) {
-									if (value.isEmpty) {
-										return '请输入提币地址';
-									}
-									return null;
-								},
-							)
-						],
+								TextFormField(
+									controller: editAddressController,
+									decoration: InputDecoration(
+										icon: Icon(Icons.account_balance_wallet),
+										labelText: '共创钱包地址:',
+										hintText: "请输入或长按粘贴地址"
+									),
+									validator: (String value) {
+										if (!StringTools.ValidateWithdrawAddress(value.trim())) {
+											return '请输入正确的提币地址';
+										}
+										return null;
+									},
+								)
+							],
+						),
 					),
 				),
 			),
@@ -148,27 +207,41 @@ class ManageAddressViewState extends State<ManageAddressView> {
 					Navigator.pop(context);
 				}, child: Text("取消")),
 				FlatButton(onPressed: (){
-					Navigator.pop(context);
+					if (_formKey.currentState.validate()) {
+						CommonWidgetTools.showLoading(context);
+						bool isEditAddress = withdrawAddressEntity.id.length > 1;
+						if (isEditAddress) {
+							print("edit address");
+							_apiRepository.editWithdrawAddress(WithdrawAddressEntity(withdrawAddressEntity.id, editTagController.text.trim(), editAddressController.text.trim())).then((value){
+								CommonWidgetTools.dismissLoading(context);
+								if (value.data == null) {
+									CommonWidgetTools.showToastView(context, "编辑失败");
+								} else {
+									CommonWidgetTools.showToastView(context,"编辑成功");
+									setState(() {
+										Navigator.pop(context);
+									});
+								}
+							});
+						} else {
+							print("add address");
+							_apiRepository.addWithdrawAddress(WithdrawAddressEntity("", editTagController.text.trim(), editAddressController.text.trim())).then((value){
+								CommonWidgetTools.dismissLoading(context);
+								if (value.data == null) {
+									CommonWidgetTools.showToastView(context, "添加失败");
+								} else {
+									CommonWidgetTools.showToastView(context, "添加成功");
+									setState(() {
+										Navigator.pop(context);
+									});
+								}
+							});
+						}
+					}
 				}, child: Text("确认")),
 			],
 		);
 	}
 
-}
-
-abstract class AddressInterface {
-	String remark();
-	String address();
-}
-
-class MockAddress implements AddressInterface {
-	@override
-	String remark() {
-		return "我的提现地址";
-	}
-	@override
-	String address() {
-		return "xxxxxxxxxx";
-	}
 }
 

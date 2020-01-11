@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-
 part 'Response.g.dart';
 // flutter packages pub run build_runner watch --delete-conflicting-outputs
 
@@ -239,14 +238,70 @@ class DownlinkUserResponse extends Object {
 
 @JsonSerializable()
 class DownlinkUserEntity extends Object {
-	final String invitor_id;
+
 	final String uid;
-	final String invite_code;
-	final double balance; // 发奖时间
+	final double total_buy_score;
+	final int created_at;
+	final double commission;
+	final int level;
+	final String ratio;
 
-
-	DownlinkUserEntity(this.invitor_id, this.uid, this.invite_code, this.balance);
+	DownlinkUserEntity(this.uid, this.total_buy_score, this.created_at, this.commission, this.level, this.ratio);
 
 	factory DownlinkUserEntity.fromJson(Map<String, dynamic> json) =>
 		_$DownlinkUserEntityFromJson(json);
+}
+
+@JsonSerializable()
+class WithdrawAddressListResponse extends Object {
+	final String msg;
+	final String code;
+	final List<WithdrawAddressEntity> data;
+
+	WithdrawAddressListResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory WithdrawAddressListResponse.fromJson(Map<String, dynamic> json) =>
+		_$WithdrawAddressListResponseFromJson(json);
+
+	WithdrawAddressListResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class WithdrawAddressEntity extends Object {
+	final String id;
+	final String tag;
+	final String address;
+
+	WithdrawAddressEntity(this.id, this.tag, this.address);
+
+	factory WithdrawAddressEntity.fromJson(Map<String, dynamic> json) =>
+		_$WithdrawAddressEntityFromJson(json);
+}
+
+@JsonSerializable()
+class WithdrawAddressResponse extends Object {
+	final String msg;
+	final String code;
+	final WithdrawAddressEntity data;
+
+	WithdrawAddressResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory WithdrawAddressResponse.fromJson(Map<String, dynamic> json) =>
+		_$WithdrawAddressResponseFromJson(json);
+
+	WithdrawAddressResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
 }

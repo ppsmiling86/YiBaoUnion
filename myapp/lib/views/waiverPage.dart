@@ -48,6 +48,7 @@ class WaiverPageState extends State <WaiverPage> {
 			child: GestureDetector(
 				onTap: (){
 					CommonWidgetTools.showLoading(context);
+					print("place order amount ${AppData().orderRequest.amount}");
 					_apiProvider.placeOrder(AppData().orderRequest.amount).then((value){
 						Navigator.pop(context);
 						print("place order success, order id is: ${value.data.id}");

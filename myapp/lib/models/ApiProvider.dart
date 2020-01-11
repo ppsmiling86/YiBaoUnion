@@ -43,6 +43,17 @@ class ApiProvider {
 		}
 	}
 
+	Future<SMSResponse> smsSelf() async {
+		try {
+			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.smsSelf);
+			print(response);
+			return SMSResponse.fromJson(response.data);
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return SMSResponse.withError('$error');
+		}
+	}
+
 	Future<ProductResponse> productInfo() async {
 		try {
 			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.productInfo);
@@ -92,6 +103,58 @@ class ApiProvider {
 		} catch (error, stacktrace) {
 			print('Exception occured:$error stackTrace: $stacktrace');
 			return DownlinkUserResponse.withError('$error');
+		}
+	}
+
+	Future<WithdrawAddressResponse> addWithDrawAddress(WithdrawAddressEntity withdrawAddressEntity) async {
+		try {
+			Response response = await dio().post(ServerConfig.baseUrl + ServerConfig.withdrawAddress,data: {"tag": withdrawAddressEntity.tag,"address": withdrawAddressEntity.address});
+			print(response);
+			var pr = WithdrawAddressResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return WithdrawAddressResponse.withError('$error');
+		}
+	}
+
+	Future<WithdrawAddressResponse> deleteWithDrawAddress(WithdrawAddressEntity withdrawAddressEntity) async {
+		try {
+			Response response = await dio().delete(ServerConfig.baseUrl + ServerConfig.withdrawAddress,data: {"id": withdrawAddressEntity.id});
+			print(response);
+			var pr = WithdrawAddressResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return WithdrawAddressResponse.withError('$error');
+		}
+	}
+
+	Future<WithdrawAddressResponse> editWithDrawAddress(WithdrawAddressEntity withdrawAddressEntity) async {
+		try {
+			Response response = await dio().put(ServerConfig.baseUrl + ServerConfig.withdrawAddress,data: {"id": withdrawAddressEntity.id,"tag": withdrawAddressEntity.tag,"address": withdrawAddressEntity.address});
+			print(response);
+			var pr = WithdrawAddressResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return WithdrawAddressResponse.withError('$error');
+		}
+	}
+
+	Future<WithdrawAddressListResponse> getWithDrawAddress() async {
+		try {
+			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.withdrawAddress);
+			print(response);
+			var pr = WithdrawAddressListResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return WithdrawAddressListResponse.withError('$error');
 		}
 	}
 

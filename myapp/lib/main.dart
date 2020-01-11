@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     LocalStorageTools.saveUpperInviteCode();
     return MaterialApp(
-      title: '共创医保',
+      title: '龙门算力租赁',
       theme: ThemeData(
         // This is the theme of your application.
         //

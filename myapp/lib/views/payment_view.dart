@@ -76,7 +76,7 @@ class PaymentViewState extends State <PaymentView> {
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
 											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text("x 1000 U")
+											Text("x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -95,7 +95,7 @@ class PaymentViewState extends State <PaymentView> {
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
 							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ 100000.00",style: TextStyle(color: Colors.red)),
+							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
 						],
 					),
 					Divider(),

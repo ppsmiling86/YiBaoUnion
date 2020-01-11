@@ -11,6 +11,10 @@ class ApiRepository {
 		return _apiProvider.sms(mobile);
 	}
 
+	Future<SMSResponse> smsSelf() {
+		return _apiProvider.smsSelf();
+	}
+
 	Future<ProductResponse> productInfo() {
 		return _apiProvider.productInfo();
 	}
@@ -25,6 +29,22 @@ class ApiRepository {
 
 	Future<DownlinkUserResponse> downlinkUser() {
 		return _apiProvider.downlinkUser();
+	}
+
+	Future<WithdrawAddressResponse> addWithdrawAddress(WithdrawAddressEntity withdrawAddressEntity) {
+		return _apiProvider.addWithDrawAddress(withdrawAddressEntity);
+	}
+
+	Future<WithdrawAddressResponse> deleteWithdrawAddress(WithdrawAddressEntity withdrawAddressEntity) {
+		return _apiProvider.deleteWithDrawAddress(withdrawAddressEntity);
+	}
+
+	Future<WithdrawAddressResponse> editWithdrawAddress(WithdrawAddressEntity withdrawAddressEntity) {
+		return _apiProvider.editWithDrawAddress(withdrawAddressEntity);
+	}
+
+	Future<WithdrawAddressListResponse> getWithdrawAddress() {
+		return _apiProvider.getWithDrawAddress();
 	}
 
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'package:myapp/tools/colorTools.dart';
 import 'my_friends_view.dart';
-import 'package:toast/toast.dart';
 import 'package:clippy/browser.dart' as clippy;
 import 'prize_rule_view.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
@@ -90,8 +89,7 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 									color: ColorTools.green1AAD19,
 									onPressed: () {
 										clippy.write('www.baiducom');
-										Toast.show("复制成功", context,
-											duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+										CommonWidgetTools.showToastView(context, "复制成功");
 									}, child: Text("复制邀请链接",style: TextStyle(color: Colors.white),)),
 							)
 						),

@@ -55,10 +55,10 @@ class CheckoutPageState extends State <CheckoutPage> {
 					print("loading");
 					return SizedBox(
 						width: double.infinity,
-					  height: 100,
-					  child: Container(
-					  	child: Center(child: CircularProgressIndicator()),
-					  ),
+						height: 100,
+						child: Container(
+							child: Center(child: CircularProgressIndicator()),
+						),
 					);
 				}
 			});
@@ -101,146 +101,156 @@ class CheckoutPageState extends State <CheckoutPage> {
 			height: 350,
 			child: Form(
 				key: _formKey,
-			  child: Column(
-			  	mainAxisAlignment: MainAxisAlignment.start,
-			  	children: <Widget>[
-			  		Container(
-			  			height: 40,
-			  			child: Row(
-			  				mainAxisAlignment: MainAxisAlignment.spaceBetween,
-			  				children: <Widget>[
-			  					Text("算力单价"),
-			  					Text("¥ ${productEntity.price} / U"),
-			  				],
-			  			),
-			  		),
-			  		Container(
-			  			height: 40,
-			  			child: Row(
-			  				mainAxisAlignment: MainAxisAlignment.spaceBetween,
-			  				children: <Widget>[
-			  					Text("数量 (U)"),
-			  					Container(
-			  						width: 200,
-			  						child: Row(
-			  							mainAxisAlignment: MainAxisAlignment.end,
-			  							children: <Widget>[
-			  								GestureDetector(
-			  									child: SizedBox(
-			  										width: 40,
-			  									  height: 60,
-			  									  child: Container(
-			  										  color: Colors.white,
-			  									  	child: Center(child: Text("-",style: TextStyle(color: Colors.grey)))
-			  									  ),
-			  									),
-			  									onTap: (){
-			  										var current = int.parse(amountController.text);
-			  										if (current > 0) {
-			  											var sub = current-1;
-			  											setState(() {
-			  												amountController.text = "$sub";
-			  											});
-			  										}
-			  									},
-			  								),
-			  								SizedBox(
-			  									width: 40,
-			  								  height: 60,
-			  								  child: Container(
-			  									  decoration: BoxDecoration(
-			  										  borderRadius: BorderRadius.circular(1),
-			  									  ),
-			  								  	child: TextFormField(
-			  								  		controller: amountController,
-			  								  		textAlign: TextAlign.center,
-			  								  		onSaved: (String value) {
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.start,
+					children: <Widget>[
+						Container(
+							height: 40,
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.spaceBetween,
+								children: <Widget>[
+									Text("算力单价"),
+									Text("¥ ${productEntity.price} / U"),
+								],
+							),
+						),
+						Container(
+							height: 40,
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.spaceBetween,
+								children: <Widget>[
+									Text("数量 (U)"),
+									Container(
+										width: 200,
+										child: Row(
+											mainAxisAlignment: MainAxisAlignment.end,
+											children: <Widget>[
+												GestureDetector(
+													child: SizedBox(
+														width: 40,
+														height: 60,
+														child: Container(
+															color: Colors.white,
+															child: Center(child: Text("-",style: TextStyle(color: Colors.grey)))
+														),
+													),
+													onTap: (){
+														if (StringTools.ValidateNumber(amountController.text)) {
+															var current = int.parse(amountController.text);
+															if (current > 0) {
+																var sub = current - 1;
+																setState(() {
+																	amountController.text = "$sub";
+																});
+															}
+														}
+													},
+												),
+												SizedBox(
+													width: 40,
+													height: 60,
+													child: Container(
+														decoration: BoxDecoration(
+															borderRadius: BorderRadius.circular(1),
+														),
+														child: TextFormField(
+															controller: amountController,
+															textAlign: TextAlign.center,
+															validator: (String value) {
+																value = value.trim();
+																if (!StringTools.ValidateNumber(value)) {
+																	CommonWidgetTools.showAlertController(context, "请输入正确的数字");
+																	return null;
+																}
+																int amount = int.parse(value);
+																if (amount < 1 || amount > productEntity.limit_per_user) {
+																	CommonWidgetTools.showAlertController(context, "超出最大购买量");
+																	return null;
+																}
 
-			  								  		},
-			  								  		validator: (String value) {
-			  								  			value = value.trim();
-			  								  			if (!StringTools.ValidateNumber(value)) {
-			  								  				return "请输入正确的数字";
-			  								  			}
-			  								  			return null;
-			  								  		},
-			  								  	),
-			  								  ),
-			  								),
-			  								GestureDetector(
-			  									child: SizedBox(
-			  										width: 40,
-			  										height: 60,
-			  										child: Container(
-			  											color: Colors.white,
-			  											child: Center(child: Text("+",style: TextStyle(color: Colors.grey))))),
-			  									onTap: (){
-			  										var current = int.parse(amountController.text);
-			  										if (current < 1000000) {
-			  											var add = current+1;
-			  											setState(() {
-			  												amountController.text = "$add";
-			  											});
-			  										}
-			  									},
-			  								),
-			  							],
-			  						),
-			  					)
-			  				],
-			  			),
-			  		),
-			  		Row(
-			  			mainAxisAlignment: MainAxisAlignment.end,
-			  		children: <Widget>[
-			  			Text("每人每日限购${productEntity.limit_per_user}U")
-			  		],
-			  		),
-			  		Row(
-			  			mainAxisAlignment: MainAxisAlignment.spaceBetween,
-			  			children: <Widget>[
-			  				Text("每日总额 ${productEntity.total_supply} U"),
-			  				Text("租赁进度: ${productEntity.sold_progress * 100}%"),
-			  			],
-			  		),
-			  		SizedBox(height: 6),
-			  		SizedBox(
-			  			width: double.infinity,
-			  		  child: Container(
-			  		    child: LinearPercentIndicator(
-			  		    	lineHeight: 8.0,
-			  		    	percent: productEntity.sold_progress,
-			  		    	progressColor: Colors.blue,
-			  		    ),
-			  		  ),
-			  		),
-			  		SizedBox(height: 10),
-			  		Container(
-			  			height: 40,
-			  			child: Row(
-			  				children: <Widget>[
-			  					Expanded(child: Text("租赁周期为24小时,每U算力24小时大约可产生1个共创积分,24小时后，积分将自动发放到账户",style: TextStyle(color: Colors.red),)),
-			  				],
-			  			),
-			  		),
-			  		SizedBox(height: 30),
-			  		Container(
-			  			height: 40,
-			  			child: Row(
-			  				mainAxisAlignment: MainAxisAlignment.spaceBetween,
-			  				children: <Widget>[
-			  					Text("合计: ¥ ${productEntity.price * int.parse(amountController.text)}"),
-			  					Column(
-			  						children: <Widget>[
-			  							Text("总额: ${productEntity.price * int.parse(amountController.text)}"),
-			  						],
-			  					),
-			  				],
-			  			),
-			  		),
-			  		buildBottomButtons(),
-			  	],
-			  ),
+																print("${amount}");
+																AppData().orderRequest.amount = amount;
+																return null;
+															},
+														),
+													),
+												),
+												GestureDetector(
+													child: SizedBox(
+														width: 40,
+														height: 60,
+														child: Container(
+															color: Colors.white,
+															child: Center(child: Text("+",style: TextStyle(color: Colors.grey))))),
+													onTap: (){
+														if (StringTools.ValidateNumber(amountController.text)) {
+															var current = int.parse(amountController.text);
+															if (current < productEntity.limit_per_user) {
+																var add = current+1;
+																setState(() {
+																	amountController.text = "$add";
+																});
+															}
+														}
+													},
+												),
+											],
+										),
+									)
+								],
+							),
+						),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.end,
+							children: <Widget>[
+								Text("每人每日限购${productEntity.limit_per_user}U")
+							],
+						),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.spaceBetween,
+							children: <Widget>[
+								Text("每日总额 ${productEntity.total_supply} U"),
+								Text("租赁进度: ${productEntity.sold_progress * 100}%"),
+							],
+						),
+						SizedBox(height: 6),
+						SizedBox(
+							width: double.infinity,
+							child: Container(
+								child: LinearPercentIndicator(
+									lineHeight: 8.0,
+									percent: productEntity.sold_progress,
+									progressColor: Colors.blue,
+								),
+							),
+						),
+						SizedBox(height: 10),
+						Container(
+							height: 40,
+							child: Row(
+								children: <Widget>[
+									Expanded(child: Text("租赁周期为24小时,每U算力24小时大约可产生1个共创积分,24小时后，积分将自动发放到账户",style: TextStyle(color: Colors.red),)),
+								],
+							),
+						),
+						SizedBox(height: 30),
+						Container(
+							height: 40,
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.spaceBetween,
+								children: <Widget>[
+									Text("合计: ¥ ${productEntity.price * int.parse(amountController.text)}"),
+									Column(
+										children: <Widget>[
+											Text("总额: ${productEntity.price * int.parse(amountController.text)}"),
+										],
+									),
+								],
+							),
+						),
+						buildBottomButtons(),
+					],
+				),
 			),
 		);
 	}
@@ -275,12 +285,12 @@ class CheckoutPageState extends State <CheckoutPage> {
 								shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
 								onPressed: (){
 									if (_formKey.currentState.validate()) {
-										_formKey.currentState.save();
-										AppData().orderRequest.amount = int.parse(amountController.text);
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => WaiverPage()),
-										);
+										if (AppData().orderRequest.amount > 0) {
+											Navigator.push(
+												context,
+												MaterialPageRoute(builder: (context) => WaiverPage()),
+											);
+										}
 									}
 								},
 								child: Text("确认租赁",style: TextStyle(color: Colors.white),)

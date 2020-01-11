@@ -7,8 +7,10 @@ import 'package:myapp/custom_views/center_view.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'package:myapp/tools/stringTools.dart';
 import 'manage_address_view.dart';
-import 'package:toast/toast.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
+import 'package:myapp/models/WithdrawAddressListBloc.dart';
+import 'package:myapp/models/Response.dart';
+
 class WithdrawView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -22,12 +24,14 @@ class WithdrawViewState extends State <WithdrawView> {
 	final walletController = TextEditingController();
 	final amountController = TextEditingController();
 	final verifyController = TextEditingController();
+	final listBloc = WithdrawAddressListBloc();
 
 	@override
   void dispose() {
     walletController.dispose();
     amountController.dispose();
     verifyController.dispose();
+    listBloc.dispose();
     super.dispose();
   }
 
@@ -93,27 +97,12 @@ class WithdrawViewState extends State <WithdrawView> {
 									width: 80,
 									height: 30,
 									child: Container(child: Center(child: OutlineButton(onPressed: (){
+										listBloc.getWithdrawAddress();
 										showDialog(
 											barrierDismissible: false,
 											context: context,
 											builder: (BuildContext context){
-												return AlertDialog(
-													title: Text("请选择提现地址"),
-													content: Center(
-													  child: SizedBox(
-													  	width: 300,
-													    height: 300,
-													    child: Container(
-													  	  padding: EdgeInsets.symmetric(horizontal: 16),
-													    	child: ListView.separated(
-													    		itemBuilder: (contest,index) => buildAddressItem(),
-													    		separatorBuilder: (context, index) => Divider(color: Colors.black),
-													    		itemCount: 2,
-													    	),
-													    ),
-													  ),
-													),
-												);
+												return buildWithdrawListStreamBuilderView();
 											}
 										);
 									},child: Text("选择"))))
@@ -126,12 +115,51 @@ class WithdrawViewState extends State <WithdrawView> {
 		);
 	}
 
-	Widget buildAddressItem() {
+	StreamBuilder buildWithdrawListStreamBuilderView() {
+		return StreamBuilder<WithdrawAddressListResponse>(
+			stream: listBloc.subject.stream,
+			builder: (context, AsyncSnapshot<WithdrawAddressListResponse> snapshot) {
+				print(snapshot);
+				if (snapshot.hasData) {
+					return AlertDialog(
+						title: Text("请选择提现地址"),
+						content: Center(
+							child: SizedBox(
+								width: 300,
+								height: 300,
+								child: Container(
+									padding: EdgeInsets.symmetric(horizontal: 16),
+									child: ListView.separated(
+										itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
+										separatorBuilder: (context, index) => Divider(),
+										itemCount: snapshot.data.data.length,
+									),
+								),
+							),
+						),
+					);
+				} else if (snapshot.hasError) {
+					print("hasError");
+					return Container();
+				} else {
+					print("loading");
+					return SizedBox(
+						width: double.infinity,
+						height: 100,
+						child: Container(
+							child: Center(child: CircularProgressIndicator()),
+						),
+					);
+				}
+			});
+	}
+
+	Widget buildAddressItem(WithdrawAddressEntity withdrawAddressEntity) {
 		return InkWell(
 			onTap: (){
 				Navigator.pop(context);
 				setState(() {
-					walletController.text = "xxxxxxxxxxxx";
+					walletController.text = withdrawAddressEntity.address;
 				});
 			},
 		  child: Container(
@@ -140,10 +168,10 @@ class WithdrawViewState extends State <WithdrawView> {
 		  		children: <Widget>[
 		  			Expanded(
 		  				flex: 1,
-		  				child: buildListColumn("备注", "我的提现地址")),
+		  				child: buildListColumn("备注", withdrawAddressEntity.tag)),
 		  			Expanded(
 		  				flex: 1,
-		  				child: buildListColumn("地址", "xxxxxxxxxxxx")),
+		  				child: buildListColumn("地址", withdrawAddressEntity.address)),
 		  		],
 		  	),
 		  ),
@@ -286,8 +314,7 @@ class WithdrawViewState extends State <WithdrawView> {
 											color: ColorTools.blue5677FC,
 											shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
 											onPressed: (){
-												Toast.show("复制成功", context,
-													duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+												CommonWidgetTools.showToastView(context, "复制成功");
 											},
 											child: Text("发送",style: TextStyle(color: Colors.white),)
 										),

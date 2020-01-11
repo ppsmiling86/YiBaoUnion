@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ant_icons/ant_icons.dart';
 import 'colorTools.dart';
+import 'package:toast/toast.dart';
 class CommonWidgetTools {
 	static Widget appBarWithTitleLeading(
 		BuildContext context, String title, VoidCallback leftOnTap) {
@@ -115,6 +116,26 @@ class CommonWidgetTools {
 		);
 	}
 
+	static void showConfirmAlertController(BuildContext context, String msg, VoidCallback onConfirm) {
+		showDialog(
+			context: context,
+			builder: (BuildContext context){
+				return AlertDialog(
+					content: Text(msg),
+					actions: <Widget>[
+						FlatButton(onPressed: (){
+							Navigator.pop(context);
+						}, child: Text("取消")),
+						FlatButton(onPressed: (){
+							onConfirm();
+							Navigator.pop(context);
+						}, child: Text("确定")),
+					],
+				);
+			}
+		);
+	}
+
 	static void showLoading(BuildContext context) {
 		showDialog(
 			context: context,
@@ -132,5 +153,32 @@ class CommonWidgetTools {
 				);
 			},
 		);
+	}
+
+	static void dismissLoading(BuildContext context) {
+		Navigator.pop(context);
+	}
+
+	static void showLoadingWithChild(BuildContext context,Widget child) {
+		showDialog(
+			context: context,
+			barrierDismissible: false,
+			builder: (BuildContext context) {
+				return Dialog(
+					child:
+					SizedBox(
+						width: 100,
+						height: 100,
+						child: Container(
+							child: Center(child: child),
+						),
+					),
+				);
+			},
+		);
+	}
+
+	static void showToastView(BuildContext context, String text) {
+		Toast.show(text, context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
 	}
 }

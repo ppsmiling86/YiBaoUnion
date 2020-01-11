@@ -19,8 +19,22 @@ class StringTools {
   }
 
   static bool ValidateNumber(String number) {
+    if (!isNumeric(number)) {
+      return false;
+    }
     RegExp exp = RegExp(r"[0-9]{1,10}$");
     return exp.hasMatch(number) && double.parse(number) >= 0;
+  }
+
+  static bool ValidateWithdrawAddress(String number) {
+    return number.length == 12;
+  }
+
+  static bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
   }
 
 }
