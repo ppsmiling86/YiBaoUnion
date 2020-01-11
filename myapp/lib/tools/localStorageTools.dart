@@ -24,12 +24,11 @@ class LocalStorageTools {
 		var url = window.location.href;
 		print("url is $url");
 		Uri uri = Uri.dataFromString("url");
-		var inviteCode = uri.queryParameters["inviteCode"];
+		var inviteCode = uri.queryParameters["invite_code"];
 		LocalStorageTools.setObject(inviteCode, kUpperInviteCode);
 	}
 
 	static String getUpperInviteCode() {
-
 		return LocalStorageTools.object(kUpperInviteCode);
 	}
 
