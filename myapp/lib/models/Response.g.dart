@@ -234,11 +234,9 @@ DownlinkUserResponse _$DownlinkUserResponseFromJson(Map<String, dynamic> json) {
   return DownlinkUserResponse(
     json['msg'] as String,
     json['code'] as String,
-    (json['data'] as List)
-        ?.map((e) => e == null
-            ? null
-            : DownlinkUserEntity.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    json['data'] == null
+        ? null
+        : DownlinkUserPackage.fromJson(json['data'] as Map<String, dynamic>),
   );
 }
 
@@ -248,6 +246,24 @@ Map<String, dynamic> _$DownlinkUserResponseToJson(
       'msg': instance.msg,
       'code': instance.code,
       'data': instance.data,
+    };
+
+DownlinkUserPackage _$DownlinkUserPackageFromJson(Map<String, dynamic> json) {
+  return DownlinkUserPackage(
+    (json['total_received_commission'] as num)?.toDouble(),
+    (json['records'] as List)
+        ?.map((e) => e == null
+            ? null
+            : DownlinkUserEntity.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$DownlinkUserPackageToJson(
+        DownlinkUserPackage instance) =>
+    <String, dynamic>{
+      'total_received_commission': instance.total_received_commission,
+      'records': instance.records,
     };
 
 DownlinkUserEntity _$DownlinkUserEntityFromJson(Map<String, dynamic> json) {
@@ -326,4 +342,103 @@ Map<String, dynamic> _$WithdrawAddressResponseToJson(
       'msg': instance.msg,
       'code': instance.code,
       'data': instance.data,
+    };
+
+PayStatusResponse _$PayStatusResponseFromJson(Map<String, dynamic> json) {
+  return PayStatusResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : PayStatusEntity.fromJson(json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$PayStatusResponseToJson(PayStatusResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+PayStatusEntity _$PayStatusEntityFromJson(Map<String, dynamic> json) {
+  return PayStatusEntity(
+    json['status'] as int,
+  );
+}
+
+Map<String, dynamic> _$PayStatusEntityToJson(PayStatusEntity instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+    };
+
+AvailableBalanceResponse _$AvailableBalanceResponseFromJson(
+    Map<String, dynamic> json) {
+  return AvailableBalanceResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : AvailableBalanceEntity.fromJson(json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$AvailableBalanceResponseToJson(
+        AvailableBalanceResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+AvailableBalanceEntity _$AvailableBalanceEntityFromJson(
+    Map<String, dynamic> json) {
+  return AvailableBalanceEntity(
+    (json['available'] as num)?.toDouble(),
+  );
+}
+
+Map<String, dynamic> _$AvailableBalanceEntityToJson(
+        AvailableBalanceEntity instance) =>
+    <String, dynamic>{
+      'available': instance.available,
+    };
+
+WithdrawListResponse _$WithdrawListResponseFromJson(Map<String, dynamic> json) {
+  return WithdrawListResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    (json['data'] as List)
+        ?.map((e) => e == null
+            ? null
+            : WithdrawEntity.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$WithdrawListResponseToJson(
+        WithdrawListResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+WithdrawEntity _$WithdrawEntityFromJson(Map<String, dynamic> json) {
+  return WithdrawEntity(
+    json['id'] as String,
+    (json['value'] as num)?.toDouble(),
+    json['address'] as String,
+    json['created_at'] as int,
+    json['status'] as int,
+  );
+}
+
+Map<String, dynamic> _$WithdrawEntityToJson(WithdrawEntity instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'value': instance.value,
+      'address': instance.address,
+      'created_at': instance.created_at,
+      'status': instance.status,
     };

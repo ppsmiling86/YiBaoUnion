@@ -219,7 +219,7 @@ class GetOrderResponse extends Object {
 class DownlinkUserResponse extends Object {
 	final String msg;
 	final String code;
-	final List<DownlinkUserEntity> data;
+	final DownlinkUserPackage data;
 
 	DownlinkUserResponse(
 		this.msg,
@@ -234,6 +234,18 @@ class DownlinkUserResponse extends Object {
 		: data = null,
 			code = "-1",
 			msg = error;
+}
+
+@JsonSerializable()
+class DownlinkUserPackage extends Object {
+
+	final double total_received_commission;
+	final List<DownlinkUserEntity> records;
+
+	DownlinkUserPackage(this.total_received_commission, this.records);
+
+	factory DownlinkUserPackage.fromJson(Map<String, dynamic> json) =>
+		_$DownlinkUserPackageFromJson(json);
 }
 
 @JsonSerializable()
@@ -304,4 +316,116 @@ class WithdrawAddressResponse extends Object {
 		: data = null,
 			code = "-1",
 			msg = error;
+}
+
+@JsonSerializable()
+class PayStatusResponse extends Object {
+	final String msg;
+	final String code;
+	final PayStatusEntity data;
+
+	PayStatusResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory PayStatusResponse.fromJson(Map<String, dynamic> json) =>
+		_$PayStatusResponseFromJson(json);
+
+	PayStatusResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class PayStatusEntity extends Object {
+	final int status;
+
+	PayStatusEntity(this.status);
+
+	factory PayStatusEntity.fromJson(Map<String, dynamic> json) =>
+		_$PayStatusEntityFromJson(json);
+}
+
+@JsonSerializable()
+class AvailableBalanceResponse extends Object {
+	final String msg;
+	final String code;
+	final AvailableBalanceEntity data;
+
+	AvailableBalanceResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory AvailableBalanceResponse.fromJson(Map<String, dynamic> json) =>
+		_$AvailableBalanceResponseFromJson(json);
+
+	AvailableBalanceResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class AvailableBalanceEntity extends Object {
+	final double available;
+
+	AvailableBalanceEntity(this.available);
+
+	factory AvailableBalanceEntity.fromJson(Map<String, dynamic> json) =>
+		_$AvailableBalanceEntityFromJson(json);
+}
+
+@JsonSerializable()
+class WithdrawListResponse extends Object {
+	final String msg;
+	final String code;
+	final List<WithdrawEntity> data;
+
+	WithdrawListResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory WithdrawListResponse.fromJson(Map<String, dynamic> json) =>
+		_$WithdrawListResponseFromJson(json);
+
+	WithdrawListResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class WithdrawEntity extends Object {
+	final String id;
+	final double value;
+	final String address;
+	final int created_at;
+	final int status;
+
+	WithdrawEntity(this.id, this.value, this.address, this.created_at, this.status);
+
+	String buildStatusStr() {
+		if (this.status == 0) {
+			return "审核中";
+		}
+
+		if (this.status == 1) {
+			return "成功";
+		}
+
+		if (this.status == -1) {
+			return "失败";
+		}
+		return "";
+	}
+
+	factory WithdrawEntity.fromJson(Map<String, dynamic> json) =>
+		_$WithdrawEntityFromJson(json);
 }

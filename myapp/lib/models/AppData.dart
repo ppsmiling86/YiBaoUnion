@@ -96,40 +96,6 @@ class Registration {
 		);
 }
 
-enum WithdrawStatus {
-	processing,
-	succeed,
-	failed,
-}
-
-class WithdrawRecord {
-	double credits;
-	String dateTime;
-
-	WithdrawStatus status;
-
-	WithdrawRecord(
-		this.credits,
-		this.dateTime,
-		this.status,
-		);
-
-	String buildStatusStr() {
-		if (this.status == WithdrawStatus.processing) {
-			return "审核中";
-		}
-
-		if (this.status == WithdrawStatus.succeed) {
-			return "成功";
-		}
-
-		if (this.status == WithdrawStatus.failed) {
-			return "失败";
-		}
-		return "";
-	}
-}
-
 class WithdrawRequest {
 	String walletAddress;
 	double amount;

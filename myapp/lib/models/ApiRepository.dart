@@ -47,4 +47,12 @@ class ApiRepository {
 		return _apiProvider.getWithDrawAddress();
 	}
 
+	Future<PayStatusResponse> payStatus() {
+		return _apiProvider.payStatus();
+	}
+
+	Future<WithdrawListResponse> withdrawApply() {
+		return _apiProvider.withdrawApply();
+	}
+
 }

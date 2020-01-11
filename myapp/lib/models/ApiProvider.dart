@@ -158,4 +158,30 @@ class ApiProvider {
 		}
 	}
 
+	Future<PayStatusResponse> payStatus() async {
+		try {
+			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.payStatus);
+			print(response);
+			var pr = PayStatusResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return PayStatusResponse.withError('$error');
+		}
+	}
+
+	Future<WithdrawListResponse> withdrawApply() async {
+		try {
+			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.withdrawApply,queryParameters: {"page": 0,"size":10000});
+			print(response);
+			var pr = WithdrawListResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return WithdrawListResponse.withError('$error');
+		}
+	}
+
 }

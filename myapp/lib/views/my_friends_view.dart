@@ -32,17 +32,17 @@ class MyFriendsViewState extends State<MyFriendsView> {
 		return ListView.separated(
 			itemBuilder: (contest,index) {
 				if (index == 0) {
-					return buildSummary();
+					return buildSummary(response.data);
 				} else {
-					return buildListItem(response.data[index]);
+					return buildListItem(response.data.records[index]);
 				}
 			},
 			separatorBuilder: (context, index) => Divider(),
-			itemCount: response.data.length,
+			itemCount: response.data.records.length,
 		);
 	}
 
-	Widget buildSummary() {
+	Widget buildSummary(DownlinkUserPackage downlinkUserPackage) {
 		return SizedBox(
 			height: 68,
 			width: double.infinity,
@@ -52,7 +52,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
 						Text("总佣金"),
-						Text("100000"),
+						Text("${downlinkUserPackage.total_received_commission}"),
 						Divider(),
 					],
 				),
