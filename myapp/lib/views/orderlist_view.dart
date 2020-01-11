@@ -7,7 +7,7 @@ import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/Response.dart';
 import 'package:myapp/models/getOrderBloc.dart';
 import 'package:myapp/tools/dateTools.dart';
-
+import 'package:myapp/models/ApiRepository.dart';
 
 class OrderStatus  {
 	static final pendingToPay = 0;
@@ -27,16 +27,17 @@ class OrderListView extends StatefulWidget {
 
 class OrderListViewState extends State <OrderListView>{
 	final bloc = GetOrderBloc();
+	final _apiRepository = ApiRepository();
 
 	@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    bloc.getOrder();
+  void dispose() {
+    super.dispose();
+    bloc.dispose();
   }
 
 	@override
   Widget build(BuildContext context) {
+		bloc.getOrder();
     return Scaffold(
 		appBar: CommonWidgetTools.appBarWithTitle(context, "订单列表"),
 		body: buildStreamBuilderView(),
@@ -318,6 +319,29 @@ class OrderListViewState extends State <OrderListView>{
 						children: <Widget>[
 							Expanded(
 								child: FlatButton(
+									color: ColorTools.redE64340,
+									shape: RoundedRectangleBorder(
+										borderRadius: BorderRadius.circular(2)
+									),
+									onPressed: (){
+										CommonWidgetTools.showLoading(context);
+										_apiRepository.cancelOrder(placeOrderEntity.id).then((value){
+											CommonWidgetTools.dismissLoading(context);
+											if (value.msg == null) {
+												setState(() {
+
+												});
+											} else {
+												CommonWidgetTools.showAlertController(context, value.msg);
+											}
+										});
+									},
+									child: Text("取消",style: TextStyle(color: ColorTools.whiteFFFFFF)),
+								)
+							),
+							SizedBox(width: 16),
+							Expanded(
+								child: FlatButton(
 									color: ColorTools.green1AAD19,
 									shape: RoundedRectangleBorder(
 										borderRadius: BorderRadius.circular(2)
@@ -330,7 +354,7 @@ class OrderListViewState extends State <OrderListView>{
 									},
 									child: Text("去支付",style: TextStyle(color: Colors.white)),
 								)
-							),
+							)
 						],
 					)
 				],

@@ -47,7 +47,8 @@ class User {
 	String mobile;
 	String inviteCode;
 	String token;
-	UserEntity userEntity;
+	UserEntity userLoginEntity;
+	UserInfoEntity userProfileEntity;
 
 	User(
 		this.token,
@@ -68,7 +69,7 @@ class User {
 			this.inviteCode = response.data.invite_code;
 			this.mobile = response.data.uid;
 			this.isLoggedIn = true;
-			this.userEntity = response.data;
+			this.userLoginEntity = response.data;
 			this.save();
 		}
 		return response;
@@ -86,7 +87,8 @@ class User {
 		this.token = "";
 		this.inviteCode = "";
 		this.mobile = "";
-		this.userEntity = null;
+		this.userLoginEntity = null;
+		this.userProfileEntity = null;
 
 		print("clear local data...");
 

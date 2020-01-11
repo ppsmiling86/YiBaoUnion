@@ -9,10 +9,13 @@ class ServerConfig {
 	static const String productInfo = '/product/info';
 	static const String placeOrder = '/order';
 	static const String getOder = '/order';
+	static const String cancelOder = '/order/cancel';
 	static const String withdrawAddress = '/withdraw/address';
 	static const String payStatus = '/pay/status';
 	static const String withdrawApply = '/withdraw/apply';
 	static const String withdrawAvailable = '/withdraw/available';
+	static const String userInfo = '/user/info';
+	static const String payOrder = '/pay/order';
 
 	static final ServerConfig _sharedInstance = ServerConfig._internal();
 	factory ServerConfig() {

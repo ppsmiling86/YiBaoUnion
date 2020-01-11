@@ -476,3 +476,90 @@ class WithdrawAvailableEntity extends Object {
 	factory WithdrawAvailableEntity.fromJson(Map<String, dynamic> json) =>
 		_$WithdrawAvailableEntityFromJson(json);
 }
+
+@JsonSerializable()
+class UserInfoResponse extends Object {
+	final String msg;
+	final String code;
+	final UserInfoEntity data;
+
+	UserInfoResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory UserInfoResponse.fromJson(Map<String, dynamic> json) =>
+		_$UserInfoResponseFromJson(json);
+
+	UserInfoResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class UserInfoEntity extends Object {
+	final String uid;
+	final double today_rent_power;
+	final double balance;
+	final String invite_url;
+	final String invitor_id;
+	final String invite_code;
+	final double today_score;
+
+	UserInfoEntity(this.uid, this.today_rent_power, this.balance, this.invite_url, this.invitor_id, this.invite_code, this.today_score);
+
+	factory UserInfoEntity.fromJson(Map<String, dynamic> json) =>
+		_$UserInfoEntityFromJson(json);
+}
+
+
+@JsonSerializable()
+class PayOrderResponse extends Object {
+	final String msg;
+	final String code;
+	final PayOrderEntity data;
+
+	PayOrderResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory PayOrderResponse.fromJson(Map<String, dynamic> json) =>
+		_$PayOrderResponseFromJson(json);
+
+	PayOrderResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class PayOrderEntity extends Object {
+	final String pay_url;
+
+	PayOrderEntity(this.pay_url);
+
+	factory PayOrderEntity.fromJson(Map<String, dynamic> json) =>
+		_$PayOrderEntityFromJson(json);
+}
+
+@JsonSerializable()
+class CancelOrderResponse extends Object {
+	final String msg;
+	final String code;
+
+	CancelOrderResponse(
+		this.msg,
+		this.code,
+		);
+
+	factory CancelOrderResponse.fromJson(Map<String, dynamic> json) =>
+		_$CancelOrderResponseFromJson(json);
+
+	CancelOrderResponse.withError(String error)
+		: code = "-1",
+			msg = error;
+}

@@ -11,6 +11,9 @@ import 'my_friends_view.dart';
 import 'package:ant_icons/ant_icons.dart';
 import 'about_us_view.dart';
 import 'contact_customer_service.dart';
+import 'package:myapp/models/Response.dart';
+import 'package:myapp/models/UserInfoBloc.dart';
+
 class UserProfilePage extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -19,26 +22,79 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class UserProfilePageState extends State <UserProfilePage> {
+	final bloc = UserInfoBloc();
+	final _notLoginUser = UserInfoEntity("", 0, 0, "", "", "", 0);
+
+	@override
+  void initState() {
+    super.initState();
+	bool isLogin = AppData().loginUser().isLoggedIn;
+	if (isLogin) {
+		bloc.userInfo();
+	}
+  }
+
+	@override
+  void dispose() {
+    super.dispose();
+	bloc.dispose();
+  }
+
 	@override
 	Widget build(BuildContext context) {
+		bool isLogin = AppData().loginUser().isLoggedIn;
 		return Drawer(
 			child: Stack(
 				children: <Widget>[
-					buildBody(),
-					buildBottomLogoutButtons(),
+					buildAlternativeBody(isLogin),
+					buildBottomLogoutButtons(isLogin),
 				],
 			),
 		);
 	}
 
-	Widget buildBody() {
+	Widget buildAlternativeBody(bool isLogin) {
+		if (isLogin) {
+			return buildStreamBuilderView();
+		} else {
+			return buildBody(_notLoginUser);
+		}
+	}
+
+	StreamBuilder buildStreamBuilderView() {
+		return StreamBuilder<UserInfoResponse>(
+			stream: bloc.subject.stream,
+			builder: (context, AsyncSnapshot<UserInfoResponse> snapshot) {
+				print(snapshot);
+				if (snapshot.hasData) {
+					AppData().loginUser().userProfileEntity = snapshot.data.data;
+					return buildBody(snapshot.data.data);
+				} else if (snapshot.hasError) {
+					print("hasError");
+					return Container();
+				} else {
+					print("loading");
+					return SizedBox(
+						width: double.infinity,
+						height: 100,
+						child: Container(
+							child: Center(child: CircularProgressIndicator()),
+						),
+					);
+				}
+			});
+	}
+
+
+
+	Widget buildBody(UserInfoEntity userInfoEntity) {
 		bool isLogin = AppData().loginUser().isLoggedIn;
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: ListView(
 				children: <Widget>[
-					buildUserAvatar(),
-					buildUserSummary(),
+					buildUserAvatar(userInfoEntity),
+					buildUserSummary(userInfoEntity),
 					Divider(),
 					buildSingleRow("租赁订单", (){
 						if (isLogin) {
@@ -110,7 +166,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 		);
 	}
 
-	Widget buildUserAvatar() {
+	Widget buildUserAvatar(UserInfoEntity userInfoEntity) {
 		bool isLogin = AppData().loginUser().isLoggedIn;
 		return Container(
 			height: 50,
@@ -122,7 +178,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 						child: Icon(Icons.person),
 					),
 					SizedBox(width: 16),
-					isLogin ? Text(AppData().loginUser().mobile) :
+					isLogin ? Text(userInfoEntity.uid) :
 					OutlineButton(
 						borderSide: BorderSide(
 							color: Colors.grey,
@@ -146,9 +202,9 @@ class UserProfilePageState extends State <UserProfilePage> {
 		);
 	}
 
-	Widget buildUserSummary() {
+	Widget buildUserSummary(UserInfoEntity userInfoEntity) {
 		return Container(
-			height: 110,
+			height: 120,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Column(
 				crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +212,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("我的共创积分: 0"),
+							Text("我的共创积分: ${userInfoEntity.balance}"),
 							OutlineButton(
 								child: Text("提现"),
 								onPressed: (){
@@ -172,9 +228,9 @@ class UserProfilePageState extends State <UserProfilePage> {
 							),
 						],
 					),
-					Text("我的总算力: xxxxx U"),
+					Text("我的总算力: ${userInfoEntity.today_rent_power} U"),
 					SizedBox(height: 16),
-					Text("每天可以挖矿生产约 xxxx 共创积分"),
+					Expanded(child: Text("大约还可产生${userInfoEntity.today_score}共创积分")),
 				],
 			),
 		);
@@ -197,9 +253,8 @@ class UserProfilePageState extends State <UserProfilePage> {
 		);
 	}
 
-	Widget buildBottomLogoutButtons() {
+	Widget buildBottomLogoutButtons(bool isLogin) {
 		var width = MediaQuery.of(context).size.width - 32;
-		bool isLogin = AppData().loginUser().isLoggedIn;
 		return isLogin ?  Align(
 			alignment: Alignment.bottomCenter,
 			child: Container(
@@ -211,7 +266,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 						setState(() {
 							AppData().loginUser().logout();
 						});
-					}, child: Text("退出")
+					}, child: Text("退出登陆", style: TextStyle(color: Colors.white),)
 				),
 			),
 		) : Container();

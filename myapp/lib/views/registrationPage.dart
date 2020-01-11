@@ -15,8 +15,10 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class RegistrationPageState extends State <RegistrationPage> {
-	final _formKey = GlobalKey<FormState>();
+	final _mobileFormKey = GlobalKey<FormState>();
+	final _smsFormKey = GlobalKey<FormState>();
 	var phoneController = TextEditingController();
+	var smsController = TextEditingController();
 	SMSEntity smsEntity;
 	UserBloc userBloc = UserBloc();
 	DateTime lastSendSmsTime;
@@ -32,14 +34,15 @@ class RegistrationPageState extends State <RegistrationPage> {
 			appBar: CommonWidgetTools.appBarWithTitle(context, "登陆"),
 			body: Container(
 				height: 500,
-				child: Form(
-					key: _formKey,
-					child: ListView(
-						children: <Widget>[
-							buildPhoneTextField(),
-							buildSendVerifyCodeField(),
-						],
-					),
+				child: ListView(
+					children: <Widget>[
+						Form(
+							key: _mobileFormKey,
+							child: buildPhoneTextField()),
+						Form(
+							key: _smsFormKey,
+							child: buildSendVerifyCodeField()),
+					],
 				),
 			),
 			bottomNavigationBar: buildLoginButton(),
@@ -64,14 +67,11 @@ class RegistrationPageState extends State <RegistrationPage> {
 								icon: Icon(Icons.phone),
 								labelText: '手机号:',
 							),
-							onSaved: (String value) {
-								AppData().tempRegistration.mobile = value;
-							},
 							validator: (String value) {
-								value = value.trim();
-								if (!StringTools.ValidatePhoneNumber(value)) {
+								if (!StringTools.ValidatePhoneNumber(value.trim())) {
 									return "请输入正确的手机号码";
 								}
+								AppData().tempRegistration.mobile = value.trim();
 								return null;
 							},
 						),
@@ -96,14 +96,12 @@ class RegistrationPageState extends State <RegistrationPage> {
 								icon: Icon(Icons.sms),
 								labelText: '验证码:',
 							),
-							onSaved: (String value) {
-								AppData().tempRegistration.verifyCode = value;
-							},
 							validator: (String value) {
 								value = value.trim();
 								if (!StringTools.ValidateSmsCode(value)) {
 									return "请输入正确的验证码";
 								}
+								AppData().tempRegistration.verifyCode = value;
 								return null;
 							},
 						),
@@ -111,44 +109,34 @@ class RegistrationPageState extends State <RegistrationPage> {
 					OutlineButton(
 						child: Text("发送验证码"),
 						onPressed: (){
-							if (!StringTools.ValidatePhoneNumber(phoneController.value.text)) {
-								showDialog(
-									context: context,
-									builder: (BuildContext context){
-										return AlertDialog(
-											content: Text("请输入正确的手机号码"),
+							if(_mobileFormKey.currentState.validate()) {
+								if (lastSendSmsTime != null) {
+									var oneMinutesAgo = DateTime.now().subtract( Duration(seconds: 60));
+									if (!lastSendSmsTime.isBefore(oneMinutesAgo)) {
+										showDialog(
+											context: context,
+											builder: (BuildContext context){
+												return AlertDialog(
+													content: Text("1分钟之内请勿连续操作"),
+												);
+											}
 										);
+										return;
 									}
-								);
-								return;
-							}
-
-							if (lastSendSmsTime != null) {
-								var oneMinutesAgo = DateTime.now().subtract( Duration(seconds: 60));
-								if (!lastSendSmsTime.isBefore(oneMinutesAgo)) {
-									showDialog(
-										context: context,
-										builder: (BuildContext context){
-											return AlertDialog(
-												content: Text("1分钟之内请勿连续操作"),
-											);
-										}
-									);
-									return;
 								}
-							}
 
-							lastSendSmsTime = DateTime.now();
-							CommonWidgetTools.showLoading(context);
-							AppData().loginUser().sms(AppData().tempRegistration).then((value){
-								Navigator.pop(context);
-								if(value.data != null) {
-									smsEntity = value.data;
-									CommonWidgetTools.showAlertController(context, "验证码发送成功");
-								} else {
-									CommonWidgetTools.showAlertController(context, value.msg);
-								}
-							});
+								lastSendSmsTime = DateTime.now();
+								CommonWidgetTools.showLoading(context);
+								AppData().loginUser().sms(AppData().tempRegistration).then((value){
+									Navigator.pop(context);
+									if(value.data != null) {
+										smsEntity = value.data;
+										CommonWidgetTools.showAlertController(context, "验证码发送成功");
+									} else {
+										CommonWidgetTools.showAlertController(context, value.msg);
+									}
+								});
+							}
 						}),
 				],
 			),
@@ -161,8 +149,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 			child: GestureDetector(
 				onTap: (){
-					if (_formKey.currentState.validate()) {
-						_formKey.currentState.save();
+					if (_mobileFormKey.currentState.validate() && _smsFormKey.currentState.validate()) {
 
 //						if (smsEntity == null || smsEntity.code != AppData().tempRegistration.verifyCode) {
 //							CommonWidgetTools.showAlertController(context, "请输入正确的验证码");

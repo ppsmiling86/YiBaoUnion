@@ -65,4 +65,15 @@ class ApiRepository {
 		return _apiProvider.withdrawAvailable();
 	}
 
+	Future<UserInfoResponse> userInfo() {
+		return _apiProvider.userInfo();
+	}
+
+	Future<PayOrderResponse> payOrder(String order_id, int pay_type) {
+		return _apiProvider.payOrder(order_id, pay_type);
+	}
+
+	Future<CancelOrderResponse> cancelOrder(String order_id) {
+		return _apiProvider.cancelOrder(order_id);
+	}
 }

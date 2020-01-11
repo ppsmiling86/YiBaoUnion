@@ -484,3 +484,85 @@ Map<String, dynamic> _$WithdrawAvailableEntityToJson(
     <String, dynamic>{
       'available': instance.available,
     };
+
+UserInfoResponse _$UserInfoResponseFromJson(Map<String, dynamic> json) {
+  return UserInfoResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : UserInfoEntity.fromJson(json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$UserInfoResponseToJson(UserInfoResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+UserInfoEntity _$UserInfoEntityFromJson(Map<String, dynamic> json) {
+  return UserInfoEntity(
+    json['uid'] as String,
+    (json['today_rent_power'] as num)?.toDouble(),
+    (json['balance'] as num)?.toDouble(),
+    json['invite_url'] as String,
+    json['invitor_id'] as String,
+    json['invite_code'] as String,
+    (json['today_score'] as num)?.toDouble(),
+  );
+}
+
+Map<String, dynamic> _$UserInfoEntityToJson(UserInfoEntity instance) =>
+    <String, dynamic>{
+      'uid': instance.uid,
+      'today_rent_power': instance.today_rent_power,
+      'balance': instance.balance,
+      'invite_url': instance.invite_url,
+      'invitor_id': instance.invitor_id,
+      'invite_code': instance.invite_code,
+      'today_score': instance.today_score,
+    };
+
+PayOrderResponse _$PayOrderResponseFromJson(Map<String, dynamic> json) {
+  return PayOrderResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : PayOrderEntity.fromJson(json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$PayOrderResponseToJson(PayOrderResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+PayOrderEntity _$PayOrderEntityFromJson(Map<String, dynamic> json) {
+  return PayOrderEntity(
+    json['pay_url'] as String,
+  );
+}
+
+Map<String, dynamic> _$PayOrderEntityToJson(PayOrderEntity instance) =>
+    <String, dynamic>{
+      'pay_url': instance.pay_url,
+    };
+
+CancelOrderResponse _$CancelOrderResponseFromJson(Map<String, dynamic> json) {
+  return CancelOrderResponse(
+    json['msg'] as String,
+    json['code'] as String,
+  );
+}
+
+Map<String, dynamic> _$CancelOrderResponseToJson(
+        CancelOrderResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+    };

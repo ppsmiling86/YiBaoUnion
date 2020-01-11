@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/models/AppData.dart';
+import 'package:myapp/tools/colorTools.dart';
 import 'payment_view.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/ApiProvider.dart';
@@ -18,7 +19,7 @@ class WaiverPageState extends State <WaiverPage> {
 	@override
   Widget build(BuildContext context) {
     return Scaffold(
-		appBar: CommonWidgetTools.appBarWithTitle(context, "租赁合同"),
+		appBar: CommonWidgetTools.appBarWithTitle(context, "算力租赁协议"),
 		body: buildWaiverPage(),
 		bottomNavigationBar: buildOrderButton(),
 	);
@@ -64,7 +65,7 @@ class WaiverPageState extends State <WaiverPage> {
 				},
 				child: Container(
 					height: 50,
-					color: Colors.blueAccent,
+					color: ColorTools.green1AAD19,
 					child: Center(
 						child: Text("同意",style: TextStyle(color: Colors.white)),
 					),

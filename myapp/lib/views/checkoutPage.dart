@@ -203,7 +203,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 						Row(
 							mainAxisAlignment: MainAxisAlignment.end,
 							children: <Widget>[
-								Text("每人每日限购${productEntity.limit_per_user}U")
+								Text("每人限购${productEntity.limit_per_user}U")
 							],
 						),
 						Row(
@@ -229,7 +229,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 							height: 40,
 							child: Row(
 								children: <Widget>[
-									Expanded(child: Text("租赁周期为24小时,每U算力24小时大约可产生1个共创积分,24小时后，积分将自动发放到账户",style: TextStyle(color: Colors.red),)),
+									Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生1个共创积分,整点发放",style: TextStyle(color: Colors.red))),
 								],
 							),
 						),

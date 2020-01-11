@@ -7,4 +7,5 @@ class ColorTools {
 	static const Color whiteFFFFFF = Color(0xFFFFFFFF);
 	static const Color bkgMainColor = Color(0xFF003159);
 	static const Color greyA1A6B3 = Color(0xFFA1A6B3);
+	static const Color redE64340 = Color(0xFFE64340);
 }

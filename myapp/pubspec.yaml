@@ -32,6 +32,7 @@ dependencies:
   toast: ^0.1.5
   clippy: ^1.0.0
   url_launcher: ^5.4.1
+  qr_flutter: ^3.2.0
 
 dev_dependencies:
   json_serializable: ^3.2.3

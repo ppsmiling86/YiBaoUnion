@@ -81,7 +81,7 @@ class PaymentViewState extends State <PaymentView> {
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
 											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text("x ${placeOrderEntity.amount} U")
+											Text(" x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -93,14 +93,12 @@ class PaymentViewState extends State <PaymentView> {
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
 							Text("订单号: ${placeOrderEntity.id}"),
-							Text("总计"),
 						],
 					),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
 							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
 						],
 					),
 					Divider(),
@@ -182,6 +180,18 @@ class PaymentViewState extends State <PaymentView> {
 		return "";
 	}
 
+	int paymentTypeIntByType(PaymentType type) {
+		if (type == PaymentType.aliPay) {
+			return 1;
+		}
+
+		if (type == PaymentType.wechatPay) {
+			return 2;
+		}
+
+		return 0;
+	}
+
 	Widget buildBottomButton(PlaceOrderEntity placeOrderEntity) {
 		return Container(
 			height: 100,
@@ -211,41 +221,49 @@ class PaymentViewState extends State <PaymentView> {
 										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
 										color: Colors.red,
 										onPressed: (){
-											launchURL();
-											poolingPaymentResponse(placeOrderEntity);
-											showDialog(context: context,
-												barrierDismissible: false,
-												builder: (_) => AlertDialog(
-													title: Text("等待支付结果"),
-													content: SizedBox(
-														width: 40,
-														height: 40,
-														child: Center(
-														  child: Container(
-														  	width: 20,
-														  	height: 20,
-														  	child: CircularProgressIndicator(),
-														  ),
+											CommonWidgetTools.showLoading(context);
+											_apiRepository.payOrder(placeOrderEntity.id, paymentTypeIntByType(selectPaymentType)).then((value){
+												CommonWidgetTools.dismissLoading(context);
+												if(value.data != null) {
+													launchURL(value.data.pay_url);
+													poolingPaymentResponse(placeOrderEntity);
+													showDialog(context: context,
+														barrierDismissible: false,
+														builder: (_) => AlertDialog(
+															title: Text("等待支付结果"),
+															content: SizedBox(
+																width: 40,
+																height: 40,
+																child: Center(
+																	child: Container(
+																		width: 20,
+																		height: 20,
+																		child: CircularProgressIndicator(),
+																	),
+																),
+															),
+															actions: <Widget>[
+																FlatButton(onPressed: (){
+																	_timer.cancel();
+																	Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+																	Navigator.push(context,
+																		MaterialPageRoute(builder: (context) => OrderListView())
+																	);
+																}, child: Text("支付成功")),
+																FlatButton(onPressed: (){
+																	_timer.cancel();
+																	Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+																	Navigator.push(context,
+																		MaterialPageRoute(builder: (context) => ContactCustomerServiceView())
+																	);
+																}, child: Text("支付遇到问题?")),
+															],
 														),
-													),
-													actions: <Widget>[
-														FlatButton(onPressed: (){
-															_timer.cancel();
-															Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-															Navigator.push(context,
-																MaterialPageRoute(builder: (context) => OrderListView())
-															);
-														}, child: Text("支付成功")),
-														FlatButton(onPressed: (){
-															_timer.cancel();
-															Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-															Navigator.push(context,
-																MaterialPageRoute(builder: (context) => ContactCustomerServiceView())
-															);
-														}, child: Text("支付遇到问题?")),
-													],
-												),
-											);
+													);
+												} else {
+													CommonWidgetTools.showAlertController(context, value.msg);
+												}
+											});
 										},
 										child: Text("立即支付",style: TextStyle(color: Colors.white)),
 									),
@@ -259,12 +277,11 @@ class PaymentViewState extends State <PaymentView> {
 		);
 	}
 
-	void launchURL() async {
-		const url = 'https://www.baidu.com';
-		if (await canLaunch(url)) {
-			await launch(url);
+	void launchURL(String urlStr) async {
+		if (await canLaunch(urlStr)) {
+			await launch(urlStr);
 		} else {
-			throw 'Could not launch $url';
+			throw 'Could not launch $urlStr';
 		}
 	}
 

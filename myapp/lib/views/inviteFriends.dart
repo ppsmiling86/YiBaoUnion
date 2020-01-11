@@ -6,6 +6,9 @@ import 'my_friends_view.dart';
 import 'package:clippy/browser.dart' as clippy;
 import 'prize_rule_view.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:myapp/models/AppData.dart';
+
 class InviteFriendsView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -37,11 +40,11 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 			body: Container(
 				child:   Center(
 					child: SizedBox(
-						height: 200,
+						height: 400,
 						width: double.infinity,
 						child: Column(
 							children: <Widget>[
-								Image(image: AssetImage(ImageTools.placeholder_qrcode),width: 100,height: 100),
+								buildInviteCodeQrImage(AppData().loginUser().userProfileEntity.invite_url),
 								SizedBox(height: 50),
 								Text("邀请好友赚佣金"),
 							],
@@ -50,6 +53,14 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 				),
 			),
 			bottomNavigationBar: buildBottomButtons(),
+		);
+	}
+
+	Widget buildInviteCodeQrImage(String inviteCode) {
+		return QrImage(
+			data: inviteCode,
+			version: QrVersions.auto,
+			size: 200.0,
 		);
 	}
 
