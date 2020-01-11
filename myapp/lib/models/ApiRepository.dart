@@ -1,3 +1,5 @@
+import 'package:myapp/models/AppData.dart';
+
 import 'Response.dart';
 import 'ApiProvider.dart';
 
@@ -47,12 +49,20 @@ class ApiRepository {
 		return _apiProvider.getWithDrawAddress();
 	}
 
-	Future<PayStatusResponse> payStatus() {
-		return _apiProvider.payStatus();
+	Future<PayStatusResponse> payStatus(String orderId) {
+		return _apiProvider.payStatus(orderId);
 	}
 
 	Future<WithdrawListResponse> withdrawApply() {
 		return _apiProvider.withdrawApply();
+	}
+
+	Future<ApplyWithdrawResponse> applyWithdraw(WithdrawRequest withdrawRequest) {
+		return _apiProvider.applyWithdraw(withdrawRequest);
+	}
+
+	Future<WithdrawAvailableResponse> withdrawAvailable() {
+		return _apiProvider.withdrawAvailable();
 	}
 
 }

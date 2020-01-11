@@ -10,6 +10,9 @@ import 'manage_address_view.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/WithdrawAddressListBloc.dart';
 import 'package:myapp/models/Response.dart';
+import 'package:myapp/models/ApiRepository.dart';
+import 'withdraw_history_view.dart';
+import 'package:myapp/models/WithdrawAvailableBloc.dart';
 
 class WithdrawView extends StatefulWidget {
 	@override
@@ -25,6 +28,17 @@ class WithdrawViewState extends State <WithdrawView> {
 	final amountController = TextEditingController();
 	final verifyController = TextEditingController();
 	final listBloc = WithdrawAddressListBloc();
+	final withAvailableBloc = WithdrawAvailableBloc();
+	SMSEntity smsEntity;
+	DateTime lastSendSmsTime;
+	final _apiRepository = ApiRepository();
+
+	@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+	withAvailableBloc.withdrawAvailable();
+  }
 
 	@override
   void dispose() {
@@ -54,9 +68,11 @@ class WithdrawViewState extends State <WithdrawView> {
 					),
 				),
 			]),
-			body: buildBody(),
+			body: buildBodyBuilderView(),
 			bottomNavigationBar: CommonWidgetTools.buildBottomButton("提现", (){
 				if (_mainFormKey.currentState.validate()) {
+					AppData().withdrawRequest.amount = double.parse(amountController.text.trim());
+					AppData().withdrawRequest.walletAddress = walletController.text.trim();
 					showModalBottomSheet(context: context, builder: (BuildContext context) => buildBottomLogoutButtons());
 				}
 			}),
@@ -82,12 +98,9 @@ class WithdrawViewState extends State <WithdrawView> {
 								  		labelText: '共创钱包地址:',
 								  		hintText: "请输入或长按粘贴地址"
 								  	),
-								  	onSaved: (String value) {
-								  		AppData().withdrawRequest.walletAddress = value;
-								  	},
 								  	validator: (String value) {
-								  		if (value.isEmpty) {
-								  			return '请输入提币地址';
+								  		if (!StringTools.ValidateWithdrawAddress(value.trim())) {
+								  			return '请输入正确的提币地址';
 								  		}
 								  		return null;
 								  	},
@@ -99,7 +112,7 @@ class WithdrawViewState extends State <WithdrawView> {
 									child: Container(child: Center(child: OutlineButton(onPressed: (){
 										listBloc.getWithdrawAddress();
 										showDialog(
-											barrierDismissible: false,
+											barrierDismissible: true,
 											context: context,
 											builder: (BuildContext context){
 												return buildWithdrawListStreamBuilderView();
@@ -188,20 +201,43 @@ class WithdrawViewState extends State <WithdrawView> {
 		);
 	}
 
-	Widget buildBody() {
+	StreamBuilder buildBodyBuilderView() {
+		return StreamBuilder<WithdrawAvailableResponse>(
+			stream: withAvailableBloc.subject.stream,
+			builder: (context, AsyncSnapshot<WithdrawAvailableResponse> snapshot) {
+				print(snapshot);
+				if (snapshot.hasData) {
+					return buildBody(snapshot.data.data);
+				} else if (snapshot.hasError) {
+					print("hasError");
+					return Container();
+				} else {
+					print("loading");
+					return SizedBox(
+						width: double.infinity,
+						height: 100,
+						child: Container(
+							child: Center(child: CircularProgressIndicator()),
+						),
+					);
+				}
+			});
+	}
+
+	Widget buildBody(WithdrawAvailableEntity withdrawAvailableEntity) {
 		return Form(
 			key: _mainFormKey,
 		  child: ListView(
 		  	children: <Widget>[
 		  		buildWallet(),
-		  		buildAmount(),
+		  		buildAmount(withdrawAvailableEntity),
 		  		buildDescription(),
 		  	],
 		  ),
 		);
 	}
 
-	Widget buildAmount() {
+	Widget buildAmount(WithdrawAvailableEntity withdrawAvailableEntity) {
 		return SizedBox(
 			width: double.infinity,
 			height: 150,
@@ -221,13 +257,18 @@ class WithdrawViewState extends State <WithdrawView> {
 								  		labelText: '数量:',
 								  		hintText: "最小提现积分数量为10"
 								  	),
-								  	onSaved: (String value) {
-								  		AppData().withdrawRequest.walletAddress = value;
-								  	},
 								  	validator: (String value) {
-								  		if (value.isEmpty) {
+								  		if (!StringTools.ValidateNumber(value.trim())) {
 								  			return '请输入提现积分数量';
 								  		}
+
+//										return null;
+
+								  		double amount = double.parse(value.trim());
+								  		if (amount<0.01 || amount > withdrawAvailableEntity.available) {
+								  			return "非法的提现数量";
+										}
+
 								  		return null;
 								  	},
 								  ),
@@ -237,13 +278,13 @@ class WithdrawViewState extends State <WithdrawView> {
 									height: 30,
 									child: Container(child: Center(child: OutlineButton(onPressed: (){
 										setState(() {
-											amountController.text = "1000";
+											amountController.text = "${withdrawAvailableEntity.available}";
 										});
 									},child: Text("全部"))))
 								),
 							],
 						),
-						Text("可提现积分: 1000"),
+						Text("可提现积分: ${withdrawAvailableEntity.available}"),
 					],
 				),
 			),
@@ -288,21 +329,24 @@ class WithdrawViewState extends State <WithdrawView> {
 							mainAxisAlignment: MainAxisAlignment.spaceBetween,
 							children: <Widget>[
 								Expanded(
-									child: TextFormField(
-										controller: verifyController,
-										decoration: InputDecoration(
-											icon: Icon(Icons.account_balance_wallet),
-											hintText: "6位数字验证码"
-										),
-										onSaved: (String value) {
-											AppData().withdrawRequest.verifyCode = value;
-										},
-										validator: (String value) {
-											if (!StringTools.ValidateSmsCode(value)) {
-												return '请输入6位数字验证码';
-											}
-											return null;
-										},
+									child: Form(
+										key: _dialogFormKey,
+									  child: TextFormField(
+									  	controller: verifyController,
+									  	decoration: InputDecoration(
+									  		icon: Icon(Icons.account_balance_wallet),
+									  		hintText: "6位数字验证码"
+									  	),
+									  	onSaved: (String value) {
+									  		AppData().withdrawRequest.verifyCode = value;
+									  	},
+									  	validator: (String value) {
+									  		if (!StringTools.ValidateSmsCode(value)) {
+									  			return '请输入6位数字验证码';
+									  		}
+									  		return null;
+									  	},
+									  ),
 									),
 								),
 								SizedBox(
@@ -314,7 +358,32 @@ class WithdrawViewState extends State <WithdrawView> {
 											color: ColorTools.blue5677FC,
 											shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
 											onPressed: (){
-												CommonWidgetTools.showToastView(context, "复制成功");
+												if (lastSendSmsTime != null) {
+													var oneMinutesAgo = DateTime.now().subtract( Duration(seconds: 60));
+													if (!lastSendSmsTime.isBefore(oneMinutesAgo)) {
+														showDialog(
+															context: context,
+															builder: (BuildContext context){
+																return AlertDialog(
+																	content: Text("1分钟之内请勿连续操作"),
+																);
+															}
+														);
+														return;
+													}
+												}
+
+												lastSendSmsTime = DateTime.now();
+												CommonWidgetTools.showLoading(context);
+												_apiRepository.smsSelf().then((value){
+													Navigator.pop(context);
+													if(value.data != null) {
+														smsEntity = value.data;
+														CommonWidgetTools.showAlertController(context, "验证码发送成功");
+													} else {
+														CommonWidgetTools.showAlertController(context, value.msg);
+													}
+												});
 											},
 											child: Text("发送",style: TextStyle(color: Colors.white),)
 										),
@@ -351,7 +420,27 @@ class WithdrawViewState extends State <WithdrawView> {
 										child: FlatButton(
 											color: ColorTools.green1AAD19,
 											onPressed: (){
-												Navigator.pop(context);
+												if (_dialogFormKey.currentState.validate()) {
+													if (!StringTools.ValidateSmsCode(verifyController.text.trim())) {
+														CommonWidgetTools.showAlertController(context, "请输入正确的验证码");
+														return;
+													}
+													AppData().withdrawRequest.verifyCode = verifyController.text.trim();
+
+													CommonWidgetTools.showLoading(context);
+													_apiRepository.applyWithdraw(AppData().withdrawRequest).then((value){
+														CommonWidgetTools.dismissLoading(context);
+														if(value.data != null) {
+															CommonWidgetTools.showToastView(context, "提现请求发送成功");
+															Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+															Navigator.push(context,
+																MaterialPageRoute(builder: (context) => WithdrawHistoryView())
+															);
+														} else {
+															CommonWidgetTools.showAlertController(context, value.msg);
+														}
+													});
+												}
 											}, child: Text("确认",style: TextStyle(color: Colors.white),))
 									),
 								),

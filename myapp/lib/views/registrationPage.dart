@@ -164,10 +164,10 @@ class RegistrationPageState extends State <RegistrationPage> {
 					if (_formKey.currentState.validate()) {
 						_formKey.currentState.save();
 
-						if (smsEntity == null || smsEntity.code != AppData().tempRegistration.verifyCode) {
-							CommonWidgetTools.showAlertController(context, "请输入正确的验证码");
-							return;
-						}
+//						if (smsEntity == null || smsEntity.code != AppData().tempRegistration.verifyCode) {
+//							CommonWidgetTools.showAlertController(context, "请输入正确的验证码");
+//							return;
+//						}
 
 						CommonWidgetTools.showLoading(context);
 						var upperInviteCode = LocalStorageTools.getUpperInviteCode();

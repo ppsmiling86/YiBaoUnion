@@ -174,40 +174,30 @@ Map<String, dynamic> _$PlaceOrderResponseToJson(PlaceOrderResponse instance) =>
 
 PlaceOrderEntity _$PlaceOrderEntityFromJson(Map<String, dynamic> json) {
   return PlaceOrderEntity(
-    json['amount'] as int,
-    json['created_at'] as int,
-    json['upper_id1'] as String,
-    json['pid'] as String,
-    json['upper_id2'] as String,
-    json['rent_start_at'] as int,
-    json['rent_duraton'] as int,
     json['uid'] as String,
+    json['amount'] as int,
     (json['price'] as num)?.toDouble(),
+    json['created_at'] as int,
     (json['progress'] as num)?.toDouble(),
     json['rent_end_at'] as int,
+    json['rent_start_at'] as int,
     json['id'] as String,
     (json['value'] as num)?.toDouble(),
-    json['payed'] as bool,
     json['status'] as int,
   );
 }
 
 Map<String, dynamic> _$PlaceOrderEntityToJson(PlaceOrderEntity instance) =>
     <String, dynamic>{
-      'amount': instance.amount,
-      'created_at': instance.created_at,
-      'upper_id1': instance.upper_id1,
-      'pid': instance.pid,
-      'upper_id2': instance.upper_id2,
-      'rent_start_at': instance.rent_start_at,
-      'rent_duraton': instance.rent_duraton,
       'uid': instance.uid,
+      'amount': instance.amount,
       'price': instance.price,
+      'created_at': instance.created_at,
       'progress': instance.progress,
       'rent_end_at': instance.rent_end_at,
+      'rent_start_at': instance.rent_start_at,
       'id': instance.id,
       'value': instance.value,
-      'payed': instance.payed,
       'status': instance.status,
     };
 
@@ -441,4 +431,56 @@ Map<String, dynamic> _$WithdrawEntityToJson(WithdrawEntity instance) =>
       'address': instance.address,
       'created_at': instance.created_at,
       'status': instance.status,
+    };
+
+ApplyWithdrawResponse _$ApplyWithdrawResponseFromJson(
+    Map<String, dynamic> json) {
+  return ApplyWithdrawResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : WithdrawEntity.fromJson(json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$ApplyWithdrawResponseToJson(
+        ApplyWithdrawResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+WithdrawAvailableResponse _$WithdrawAvailableResponseFromJson(
+    Map<String, dynamic> json) {
+  return WithdrawAvailableResponse(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : WithdrawAvailableEntity.fromJson(
+            json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$WithdrawAvailableResponseToJson(
+        WithdrawAvailableResponse instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
+WithdrawAvailableEntity _$WithdrawAvailableEntityFromJson(
+    Map<String, dynamic> json) {
+  return WithdrawAvailableEntity(
+    (json['available'] as num)?.toDouble(),
+  );
+}
+
+Map<String, dynamic> _$WithdrawAvailableEntityToJson(
+        WithdrawAvailableEntity instance) =>
+    <String, dynamic>{
+      'available': instance.available,
     };

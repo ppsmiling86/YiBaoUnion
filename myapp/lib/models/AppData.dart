@@ -11,7 +11,7 @@ class AppData {
 	Registration tempRegistration = Registration("", "", "");
 	WithdrawRequest withdrawRequest = WithdrawRequest("", 0,"");
 	OrderRequest orderRequest = OrderRequest();
-
+	User currentLoginUser = null;
 	static final AppData sharedInstance = AppData._internal();
 
 	factory AppData() {
@@ -21,16 +21,22 @@ class AppData {
 	AppData._internal();
 
 	User loginUser() {
-		var loginPhoneNumber = LocalStorageTools.object(kLoginPhoneNumber);
-		var token = LocalStorageTools.object(kToken);
-		var inviteCode = LocalStorageTools.object(kInviteCode);
-
-		if(loginPhoneNumber != null && loginPhoneNumber.isNotEmpty &&
-			token != null && token.isNotEmpty &&
-			inviteCode != null && inviteCode.isNotEmpty) {
-			return User(token,true, loginPhoneNumber, inviteCode);
+		if (currentLoginUser == null) {
+			var loginPhoneNumber = LocalStorageTools.object(kLoginPhoneNumber);
+			var token = LocalStorageTools.object(kToken);
+			var inviteCode = LocalStorageTools.object(kInviteCode);
+			print("local saved phone: ${loginPhoneNumber}, token: ${token}, inviteCode:${inviteCode}");
+			if(loginPhoneNumber != null && loginPhoneNumber.isNotEmpty &&
+				token != null && token.isNotEmpty &&
+				inviteCode != null && inviteCode.isNotEmpty) {
+				print("start by login");
+				currentLoginUser = User(token,true, loginPhoneNumber, inviteCode);
+			} else {
+				print("start by not login");
+				currentLoginUser = User("", false, "", "");
+			}
 		}
-		return User("", false, "", "");
+		return currentLoginUser;
 	}
 
 }
@@ -75,9 +81,25 @@ class User {
 	}
 
 	void logout() {
+		print("do logout");
+		this.isLoggedIn = false;
+		this.token = "";
+		this.inviteCode = "";
+		this.mobile = "";
+		this.userEntity = null;
+
+		print("clear local data...");
+
+
 		LocalStorageTools.setObject("", kLoginPhoneNumber);
 		LocalStorageTools.setObject("", kToken);
 		LocalStorageTools.setObject("", kInviteCode);
+
+		print("must no login phone number: ${LocalStorageTools.object(kLoginPhoneNumber)}");
+		print("must no token: ${LocalStorageTools.object(kToken)}");
+		print("must no invite code: ${LocalStorageTools.object(kInviteCode)}");
+
+
 	}
 }
 

@@ -3,7 +3,7 @@ final kUpperInviteCode = "UpperInviteCode";
 class LocalStorageTools {
 	static void setObject(String value, String forKey) {
 		if (value is String && forKey is String) {
-			if (value.length > 0 && forKey.length > 0) {
+			if (forKey.length > 0) {
 				Storage localStorage = window.localStorage;
 				localStorage[forKey] = value;
 			}

@@ -116,6 +116,23 @@ class CommonWidgetTools {
 		);
 	}
 
+	static void showAlertControllerOnTap(BuildContext context, String msg, VoidCallback onTap) {
+		showDialog(
+			context: context,
+			builder: (BuildContext context){
+				return AlertDialog(
+					content: Text(msg),
+					actions: <Widget>[
+						FlatButton(onPressed: (){
+							Navigator.pop(context);
+							onTap();
+						}, child: Text("确定")),
+					],
+				);
+			}
+		);
+	}
+
 	static void showConfirmAlertController(BuildContext context, String msg, VoidCallback onConfirm) {
 		showDialog(
 			context: context,

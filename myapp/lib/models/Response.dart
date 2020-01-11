@@ -170,24 +170,18 @@ class PlaceOrderResponse extends Object {
 
 @JsonSerializable()
 class PlaceOrderEntity extends Object {
-	final int amount;
-	final int created_at;
-	final String upper_id1;
-	final String pid;
-	final String upper_id2;
-	final int rent_start_at;
-	final int rent_duraton;
 	final String uid;
+	final int amount;
 	final double price;
+	final int created_at;
 	final double progress;
-	final int rent_end_at;
+	final int rent_end_at;//租约结束时间
+	final int rent_start_at;//支付成功时间
 	final String id;
 	final double value;
-	final bool payed;
 	final int status;
 
-
-	PlaceOrderEntity(this.amount, this.created_at, this.upper_id1, this.pid, this.upper_id2, this.rent_start_at, this.rent_duraton, this.uid, this.price, this.progress, this.rent_end_at, this.id, this.value, this.payed, this.status);
+	PlaceOrderEntity(this.uid, this.amount, this.price, this.created_at, this.progress, this.rent_end_at, this.rent_start_at, this.id, this.value, this.status);
 
 	factory PlaceOrderEntity.fromJson(Map<String, dynamic> json) =>
 		_$PlaceOrderEntityFromJson(json);
@@ -428,4 +422,57 @@ class WithdrawEntity extends Object {
 
 	factory WithdrawEntity.fromJson(Map<String, dynamic> json) =>
 		_$WithdrawEntityFromJson(json);
+}
+
+@JsonSerializable()
+class ApplyWithdrawResponse extends Object {
+	final String msg;
+	final String code;
+	final WithdrawEntity data;
+
+	ApplyWithdrawResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory ApplyWithdrawResponse.fromJson(Map<String, dynamic> json) =>
+		_$ApplyWithdrawResponseFromJson(json);
+
+	ApplyWithdrawResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+
+@JsonSerializable()
+class WithdrawAvailableResponse extends Object {
+	final String msg;
+	final String code;
+	final WithdrawAvailableEntity data;
+
+	WithdrawAvailableResponse(
+		this.msg,
+		this.code,
+		this.data,
+		);
+
+	factory WithdrawAvailableResponse.fromJson(Map<String, dynamic> json) =>
+		_$WithdrawAvailableResponseFromJson(json);
+
+	WithdrawAvailableResponse.withError(String error)
+		: data = null,
+			code = "-1",
+			msg = error;
+}
+
+@JsonSerializable()
+class WithdrawAvailableEntity extends Object {
+	final double available;
+
+	WithdrawAvailableEntity(this.available);
+
+	factory WithdrawAvailableEntity.fromJson(Map<String, dynamic> json) =>
+		_$WithdrawAvailableEntityFromJson(json);
 }

@@ -158,9 +158,9 @@ class ApiProvider {
 		}
 	}
 
-	Future<PayStatusResponse> payStatus() async {
+	Future<PayStatusResponse> payStatus(String orderId) async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.payStatus);
+			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.payStatus,queryParameters: {"order_id": orderId});
 			print(response);
 			var pr = PayStatusResponse.fromJson(response.data);
 			print("pr is ${pr.data}");
@@ -181,6 +181,34 @@ class ApiProvider {
 		} catch (error, stacktrace) {
 			print('Exception occured:$error stackTrace: $stacktrace');
 			return WithdrawListResponse.withError('$error');
+		}
+	}
+
+	Future<ApplyWithdrawResponse> applyWithdraw(WithdrawRequest request) async {
+		try {
+			var data = {"value": request.amount,"address": request.walletAddress,"sms_code":request.verifyCode};
+			print(data);
+			Response response = await dio().post(ServerConfig.baseUrl + ServerConfig.withdrawApply,data: data);
+			print(response);
+			var pr = ApplyWithdrawResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return ApplyWithdrawResponse.withError('$error');
+		}
+	}
+
+	Future<WithdrawAvailableResponse> withdrawAvailable() async {
+		try {
+			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.withdrawAvailable);
+			print(response);
+			var pr = WithdrawAvailableResponse.fromJson(response.data);
+			print("pr is ${pr.data}");
+			return pr;
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return WithdrawAvailableResponse.withError('$error');
 		}
 	}
 
