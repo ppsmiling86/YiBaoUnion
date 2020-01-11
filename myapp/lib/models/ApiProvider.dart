@@ -228,6 +228,7 @@ class ApiProvider {
 	void printResponse(Response response) {
 		print("[${response.request.method} ${response.statusCode} :${response.request.path}]");
 		print("[request data : ${response.request.data}]");
+		print("[request queryParameters : ${response.request.queryParameters}]");
 		print("[response data : ${response.data}]");
 	}
 

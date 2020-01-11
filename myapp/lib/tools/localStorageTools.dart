@@ -24,10 +24,19 @@ class LocalStorageTools {
 		var url = window.location.href;
 		print("url is $url");
 		Uri uri = Uri.dataFromString(url);
-		var inviteCode = uri.queryParameters["invite_code"].replaceAll("#/", "");
-		print(uri.queryParameters.toString());
-		print("parsed inviteCode is ${inviteCode}");
-		LocalStorageTools.setObject(inviteCode, kUpperInviteCode);
+
+
+		var inviteCode = uri.queryParameters["invite_code"];
+		if (inviteCode is String) {
+			if (inviteCode.contains("#/")) {
+				inviteCode = inviteCode.replaceAll("#/", "");
+			}
+			if (inviteCode.isNotEmpty) {
+				print("parsed inviteCode is ${inviteCode}");
+				LocalStorageTools.setObject(inviteCode, kUpperInviteCode);
+			}
+		}
+
 	}
 
 	static String getUpperInviteCode() {
