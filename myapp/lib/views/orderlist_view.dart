@@ -10,10 +10,11 @@ import 'package:myapp/tools/dateTools.dart';
 import 'package:myapp/models/ApiRepository.dart';
 
 class OrderStatus  {
+	static final canceled = -2;
+	static final payFail = -1;
 	static final pendingToPay = 0;
-	static final completed = 1;
-	static final working = 2;
-	static final canceled = 3;
+	static final working = 1;
+	static final completed = 2;
 }
 
 
@@ -119,7 +120,7 @@ class OrderListViewState extends State <OrderListView>{
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
 											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text("x ${placeOrderEntity.amount} U")
+											Text(" x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -206,7 +207,7 @@ class OrderListViewState extends State <OrderListView>{
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
 											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text("x ${placeOrderEntity.amount} U")
+											Text(" x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -293,7 +294,7 @@ class OrderListViewState extends State <OrderListView>{
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
 											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text("x ${placeOrderEntity.amount} U")
+											Text(" x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
@@ -397,7 +398,7 @@ class OrderListViewState extends State <OrderListView>{
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
 											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text("x ${placeOrderEntity.amount} U")
+											Text(" x ${placeOrderEntity.amount} U")
 										],
 									)
 								],
