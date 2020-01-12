@@ -31,7 +31,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: CommonWidgetTools.appBarWithTitle(context, "登陆"),
+			appBar: CommonWidgetTools.appBarWithTitle(context, "快速登陆注册"),
 			body: Container(
 				height: 500,
 				child: ListView(

@@ -25,12 +25,12 @@ class CheckoutPageState extends State <CheckoutPage> {
 	@override
 	void initState() {
 		super.initState();
-		_productInfoBloc.productInfo();
-		amountController.text = "1000";
+		amountController.text = "10000";
 	}
 
 	@override
 	Widget build(BuildContext context) {
+		_productInfoBloc.productInfo();
 		return Scaffold(
 			appBar:CommonWidgetTools.appBarWithTitleLeading(context, "下订单", (){
 				Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);

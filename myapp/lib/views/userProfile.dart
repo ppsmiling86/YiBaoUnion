@@ -28,10 +28,6 @@ class UserProfilePageState extends State <UserProfilePage> {
 	@override
   void initState() {
     super.initState();
-	bool isLogin = AppData().loginUser().isLoggedIn;
-	if (isLogin) {
-		bloc.userInfo();
-	}
   }
 
 	@override
@@ -43,6 +39,9 @@ class UserProfilePageState extends State <UserProfilePage> {
 	@override
 	Widget build(BuildContext context) {
 		bool isLogin = AppData().loginUser().isLoggedIn;
+		if (isLogin) {
+			bloc.userInfo();
+		}
 		return Drawer(
 			child: Stack(
 				children: <Widget>[
@@ -188,7 +187,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 						onPressed: (){
 							gotoRegistrationPage();
 						},
-						child: Text("未登录")
+						child: Text("登录")
 					),
 				],
 			),

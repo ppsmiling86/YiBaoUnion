@@ -26,7 +26,7 @@ class ServerConfig {
 	ServerConfig._internal();
 
 	static String baseUrl() {
-		return LocalStorageTools.getOrigin();
+		return LocalStorageTools.getOrigin()+"/api";
 	}
 }
 

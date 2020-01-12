@@ -18,11 +18,11 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 	@override
   void initState() {
     super.initState();
-    listBloc.withdrawApply();
   }
 
 	@override
 	Widget build(BuildContext context) {
+		listBloc.withdrawApply();
 		return Scaffold(
 			appBar: CommonWidgetTools.appBarWithTitle(context, "提现记录"),
 			body:buildWithdrawListStreamBuilderView(),

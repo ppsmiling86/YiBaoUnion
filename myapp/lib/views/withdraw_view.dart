@@ -37,7 +37,6 @@ class WithdrawViewState extends State <WithdrawView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-	withAvailableBloc.withdrawAvailable();
   }
 
 	@override
@@ -51,6 +50,7 @@ class WithdrawViewState extends State <WithdrawView> {
 
 	@override
 	Widget build(BuildContext context) {
+		withAvailableBloc.withdrawAvailable();
 		return Scaffold(
 			appBar: CommonWidgetTools.appBarWithTitleActions(context, "提现", [
 				GestureDetector(

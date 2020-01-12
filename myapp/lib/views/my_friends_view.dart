@@ -15,13 +15,12 @@ class MyFriendsViewState extends State<MyFriendsView> {
 	final bloc = DownlinkUserBloc();
 	@override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    bloc.downlinkUser();
   }
 	
 	@override
 	Widget build(BuildContext context) {
+		bloc.downlinkUser();
 		return Scaffold(
 			appBar: CommonWidgetTools.appBarWithTitle(context, "我的好友"),
 			body: buildStreamBuilderView(),
@@ -38,7 +37,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 				}
 			},
 			separatorBuilder: (context, index) => Divider(),
-			itemCount: response.data.records.length,
+			itemCount: response.data.records.length+1,
 		);
 	}
 
