@@ -28,11 +28,6 @@ class ManageAddressViewState extends State<ManageAddressView> {
 	}
 
 	@override
-	void initState() {
-		super.initState();
-	}
-
-	@override
 	Widget build(BuildContext context) {
 		listBloc.getWithdrawAddress();
 		return Scaffold(
@@ -74,11 +69,7 @@ class ManageAddressViewState extends State<ManageAddressView> {
 						width: double.infinity,
 						child: Container(
 							padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-							child: ListView.separated(
-								itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
-								separatorBuilder: (context, index) => Divider(),
-								itemCount: snapshot.data.data is List ?  snapshot.data.data.length : 0,
-							),
+							child: buildListData(snapshot),
 						),
 					);
 				} else if (snapshot.hasError) {
@@ -95,6 +86,19 @@ class ManageAddressViewState extends State<ManageAddressView> {
 					);
 				}
 			});
+	}
+	
+	Widget buildListData(AsyncSnapshot<WithdrawAddressListResponse> snapshot) {
+		if (snapshot.data.data is List) {
+			if (snapshot.data.data.length > 0) {
+				return ListView.separated(
+					itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
+					separatorBuilder: (context, index) => Divider(),
+					itemCount: snapshot.data.data.length,
+				);
+			}
+		}
+		return CommonWidgetTools.buildEmptyListPlaceholder(context);
 	}
 
 	Widget buildAddressItem(WithdrawAddressEntity withdrawAddressEntity) {

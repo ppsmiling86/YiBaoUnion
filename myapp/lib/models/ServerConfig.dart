@@ -1,4 +1,5 @@
 import 'package:myapp/tools/localStorageTools.dart';
+import 'package:flutter/foundation.dart';
 
 class ServerConfig {
 //	static const String baseUrl = this.baseUrl();
@@ -26,7 +27,11 @@ class ServerConfig {
 	ServerConfig._internal();
 
 	static String baseUrl() {
-		return LocalStorageTools.getOrigin()+"/api";
+		if (kReleaseMode) {
+			return LocalStorageTools.getOrigin()+"/api";
+		} else {
+			return "http://47.108.62.79/api";
+		}
 	}
 }
 

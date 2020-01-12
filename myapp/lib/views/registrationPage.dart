@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/tools/colorTools.dart';
 import 'checkoutPage.dart';
 import 'package:myapp/tools/stringTools.dart';
 import 'package:myapp/models/AppData.dart';
@@ -7,6 +8,7 @@ import 'package:myapp/models/UserBloc.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/Response.dart';
 import 'package:myapp/tools/localStorageTools.dart';
+import 'package:myapp/views/rent_contract_view.dart';
 class RegistrationPage extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -31,7 +33,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: CommonWidgetTools.appBarWithTitle(context, "快速登陆注册"),
+			appBar: CommonWidgetTools.appBarWithTitle(context, "快捷注册登陆"),
 			body: Container(
 				height: 500,
 				child: ListView(
@@ -42,6 +44,30 @@ class RegistrationPageState extends State <RegistrationPage> {
 						Form(
 							key: _smsFormKey,
 							child: buildSendVerifyCodeField()),
+						SizedBox(
+							height: 40,
+						),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.end,
+							mainAxisSize: MainAxisSize.min,
+							children: <Widget>[
+								Text("未注册的手机验证成功后将自动注册,注册视为同意"),
+								SizedBox(width: 8),
+								GestureDetector(
+									onTap: (){
+										Navigator.push(
+											context,
+											MaterialPageRoute(builder: (context) => RentContractView()),
+										);
+									},
+									child: Text("龙门算力租赁服务条款",
+										style: TextStyle(
+											decoration: TextDecoration.underline,
+											color: ColorTools.greyA1A6B3)),
+								),
+								SizedBox(width: 16),
+							],
+						)
 					],
 				),
 			),
@@ -151,10 +177,10 @@ class RegistrationPageState extends State <RegistrationPage> {
 				onTap: (){
 					if (_mobileFormKey.currentState.validate() && _smsFormKey.currentState.validate()) {
 
-//						if (smsEntity == null || smsEntity.code != AppData().tempRegistration.verifyCode) {
-//							CommonWidgetTools.showAlertController(context, "请输入正确的验证码");
-//							return;
-//						}
+						if (!StringTools.ValidateSmsCode(AppData().tempRegistration.verifyCode)) {
+							CommonWidgetTools.showAlertController(context, "请输入正确的验证码");
+							return;
+						}
 
 						CommonWidgetTools.showLoading(context);
 						var upperInviteCode = LocalStorageTools.getUpperInviteCode();
@@ -163,10 +189,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 						AppData().loginUser().login(AppData().tempRegistration).then((value){
 							Navigator.pop(context);
 							if(value.data != null) {
-								Navigator.push(
-									context,
-									MaterialPageRoute(builder: (context) => CheckoutPage()),
-								);
+								Navigator.of(context).pop();
 							} else {
 								CommonWidgetTools.showAlertController(context, value.msg);
 							}

@@ -16,8 +16,10 @@ class WithdrawHistoryView extends StatefulWidget {
 class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 	final listBloc = WithdrawApplyListBloc();
 	@override
-  void initState() {
-    super.initState();
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+	listBloc.dispose();
   }
 
 	@override
@@ -35,11 +37,7 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 			builder: (context, AsyncSnapshot<WithdrawListResponse> snapshot) {
 				print(snapshot);
 				if (snapshot.hasData) {
-					return ListView.separated(
-						itemBuilder: (contest,index) => buildWithdrawRecord(snapshot.data.data[index]),
-						separatorBuilder: (context, index) => Divider(color: Colors.black),
-						itemCount: snapshot.data.data.length,
-					);
+					return buildListData(snapshot);
 				} else if (snapshot.hasError) {
 					print("hasError");
 					return Container();
@@ -54,6 +52,17 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 					);
 				}
 			});
+	}
+
+	Widget buildListData(AsyncSnapshot<WithdrawListResponse> snapshot) {
+		if (snapshot.data.data.length > 0) {
+			return ListView.separated(
+				itemBuilder: (contest,index) => buildWithdrawRecord(snapshot.data.data[index]),
+				separatorBuilder: (context, index) => Divider(color: Colors.black),
+				itemCount: snapshot.data.data.length,
+			);
+		}
+		return CommonWidgetTools.buildEmptyListPlaceholder(context);
 	}
 
 	Widget buildWithdrawRecord(WithdrawEntity withdrawEntity) {

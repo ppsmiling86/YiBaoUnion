@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ant_icons/ant_icons.dart';
+import 'package:myapp/tools/imageTools.dart';
 import 'colorTools.dart';
 import 'package:toast/toast.dart';
 class CommonWidgetTools {
@@ -197,5 +198,28 @@ class CommonWidgetTools {
 
 	static void showToastView(BuildContext context, String text) {
 		Toast.show(text, context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+	}
+
+	static Widget buildEmptyListPlaceholder(BuildContext context,
+		[String t = '暂无数据']) {
+		var width = MediaQuery.of(context).size.width;
+		var height = MediaQuery.of(context).size.height;
+		return Container(
+			height: height / 1.5,
+			child: Center(
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.center,
+					crossAxisAlignment: CrossAxisAlignment.center,
+					children: <Widget>[
+						Image(
+							image: AssetImage(ImageTools.empty_order_list),
+							width: 72,
+							height: 88),
+						SizedBox(height: 4),
+						Text(t,
+							style: TextStyle(fontSize: 14, color: ColorTools.greyA1A6B3)),
+					],
+				)),
+		);
 	}
 }

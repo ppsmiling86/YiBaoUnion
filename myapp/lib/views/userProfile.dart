@@ -13,6 +13,7 @@ import 'about_us_view.dart';
 import 'contact_customer_service.dart';
 import 'package:myapp/models/Response.dart';
 import 'package:myapp/models/UserInfoBloc.dart';
+import 'package:myapp/tools/numberTools.dart';
 
 class UserProfilePage extends StatefulWidget {
 	@override
@@ -24,11 +25,6 @@ class UserProfilePage extends StatefulWidget {
 class UserProfilePageState extends State <UserProfilePage> {
 	final bloc = UserInfoBloc();
 	final _notLoginUser = UserInfoEntity("", 0, 0, "", "", "", 0);
-
-	@override
-  void initState() {
-    super.initState();
-  }
 
 	@override
   void dispose() {
@@ -140,26 +136,19 @@ class UserProfilePageState extends State <UserProfilePage> {
 					}),
 					Divider(),
 					buildSingleRow("关于我们", (){
-						if(isLogin) {
-							Navigator.push(
-								context,
-								MaterialPageRoute(builder: (context) => AboutUsView()),
-							);
-						} else {
-							gotoRegistrationPage();
-						}
+						Navigator.push(
+							context,
+							MaterialPageRoute(builder: (context) => AboutUsView()),
+						);
 					}),
 					Divider(),
 					buildSingleRow("联系客服", (){
-						if(isLogin) {
-							Navigator.push(
-								context,
-								MaterialPageRoute(builder: (context) => ContactCustomerServiceView()),
-							);
-						} else {
-							gotoRegistrationPage();
-						}
+						Navigator.push(
+							context,
+							MaterialPageRoute(builder: (context) => ContactCustomerServiceView()),
+						);
 					}),
+					SizedBox(height: 500),
 				],
 			),
 		);
@@ -211,7 +200,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("我的共创积分: ${userInfoEntity.balance}"),
+							Text("我的共创积分: ${NumberTools.DoubleToFixedString(userInfoEntity.balance, 2)}"),
 							OutlineButton(
 								child: Text("提现"),
 								onPressed: (){
@@ -229,7 +218,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 					),
 					Text("我的总算力: ${userInfoEntity.today_rent_power} U"),
 					SizedBox(height: 16),
-					Expanded(child: Text("大约还可产生${userInfoEntity.today_score}共创积分")),
+					Expanded(child: Text("大约还可产生${NumberTools.DoubleToFixedString(userInfoEntity.today_score, 2)}共创积分")),
 				],
 			),
 		);

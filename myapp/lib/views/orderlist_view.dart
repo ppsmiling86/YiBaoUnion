@@ -9,6 +9,7 @@ import 'package:myapp/models/getOrderBloc.dart';
 import 'package:myapp/tools/dateTools.dart';
 import 'package:myapp/models/ApiRepository.dart';
 
+
 class OrderStatus  {
 	static final canceled = -2;
 	static final payFail = -1;
@@ -52,22 +53,7 @@ class OrderListViewState extends State <OrderListView>{
 				print(snapshot);
 				if (snapshot.hasData) {
 					return Container(
-						child: ListView.builder(
-							itemCount: snapshot.data.data.length,
-							itemBuilder: (context,index) {
-							PlaceOrderEntity placeOrderEntity = snapshot.data.data[index];
-							if (placeOrderEntity.status == OrderStatus.working) {
-								return buildOrderInProgress(placeOrderEntity);
-							} else if (placeOrderEntity.status == OrderStatus.completed) {
-								return buildOrderCompleted(placeOrderEntity);
-							} else if (placeOrderEntity.status == OrderStatus.pendingToPay) {
-								return buildOrderPendingToPay(placeOrderEntity);
-							} else if (placeOrderEntity.status == OrderStatus.canceled) {
-								return buildOrderCanceled(placeOrderEntity);
-							} else {
-								return Container();
-							}
-						}),
+						child: buildListData(snapshot),
 					);
 				} else if (snapshot.hasError) {
 					print("hasError");
@@ -84,6 +70,29 @@ class OrderListViewState extends State <OrderListView>{
 				}
 			});
 	}
+	
+	Widget buildListData(AsyncSnapshot<GetOrderResponse> snapshot) {
+		if (snapshot.data.data.length > 0) {
+			return ListView.builder(
+				itemCount: snapshot.data.data.length,
+				itemBuilder: (context,index) {
+					PlaceOrderEntity placeOrderEntity = snapshot.data.data[index];
+					if (placeOrderEntity.status == OrderStatus.working) {
+						return buildOrderInProgress(placeOrderEntity);
+					} else if (placeOrderEntity.status == OrderStatus.completed) {
+						return buildOrderCompleted(placeOrderEntity);
+					} else if (placeOrderEntity.status == OrderStatus.pendingToPay) {
+						return buildOrderPendingToPay(placeOrderEntity);
+					} else if (placeOrderEntity.status == OrderStatus.canceled) {
+						return buildOrderCanceled(placeOrderEntity);
+					} else {
+						return Container();
+					}
+				});
+		}
+		return CommonWidgetTools.buildEmptyListPlaceholder(context);
+	}
+	
 
   Widget buildOrderInProgress(PlaceOrderEntity placeOrderEntity) {
 		return Container(
@@ -148,7 +157,7 @@ class OrderListViewState extends State <OrderListView>{
 								text: "已挖矿生产共创积分:",
 								children: [
 									TextSpan(
-										text: "50.66",
+										text: "${placeOrderEntity.mined_score}",
 										style: TextStyle(color: Colors.red),
 									)
 								]

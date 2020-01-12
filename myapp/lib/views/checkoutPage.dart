@@ -248,14 +248,14 @@ class CheckoutPageState extends State <CheckoutPage> {
 								],
 							),
 						),
-						buildBottomButtons(),
+						buildBottomButtons(productEntity),
 					],
 				),
 			),
 		);
 	}
 
-	Widget buildBottomButtons() {
+	Widget buildBottomButtons(ProductEntity productEntity) {
 		var width = MediaQuery.of(context).size.width - 32;
 		return Container(
 			height: 60,
@@ -285,7 +285,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 								shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
 								onPressed: (){
 									if (_formKey.currentState.validate()) {
-										if (AppData().orderRequest.amount > 0) {
+										if (AppData().orderRequest.amount > 0 && AppData().orderRequest.amount <= productEntity.limit_per_user) {
 											Navigator.push(
 												context,
 												MaterialPageRoute(builder: (context) => WaiverPage()),

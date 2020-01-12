@@ -20,10 +20,7 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> {
-	@override
-	void initState() {
-		super.initState();
-	}
+
 
 	@override
 	Widget build(BuildContext context) {

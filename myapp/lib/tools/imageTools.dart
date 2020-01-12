@@ -7,4 +7,5 @@ class ImageTools {
 	static const placeholder5 = 'assets/images/img_5.gif';
 	static const placeholder6 = 'assets/images/img_6.png';
 	static const placeholder_qrcode = 'assets/images/qrcode.png';
+	static const empty_order_list = 'assets/images/empty-order-list.png';
 }

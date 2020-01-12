@@ -184,6 +184,7 @@ PlaceOrderEntity _$PlaceOrderEntityFromJson(Map<String, dynamic> json) {
     json['id'] as String,
     (json['value'] as num)?.toDouble(),
     json['status'] as int,
+    (json['mined_score'] as num)?.toDouble(),
   );
 }
 
@@ -199,6 +200,7 @@ Map<String, dynamic> _$PlaceOrderEntityToJson(PlaceOrderEntity instance) =>
       'id': instance.id,
       'value': instance.value,
       'status': instance.status,
+      'mined_score': instance.mined_score,
     };
 
 GetOrderResponse _$GetOrderResponseFromJson(Map<String, dynamic> json) {

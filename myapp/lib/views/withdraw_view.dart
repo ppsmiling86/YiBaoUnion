@@ -33,11 +33,7 @@ class WithdrawViewState extends State <WithdrawView> {
 	DateTime lastSendSmsTime;
 	final _apiRepository = ApiRepository();
 
-	@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+
 
 	@override
   void dispose() {
@@ -142,11 +138,7 @@ class WithdrawViewState extends State <WithdrawView> {
 								height: 300,
 								child: Container(
 									padding: EdgeInsets.symmetric(horizontal: 16),
-									child: ListView.separated(
-										itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
-										separatorBuilder: (context, index) => Divider(),
-										itemCount: snapshot.data.data.length,
-									),
+									child: buildListData(snapshot),
 								),
 							),
 						),
@@ -165,6 +157,17 @@ class WithdrawViewState extends State <WithdrawView> {
 					);
 				}
 			});
+	}
+	
+	Widget buildListData(AsyncSnapshot<WithdrawAddressListResponse> snapshot) {
+		if (snapshot.data.data.length > 0) {
+			return ListView.separated(
+				itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
+				separatorBuilder: (context, index) => Divider(),
+				itemCount: snapshot.data.data.length,
+			);
+		}
+		return CommonWidgetTools.buildEmptyListPlaceholder(context);
 	}
 
 	Widget buildAddressItem(WithdrawAddressEntity withdrawAddressEntity) {
@@ -261,8 +264,6 @@ class WithdrawViewState extends State <WithdrawView> {
 								  		if (!StringTools.ValidateNumber(value.trim())) {
 								  			return '请输入提现积分数量';
 								  		}
-
-//										return null;
 
 								  		double amount = double.parse(value.trim());
 								  		if (amount<0.01 || amount > withdrawAvailableEntity.available) {

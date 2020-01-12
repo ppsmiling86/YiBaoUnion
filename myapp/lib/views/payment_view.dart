@@ -12,6 +12,9 @@ import 'package:myapp/models/AppData.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import 'package:myapp/models/ApiRepository.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+
 
 class PaymentView extends StatefulWidget {
 	final PlaceOrderEntity placeOrderEntity;
@@ -278,11 +281,22 @@ class PaymentViewState extends State <PaymentView> {
 	}
 
 	void launchURL(String urlStr) async {
-		if (await canLaunch(urlStr)) {
-			await launch(urlStr);
-		} else {
-			throw 'Could not launch $urlStr';
-		}
+		final flutterWebviewPlugin = new FlutterWebviewPlugin();
+
+		flutterWebviewPlugin.launch(urlStr,
+			rect: new Rect.fromLTWH(
+				0.0,
+				0.0,
+				MediaQuery.of(context).size.width,
+				300.0,
+			),
+		);
+
+//		if (await canLaunch(urlStr)) {
+//			await launch(urlStr,forceWebView: true);
+//		} else {
+//			throw 'Could not launch $urlStr';
+//		}
 	}
 
 	void poolingPaymentResponse(PlaceOrderEntity placeOrderEntity) {

@@ -180,8 +180,9 @@ class PlaceOrderEntity extends Object {
 	final String id;
 	final double value;
 	final int status;
+	final double mined_score;
 
-	PlaceOrderEntity(this.uid, this.amount, this.price, this.created_at, this.progress, this.rent_end_at, this.rent_start_at, this.id, this.value, this.status);
+	PlaceOrderEntity(this.uid, this.amount, this.price, this.created_at, this.progress, this.rent_end_at, this.rent_start_at, this.id, this.value, this.status,this.mined_score);
 
 	factory PlaceOrderEntity.fromJson(Map<String, dynamic> json) =>
 		_$PlaceOrderEntityFromJson(json);

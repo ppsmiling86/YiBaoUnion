@@ -14,8 +14,10 @@ class MyFriendsView extends StatefulWidget {
 class MyFriendsViewState extends State<MyFriendsView> {
 	final bloc = DownlinkUserBloc();
 	@override
-  void initState() {
-    super.initState();
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    bloc.dispose();
   }
 	
 	@override
@@ -28,16 +30,19 @@ class MyFriendsViewState extends State<MyFriendsView> {
 	}
 
 	Widget buildFriendsList(DownlinkUserResponse response) {
-		return ListView.separated(
-			itemBuilder: (contest,index) {
-				if (index == 0) {
-					return buildSummary(response.data);
-				} else {
-					return buildListItem(response.data.records[index]);
-				}
-			},
-			separatorBuilder: (context, index) => Divider(),
-			itemCount: response.data.records.length+1,
+		List<Widget>container = [];
+		container.add(buildSummary(response.data));
+
+		if(response.data.records.length > 0) {
+			response.data.records.forEach((f) {
+				container.add(Divider());
+				container.add(buildListItem(f));
+			});
+		} else {
+			container.add(CommonWidgetTools.buildEmptyListPlaceholder(context));
+		}
+		return ListView(
+			children: container,
 		);
 	}
 
