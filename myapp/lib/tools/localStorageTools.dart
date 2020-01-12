@@ -1,5 +1,6 @@
 import 'dart:html';
 final kUpperInviteCode = "UpperInviteCode";
+final kOrigin = "urlOrigin";
 class LocalStorageTools {
 	static void setObject(String value, String forKey) {
 		if (value is String && forKey is String) {
@@ -23,20 +24,18 @@ class LocalStorageTools {
 	static void saveUpperInviteCode() {
 		var url = window.location.href;
 		print("url is $url");
-		Uri uri = Uri.dataFromString(url);
+		Uri uri = Uri.parse(url.replaceAll("#/", ""));
 
-
+		var urlOrigin = uri.origin;
+		print("urlOrigin is ${urlOrigin}");
 		var inviteCode = uri.queryParameters["invite_code"];
 		if (inviteCode is String) {
-			if (inviteCode.contains("#/")) {
-				inviteCode = inviteCode.replaceAll("#/", "");
-			}
 			if (inviteCode.isNotEmpty) {
 				print("parsed inviteCode is ${inviteCode}");
 				LocalStorageTools.setObject(inviteCode, kUpperInviteCode);
 			}
 		}
-
+		LocalStorageTools.setObject(urlOrigin, kOrigin);
 	}
 
 	static String getUpperInviteCode() {
@@ -45,6 +44,10 @@ class LocalStorageTools {
 
 	static void clearUpperInviteCode() {
 		LocalStorageTools.setObject("", kUpperInviteCode);
+	}
+
+	static String getOrigin() {
+		return LocalStorageTools.object(kOrigin);
 	}
 
 }

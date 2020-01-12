@@ -24,7 +24,7 @@ class ApiProvider {
 	Future<UserLoginResponse> userLogin(String mobile, String sms_code, String invite_code) async {
 		try {
 			var data = {"mobile": mobile, "sms_code": sms_code,"invite_code": invite_code};
-			Response response = await _dio.post(ServerConfig.baseUrl + ServerConfig.userLogin, data: data);
+			Response response = await _dio.post(ServerConfig.baseUrl() + ServerConfig.userLogin, data: data);
 			printResponse(response);
 			return UserLoginResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -35,7 +35,7 @@ class ApiProvider {
 
 	Future<SMSResponse> sms(String mobile) async {
 		try {
-			Response response = await _dio.get(ServerConfig.baseUrl + ServerConfig.sms, queryParameters: {"mobile": mobile});
+			Response response = await _dio.get(ServerConfig.baseUrl() + ServerConfig.sms, queryParameters: {"mobile": mobile});
 			printResponse(response);
 			return SMSResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -46,7 +46,7 @@ class ApiProvider {
 
 	Future<SMSResponse> smsSelf() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.smsSelf);
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.smsSelf);
 			printResponse(response);
 			return SMSResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -57,7 +57,7 @@ class ApiProvider {
 
 	Future<ProductResponse> productInfo() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.productInfo);
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.productInfo);
 			printResponse(response);
 			return ProductResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -68,7 +68,7 @@ class ApiProvider {
 
 	Future<PlaceOrderResponse> placeOrder(int amount) async {
 		try {
-			Response response = await dio().post(ServerConfig.baseUrl + ServerConfig.placeOrder,data: {"amount": amount});
+			Response response = await dio().post(ServerConfig.baseUrl() + ServerConfig.placeOrder,data: {"amount": amount});
 			printResponse(response);
 			return PlaceOrderResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -79,7 +79,7 @@ class ApiProvider {
 
 	Future<GetOrderResponse> getOrder() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.getOder);
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.getOder);
 			printResponse(response);
 			return GetOrderResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -90,7 +90,7 @@ class ApiProvider {
 
 	Future<DownlinkUserResponse> downlinkUser() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.downlinkUser);
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.downlinkUser);
 			printResponse(response);
 			return DownlinkUserResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -101,7 +101,7 @@ class ApiProvider {
 
 	Future<WithdrawAddressResponse> addWithDrawAddress(WithdrawAddressEntity withdrawAddressEntity) async {
 		try {
-			Response response = await dio().post(ServerConfig.baseUrl + ServerConfig.withdrawAddress,data: {"tag": withdrawAddressEntity.tag,"address": withdrawAddressEntity.address});
+			Response response = await dio().post(ServerConfig.baseUrl() + ServerConfig.withdrawAddress,data: {"tag": withdrawAddressEntity.tag,"address": withdrawAddressEntity.address});
 			printResponse(response);
 			return WithdrawAddressResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -112,7 +112,7 @@ class ApiProvider {
 
 	Future<WithdrawAddressResponse> deleteWithDrawAddress(WithdrawAddressEntity withdrawAddressEntity) async {
 		try {
-			Response response = await dio().delete(ServerConfig.baseUrl + ServerConfig.withdrawAddress,data: {"id": withdrawAddressEntity.id});
+			Response response = await dio().delete(ServerConfig.baseUrl() + ServerConfig.withdrawAddress,data: {"id": withdrawAddressEntity.id});
 			printResponse(response);
 			return WithdrawAddressResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -123,7 +123,7 @@ class ApiProvider {
 
 	Future<WithdrawAddressResponse> editWithDrawAddress(WithdrawAddressEntity withdrawAddressEntity) async {
 		try {
-			Response response = await dio().put(ServerConfig.baseUrl + ServerConfig.withdrawAddress,data: {"id": withdrawAddressEntity.id,"tag": withdrawAddressEntity.tag,"address": withdrawAddressEntity.address});
+			Response response = await dio().put(ServerConfig.baseUrl() + ServerConfig.withdrawAddress,data: {"id": withdrawAddressEntity.id,"tag": withdrawAddressEntity.tag,"address": withdrawAddressEntity.address});
 			printResponse(response);
 			return WithdrawAddressResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -134,7 +134,7 @@ class ApiProvider {
 
 	Future<WithdrawAddressListResponse> getWithDrawAddress() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.withdrawAddress);
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.withdrawAddress);
 			printResponse(response);
 			return WithdrawAddressListResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -145,7 +145,7 @@ class ApiProvider {
 
 	Future<PayStatusResponse> payStatus(String orderId) async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.payStatus,queryParameters: {"order_id": orderId});
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.payStatus,queryParameters: {"order_id": orderId});
 			printResponse(response);
 			return PayStatusResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -156,7 +156,7 @@ class ApiProvider {
 
 	Future<WithdrawListResponse> withdrawApply() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.withdrawApply,queryParameters: {"page": 0,"size":10000});
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.withdrawApply,queryParameters: {"page": 0,"size":10000});
 			printResponse(response);
 			return WithdrawListResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -169,7 +169,7 @@ class ApiProvider {
 		try {
 			var data = {"value": request.amount,"address": request.walletAddress,"sms_code":request.verifyCode};
 			print(data);
-			Response response = await dio().post(ServerConfig.baseUrl + ServerConfig.withdrawApply,data: data);
+			Response response = await dio().post(ServerConfig.baseUrl() + ServerConfig.withdrawApply,data: data);
 			printResponse(response);
 			return ApplyWithdrawResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -180,7 +180,7 @@ class ApiProvider {
 
 	Future<WithdrawAvailableResponse> withdrawAvailable() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.withdrawAvailable);
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.withdrawAvailable);
 			printResponse(response);
 			return WithdrawAvailableResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -191,7 +191,7 @@ class ApiProvider {
 
 	Future<UserInfoResponse> userInfo() async {
 		try {
-			Response response = await dio().get(ServerConfig.baseUrl + ServerConfig.userInfo);
+			Response response = await dio().get(ServerConfig.baseUrl() + ServerConfig.userInfo);
 			printResponse(response);
 			return UserInfoResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -204,7 +204,7 @@ class ApiProvider {
 		try {
 			print(order_id);
 			print("${pay_type}");
-			Response response = await dio().post(ServerConfig.baseUrl + ServerConfig.payOrder,data: {"order_id": order_id,"pay_type":pay_type});
+			Response response = await dio().post(ServerConfig.baseUrl() + ServerConfig.payOrder,data: {"order_id": order_id,"pay_type":pay_type});
 			printResponse(response);
 			return PayOrderResponse.fromJson(response.data);
 		} catch (error, stacktrace) {
@@ -216,7 +216,7 @@ class ApiProvider {
 	Future<CancelOrderResponse> cancelOrder(String order_id) async {
 		try {
 			var data = {"order_id": order_id};
-			Response response = await dio().post(ServerConfig.baseUrl + ServerConfig.cancelOder,data: data);
+			Response response = await dio().post(ServerConfig.baseUrl() + ServerConfig.cancelOder,data: data);
 			printResponse(response);
 			return CancelOrderResponse.fromJson(response.data);
 		} catch (error, stacktrace) {

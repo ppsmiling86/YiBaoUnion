@@ -1,5 +1,7 @@
+import 'package:myapp/tools/localStorageTools.dart';
+
 class ServerConfig {
-	static const String baseUrl = 'http://34.92.152.68/api';
+//	static const String baseUrl = this.baseUrl();
 //	static const String baseUrl = 'http://192.168.99.248:28080';
 
 	static const String userLogin = '/user/login';
@@ -22,5 +24,9 @@ class ServerConfig {
 		return _sharedInstance;
 	}
 	ServerConfig._internal();
+
+	static String baseUrl() {
+		return LocalStorageTools.getOrigin();
+	}
 }
 
