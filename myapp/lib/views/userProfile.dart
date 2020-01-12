@@ -254,7 +254,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 						setState(() {
 							AppData().loginUser().logout();
 						});
-					}, child: Text("退出登陆", style: TextStyle(color: Colors.white),)
+					}, child: Text("退出登录", style: TextStyle(color: Colors.white),)
 				),
 			),
 		) : Container();

@@ -244,7 +244,7 @@ class OrderListViewState extends State <OrderListView>{
 								text: "已挖矿生产共创积分:",
 								children: [
 									TextSpan(
-										text: "50.66",
+										text: "${placeOrderEntity.mined_score}",
 										style: TextStyle(color: Colors.red),
 									)
 								]
