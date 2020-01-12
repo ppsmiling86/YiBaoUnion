@@ -104,9 +104,10 @@ class ProductEntity extends Object {
 	final double price;
 	final double finished_progress;
 	final int limit_per_user;
+	final double scrore_per_unithour;
 
 
-	ProductEntity(this.sold_progress, this.total_supply, this.price, this.finished_progress, this.limit_per_user);
+	ProductEntity(this.sold_progress, this.total_supply, this.price, this.finished_progress, this.limit_per_user,this.scrore_per_unithour);
 
 	factory ProductEntity.fromJson(Map<String, dynamic> json) =>
 		_$ProductEntityFromJson(json);

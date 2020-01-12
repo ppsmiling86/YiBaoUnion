@@ -229,7 +229,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 							height: 40,
 							child: Row(
 								children: <Widget>[
-									Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生1个共创积分,整点发放",style: TextStyle(color: Colors.red))),
+									Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.scrore_per_unithour}个共创积分,整点发放",style: TextStyle(color: Colors.red))),
 								],
 							),
 						),

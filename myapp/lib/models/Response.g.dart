@@ -109,6 +109,7 @@ ProductEntity _$ProductEntityFromJson(Map<String, dynamic> json) {
     (json['price'] as num)?.toDouble(),
     (json['finished_progress'] as num)?.toDouble(),
     json['limit_per_user'] as int,
+    (json['scrore_per_unithour'] as num)?.toDouble(),
   );
 }
 
@@ -119,6 +120,7 @@ Map<String, dynamic> _$ProductEntityToJson(ProductEntity instance) =>
       'price': instance.price,
       'finished_progress': instance.finished_progress,
       'limit_per_user': instance.limit_per_user,
+      'scrore_per_unithour': instance.scrore_per_unithour,
     };
 
 CommissionResponse _$CommissionResponseFromJson(Map<String, dynamic> json) {
