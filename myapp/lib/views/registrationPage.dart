@@ -51,21 +51,32 @@ class RegistrationPageState extends State <RegistrationPage> {
 							mainAxisAlignment: MainAxisAlignment.end,
 							mainAxisSize: MainAxisSize.min,
 							children: <Widget>[
-								Text("未注册的手机验证成功后将自动注册,注册视为同意"),
-								SizedBox(width: 8),
-								GestureDetector(
-									onTap: (){
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => RentContractView()),
-										);
-									},
-									child: Text("龙门算力租赁服务条款",
-										style: TextStyle(
-											decoration: TextDecoration.underline,
-											color: ColorTools.greyA1A6B3)),
+								Expanded(
+								  child: GestureDetector(
+									  onTap: (){
+										  Navigator.push(
+											  context,
+											  MaterialPageRoute(builder: (context) => RentContractView()),
+										  );
+									  },
+								    child: RichText(
+										textAlign: TextAlign.end,
+										text: TextSpan(
+								    	text: "未注册的手机验证成功后将自动注册,注册视为同意 ",
+								    	style: TextStyle(
+											color: Colors.black),
+								    	children: [
+								    		TextSpan(
+								    			text: "龙门算力租赁服务条款 ",
+								    			style: TextStyle(
+								    				decoration: TextDecoration.underline,
+								    				color: ColorTools.greyA1A6B3),
+								    		)
+								    	]
+								    )
+								    ),
+								  ),
 								),
-								SizedBox(width: 16),
 							],
 						)
 					],
