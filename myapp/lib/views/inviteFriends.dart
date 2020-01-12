@@ -99,7 +99,7 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 								child: FlatButton(
 									color: ColorTools.green1AAD19,
 									onPressed: () {
-										clippy.write('www.baiducom');
+										clippy.write(AppData().loginUser().userProfileEntity.invite_url);
 										CommonWidgetTools.showToastView(context, "复制成功");
 									}, child: Text("复制邀请链接",style: TextStyle(color: Colors.white),)),
 							)
