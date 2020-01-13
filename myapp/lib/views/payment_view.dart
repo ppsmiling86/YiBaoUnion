@@ -14,7 +14,7 @@ import 'dart:async';
 import 'package:myapp/models/ApiRepository.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-
+import 'package:universal_html/prefer_universal/html.dart' as html;
 
 class PaymentView extends StatefulWidget {
 	final PlaceOrderEntity placeOrderEntity;
@@ -281,16 +281,9 @@ class PaymentViewState extends State <PaymentView> {
 	}
 
 	void launchURL(String urlStr) async {
-		final flutterWebviewPlugin = new FlutterWebviewPlugin();
+		html.window.location.assign(urlStr);
 
-		flutterWebviewPlugin.launch(urlStr,
-			rect: new Rect.fromLTWH(
-				0.0,
-				0.0,
-				MediaQuery.of(context).size.width,
-				300.0,
-			),
-		);
+
 
 //		if (await canLaunch(urlStr)) {
 //			await launch(urlStr,forceWebView: true);

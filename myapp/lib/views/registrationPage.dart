@@ -83,6 +83,8 @@ class RegistrationPageState extends State <RegistrationPage> {
 				),
 			),
 			bottomNavigationBar: buildLoginButton(),
+			resizeToAvoidBottomPadding: false,
+			resizeToAvoidBottomInset: false,
 		);
 	}
 

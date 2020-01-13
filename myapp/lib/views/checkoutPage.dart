@@ -4,13 +4,17 @@ import 'package:myapp/models/AppData.dart';
 import 'package:myapp/models/Response.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'package:myapp/tools/colorTools.dart';
-import 'package:myapp/views/waiverPage.dart';
+import 'package:myapp/views/payment_view.dart';
 import 'package:myapp/views/userProfile.dart';
 import 'package:myapp/tools/stringTools.dart';
 import 'package:myapp/custom_views/center_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/ProductInfoBloc.dart';
+import 'package:myapp/tools/numberTools.dart';
+import 'package:ant_icons/ant_icons.dart';
+import 'package:myapp/models/ApiRepository.dart';
+
 class CheckoutPage extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -19,13 +23,14 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class CheckoutPageState extends State <CheckoutPage> {
+	final _apiRepository = ApiRepository();
 	final _formKey = GlobalKey<FormState>();
 	final amountController = TextEditingController();
 	final _productInfoBloc = ProductInfoBloc();
 	@override
 	void initState() {
 		super.initState();
-		amountController.text = "10000";
+		amountController.text = "1";
 	}
 
 	@override
@@ -37,7 +42,11 @@ class CheckoutPageState extends State <CheckoutPage> {
 			}),
 			drawer: UserProfilePage(),
 			body: CenterView(),
-			bottomNavigationBar: buildBottomView(),
+			bottomNavigationBar: SingleChildScrollView(
+				child: buildBottomView(),
+			),
+			resizeToAvoidBottomInset: false,
+			resizeToAvoidBottomPadding: false,
 		);
 	}
 
@@ -46,7 +55,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 			stream: _productInfoBloc.subject.stream,
 			builder: (context, AsyncSnapshot<ProductResponse> snapshot) {
 				print(snapshot);
-				if (snapshot.hasData) {
+				if (snapshot.hasData && snapshot.data.data is ProductEntity) {
 					return buildProductDetail(snapshot.data.data);
 				} else if (snapshot.hasError) {
 					print("hasError");
@@ -98,7 +107,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 		return Container(
 			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 			width: width,
-			height: 350,
+			height: 346,
 			child: Form(
 				key: _formKey,
 				child: Column(
@@ -123,32 +132,22 @@ class CheckoutPageState extends State <CheckoutPage> {
 									Container(
 										width: 200,
 										child: Row(
+											crossAxisAlignment: CrossAxisAlignment.center,
 											mainAxisAlignment: MainAxisAlignment.end,
 											children: <Widget>[
-												GestureDetector(
-													child: SizedBox(
-														width: 40,
-														height: 60,
-														child: Container(
-															color: Colors.white,
-															child: Center(child: Text("-",style: TextStyle(color: Colors.grey)))
-														),
-													),
-													onTap: (){
-														if (StringTools.ValidateNumber(amountController.text)) {
-															var current = int.parse(amountController.text);
-															if (current > 0) {
-																var sub = current - 1;
-																setState(() {
-																	amountController.text = "$sub";
-																});
-															}
+												IconButton(icon: Icon(AntIcons.minus_circle_outline,size: 24), onPressed: (){
+													if (StringTools.ValidateNumber(amountController.text)) {
+														var current = int.parse(amountController.text);
+														if (current > 0) {
+															var sub = current - 1;
+															setState(() {
+																amountController.text = "$sub";
+															});
 														}
-													},
-												),
+													}
+												}),
 												SizedBox(
 													width: 40,
-													height: 60,
 													child: Container(
 														decoration: BoxDecoration(
 															borderRadius: BorderRadius.circular(1),
@@ -175,25 +174,17 @@ class CheckoutPageState extends State <CheckoutPage> {
 														),
 													),
 												),
-												GestureDetector(
-													child: SizedBox(
-														width: 40,
-														height: 60,
-														child: Container(
-															color: Colors.white,
-															child: Center(child: Text("+",style: TextStyle(color: Colors.grey))))),
-													onTap: (){
-														if (StringTools.ValidateNumber(amountController.text)) {
-															var current = int.parse(amountController.text);
-															if (current < productEntity.limit_per_user) {
-																var add = current+1;
-																setState(() {
-																	amountController.text = "$add";
-																});
-															}
+												IconButton(icon: Icon(AntIcons.plus_circle_outline,size: 24), onPressed: (){
+													if (StringTools.ValidateNumber(amountController.text)) {
+														var current = int.parse(amountController.text);
+														if (current < productEntity.limit_per_user) {
+															var add = current+1;
+															setState(() {
+																amountController.text = "$add";
+															});
 														}
-													},
-												),
+													}
+												}),
 											],
 										),
 									)
@@ -210,7 +201,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 							mainAxisAlignment: MainAxisAlignment.spaceBetween,
 							children: <Widget>[
 								Text("每日总额 ${productEntity.total_supply} U"),
-								Text("租赁进度: ${productEntity.sold_progress * 100}%"),
+								Text("租赁进度: ${NumberTools.DoubleToFixedString(productEntity.sold_progress * 100, 2)}%"),
 							],
 						),
 						SizedBox(height: 6),
@@ -229,7 +220,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 							height: 40,
 							child: Row(
 								children: <Widget>[
-									Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.scrore_per_unithour}个共创积分,整点发放",style: TextStyle(color: Colors.red))),
+									Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.score_per_unithour}个共创积分,整点发放",style: TextStyle(color: Colors.red))),
 								],
 							),
 						),
@@ -286,10 +277,22 @@ class CheckoutPageState extends State <CheckoutPage> {
 								onPressed: (){
 									if (_formKey.currentState.validate()) {
 										if (AppData().orderRequest.amount > 0 && AppData().orderRequest.amount <= productEntity.limit_per_user) {
-											Navigator.push(
-												context,
-												MaterialPageRoute(builder: (context) => WaiverPage()),
-											);
+
+											CommonWidgetTools.showLoading(context);
+											print("place order amount ${AppData().orderRequest.amount}");
+											_apiRepository.placeOrder(AppData().orderRequest.amount).then((value){
+												CommonWidgetTools.dismissLoading(context);
+												if (value.data is PlaceOrderEntity) {
+													print("place order success, order id is: ${value.data.id}");
+													Navigator.push(
+														context,
+														MaterialPageRoute(builder: (context) => PaymentView(value.data)),
+													);
+												} else {
+													print("error is ${value.msg}");
+													CommonWidgetTools.showAlertController(context, value.msg);
+												}
+											});
 										}
 									}
 								},
