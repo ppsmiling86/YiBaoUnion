@@ -19,6 +19,7 @@ class CenterViewState extends State <CenterView> {
 		images.add(ImageTools.placeholder4);
 		images.add(ImageTools.placeholder5);
 		images.add(ImageTools.placeholder6);
+		images.add(ImageTools.placeholder7);
 		return ListView.builder(
 			itemCount: images.length,
 			itemBuilder: (context,index) => buildImage(images[index], width),

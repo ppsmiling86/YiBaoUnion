@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/tools/colorTools.dart';
+import 'package:myapp/tools/imageTools.dart';
 import 'checkoutPage.dart';
 import 'package:myapp/tools/stringTools.dart';
 import 'package:myapp/models/AppData.dart';
@@ -8,7 +9,8 @@ import 'package:myapp/models/UserBloc.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/Response.dart';
 import 'package:myapp/tools/localStorageTools.dart';
-import 'package:myapp/views/rent_contract_view.dart';
+import 'contract_view.dart';
+import 'package:universal_html/prefer_universal/html.dart' as html;
 class RegistrationPage extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -54,10 +56,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 								Expanded(
 								  child: GestureDetector(
 									  onTap: (){
-										  Navigator.push(
-											  context,
-											  MaterialPageRoute(builder: (context) => RentContractView()),
-										  );
+										launchURL(ImageTools.contract);
 									  },
 								    child: RichText(
 										textAlign: TextAlign.end,
@@ -83,8 +82,6 @@ class RegistrationPageState extends State <RegistrationPage> {
 				),
 			),
 			bottomNavigationBar: buildLoginButton(),
-			resizeToAvoidBottomPadding: false,
-			resizeToAvoidBottomInset: false,
 		);
 	}
 
@@ -219,5 +216,10 @@ class RegistrationPageState extends State <RegistrationPage> {
 			),
 		);
 	}
+
+	void launchURL(String urlStr) async {
+		html.window.location.assign(urlStr);
+	}
+
 
 }

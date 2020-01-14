@@ -5,7 +5,9 @@ class ImageTools {
 	static const placeholder3 = 'assets/images/img_3.gif';
 	static const placeholder4 = 'assets/images/img_4.gif';
 	static const placeholder5 = 'assets/images/img_5.gif';
-	static const placeholder6 = 'assets/images/img_6.png';
+	static const placeholder6 = 'assets/images/img_6.gif';
+	static const placeholder7 = 'assets/images/img_7.gif';
 	static const placeholder_qrcode = 'assets/images/qrcode.png';
 	static const empty_order_list = 'assets/images/empty-order-list.png';
+	static const contract = 'https://tynewstar2011.github.io/test/#/';
 }
