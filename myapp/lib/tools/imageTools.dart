@@ -9,5 +9,5 @@ class ImageTools {
 	static const placeholder7 = 'assets/images/img_7.gif';
 	static const placeholder_qrcode = 'assets/images/qrcode.png';
 	static const empty_order_list = 'assets/images/empty-order-list.png';
-	static const contract = 'https://tynewstar2011.github.io/test/#/';
+	static const contract = '/front/agreement.html';
 }
