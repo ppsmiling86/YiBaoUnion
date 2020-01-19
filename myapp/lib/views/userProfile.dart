@@ -14,6 +14,7 @@ import 'contact_customer_service.dart';
 import 'package:myapp/models/Response.dart';
 import 'package:myapp/models/UserInfoBloc.dart';
 import 'package:myapp/tools/numberTools.dart';
+import 'package:myapp/views/checkin_view.dart';
 
 class UserProfilePage extends StatefulWidget {
 	@override
@@ -129,6 +130,17 @@ class UserProfilePageState extends State <UserProfilePage> {
 							Navigator.push(
 								context,
 								MaterialPageRoute(builder: (context) => MyFriendsView()),
+							);
+						} else {
+							gotoRegistrationPage();
+						}
+					}),
+					Divider(),
+					buildSingleRow("签到有礼", (){
+						if(isLogin) {
+							Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => CheckInView()),
 							);
 						} else {
 							gotoRegistrationPage();
