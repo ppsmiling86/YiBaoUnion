@@ -19,7 +19,7 @@ class CheckInDayModel {
 
 class CheckInViewState extends State<CheckInView> {
 	int numberOfCheckedInDay = 7;
-	double checkedInPrize = 0.05;
+	double checkedInPrize = 0.03;
 	final count = 30;
 	int tapCount = 0;
 	Map<int,String>map = {

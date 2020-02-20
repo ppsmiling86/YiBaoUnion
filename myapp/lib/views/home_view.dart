@@ -34,33 +34,43 @@ class HomeViewState extends State<HomeView> {
 
 	Widget buildBottomButtons() {
 		return Container(
-			height: 80,
+			height: 120,
 			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-			child: Row(
-				mainAxisAlignment: MainAxisAlignment.spaceBetween,
+			child: Column(
 				children: <Widget>[
-					Expanded(
-						child: SizedBox(
-							height: 60,
-							child: FlatButton(
-								color: ColorTools.green1AAD19,
-								shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
-								onPressed: (){
-									if (AppData().loginUser().isLoggedIn) {
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => CheckoutPage()),
-										);
-									} else {
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => RegistrationPage()),
-										);
-									}
-								},
-								child: Text("立即租赁算力",style: TextStyle(color: Colors.white))
+					Row(
+						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+						children: <Widget>[
+							Expanded(
+								child: SizedBox(
+									height: 60,
+									child: FlatButton(
+										color: ColorTools.green1AAD19,
+										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
+										onPressed: (){
+											if (AppData().loginUser().isLoggedIn) {
+												Navigator.push(
+													context,
+													MaterialPageRoute(builder: (context) => CheckoutPage()),
+												);
+											} else {
+												Navigator.push(
+													context,
+													MaterialPageRoute(builder: (context) => RegistrationPage()),
+												);
+											}
+										},
+										child: Text("立即租赁算力",style: TextStyle(color: Colors.white))
+									),
+								),
 							),
-						),
+						],
+					),
+					Row(
+						mainAxisAlignment: MainAxisAlignment.center,
+						children: <Widget>[
+							Text("© CopyRight 2019-2020 蜀ICP备08082108号"),
+						],
 					),
 				],
 			),
