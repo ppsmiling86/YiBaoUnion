@@ -66,11 +66,14 @@ class HomeViewState extends State<HomeView> {
 							),
 						],
 					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.center,
-						children: <Widget>[
-							Text("© CopyRight 2019-2020 蜀ICP备08082108号"),
-						],
+					Opacity(
+						opacity: 0,
+					  child: Row(
+					  	mainAxisAlignment: MainAxisAlignment.center,
+					  	children: <Widget>[
+					  		Text("© CopyRight 2019-2020 蜀ICP备08082108号"),
+					  	],
+					  ),
 					),
 				],
 			),
