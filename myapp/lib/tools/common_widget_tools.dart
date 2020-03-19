@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ant_icons/ant_icons.dart';
+import 'package:myapp/models/MyNotification.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'colorTools.dart';
 import 'package:toast/toast.dart';
@@ -32,6 +33,28 @@ class CommonWidgetTools {
 					),
 					onPressed: (){
 						Scaffold.of(context).openDrawer();
+					})
+			),
+			centerTitle: true,
+			title: Text(title,
+				style: TextStyle(
+					fontWeight: FontWeight.w500,
+					fontSize: 18,
+					color: ColorTools.whiteFFFFFF)),
+//			backgroundColor: ColorTools.bkgMainColor,
+			elevation: 0.0,
+		);
+	}
+
+	static Widget appBarInWechatWithBuilder(BuildContext context, String title) {
+		return AppBar(
+			leading: Builder(builder: (context) =>
+				IconButton(
+					icon: CircleAvatar(
+						child: Icon(Icons.person),
+					),
+					onPressed: (){
+						MyNotification(true).dispatch(context);
 					})
 			),
 			centerTitle: true,

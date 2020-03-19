@@ -520,7 +520,7 @@ class UserInfoEntity extends Object {
 class PayOrderWeiXinH5Response extends Object {
 	final String msg;
 	final String code;
-	final PayOrderEntity data;
+	final PayOrderWeiXinH5Entity data;
 
 	PayOrderWeiXinH5Response(
 		this.msg,
@@ -536,6 +536,17 @@ class PayOrderWeiXinH5Response extends Object {
 			code = "-1",
 			msg = error;
 }
+
+@JsonSerializable()
+class PayOrderWeiXinH5Entity extends Object {
+	final String url;
+
+	PayOrderWeiXinH5Entity(this.url);
+
+	factory PayOrderWeiXinH5Entity.fromJson(Map<String, dynamic> json) =>
+		_$PayOrderWeiXinH5EntityFromJson(json);
+}
+
 
 
 @JsonSerializable()

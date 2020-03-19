@@ -538,7 +538,7 @@ PayOrderWeiXinH5Response _$PayOrderWeiXinH5ResponseFromJson(
     json['code'] as String,
     json['data'] == null
         ? null
-        : PayOrderEntity.fromJson(json['data'] as Map<String, dynamic>),
+        : PayOrderWeiXinH5Entity.fromJson(json['data'] as Map<String, dynamic>),
   );
 }
 
@@ -548,6 +548,19 @@ Map<String, dynamic> _$PayOrderWeiXinH5ResponseToJson(
       'msg': instance.msg,
       'code': instance.code,
       'data': instance.data,
+    };
+
+PayOrderWeiXinH5Entity _$PayOrderWeiXinH5EntityFromJson(
+    Map<String, dynamic> json) {
+  return PayOrderWeiXinH5Entity(
+    json['url'] as String,
+  );
+}
+
+Map<String, dynamic> _$PayOrderWeiXinH5EntityToJson(
+        PayOrderWeiXinH5Entity instance) =>
+    <String, dynamic>{
+      'url': instance.url,
     };
 
 PayOrderResponse _$PayOrderResponseFromJson(Map<String, dynamic> json) {

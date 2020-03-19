@@ -38,6 +38,23 @@ class LocalStorageTools {
 		LocalStorageTools.setObject(urlOrigin, kOrigin);
 	}
 
+	static bool isRediretToOrderList() {
+		var url = window.location.href;
+		print("isRediretToOrderList url is $url");
+		Uri uri = Uri.parse(url.replaceAll("#/", ""));
+
+		var urlOrigin = uri.origin;
+		print("isRediretToOrderList urlOrigin is ${urlOrigin}");
+		var redirectPath = uri.queryParameters["reidrect"];
+		if (redirectPath is String) {
+			if (redirectPath.isNotEmpty) {
+				print("redirectPath is $redirectPath");
+				return redirectPath == "order_list";
+			}
+		}
+		return false;
+	}
+
 	static String getUpperInviteCode() {
 		return LocalStorageTools.object(kUpperInviteCode);
 	}

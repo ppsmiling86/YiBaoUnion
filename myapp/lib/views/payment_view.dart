@@ -228,7 +228,7 @@ class PaymentViewState extends State <PaymentView> {
 											_apiRepository.payOrderWinXinH5(placeOrderEntity.id).then((value){
 												CommonWidgetTools.dismissLoading(context);
 												if(value.data != null) {
-													launchURL(value.data.pay_url);
+													launchURL(value.data.url);
 													poolingPaymentResponse(placeOrderEntity);
 													showDialog(context: context,
 														barrierDismissible: false,

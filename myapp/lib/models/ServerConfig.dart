@@ -20,7 +20,6 @@ class ServerConfig {
 	static const String userInfo = '/user/info';
 	static const String payOrder = '/pay/order';
 	static const String payOrderWeixinh5 = '/pay/order/weixinh5';
-
 	static final ServerConfig _sharedInstance = ServerConfig._internal();
 	factory ServerConfig() {
 		return _sharedInstance;
