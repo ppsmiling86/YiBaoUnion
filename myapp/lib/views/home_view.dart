@@ -12,6 +12,8 @@ import 'package:myapp/tools/colorTools.dart';
 import 'package:myapp/models/UserBloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
+import 'package:myapp/tools/userAgent.dart';
+
 class HomeView extends StatefulWidget {
 	@override
 	State<StatefulWidget> createState() {
@@ -21,9 +23,17 @@ class HomeView extends StatefulWidget {
 
 class HomeViewState extends State<HomeView> {
 
+	@override
+  void initState() {
+    super.initState();
+
+  }
 
 	@override
 	Widget build(BuildContext context) {
+		Use1rAgent.isWeChatOpen().then((bool value) {
+			print("is wechat open = $value");
+		});
 		return Scaffold(
 			appBar: CommonWidgetTools.appBarWithBuilder(context, "首页"),
 			drawer: UserProfilePage(),
@@ -71,7 +81,7 @@ class HomeViewState extends State<HomeView> {
 					  child: Row(
 					  	mainAxisAlignment: MainAxisAlignment.center,
 					  	children: <Widget>[
-					  		Text("© CopyRight 2019-2020 蜀ICP备08082108号"),
+					  		Text("Copyright@2020 成都易程信息技术有限公司版权所有"),
 					  	],
 					  ),
 					),

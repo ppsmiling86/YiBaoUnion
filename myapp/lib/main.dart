@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/views/home_view.dart';
 import 'package:myapp/tools/localStorageTools.dart';
 
-//scp -r ./**  root@34.92.152.68:/opt/front
+//scp -r ./build/web/** root@47.108.62.79:/opt/front
+//Ethan1102
 //flutter run -d chrome
 
 void main() => runApp(MyApp());

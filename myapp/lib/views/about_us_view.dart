@@ -24,6 +24,24 @@ class AboutUsViewState extends State<AboutUsView> {
 		  	),
 		  ),
 		),
+		bottomNavigationBar: buildBottom(),
 	);
+  }
+
+  Widget buildBottom() {
+		return SizedBox(
+			width: double.infinity,
+			height: 80,
+		  child: Container(
+		    child: Center(
+		      child: Row(
+		      	mainAxisAlignment: MainAxisAlignment.center,
+		      	children: <Widget>[
+		      		Text("Copyright@2020 成都易程信息技术有限公司版权所有"),
+		      	],
+		      ),
+		    ),
+		  ),
+		);
   }
 }
