@@ -10,4 +10,6 @@ class ImageTools {
 	static const placeholder_qrcode = 'assets/images/qrcode.png';
 	static const empty_order_list = 'assets/images/empty-order-list.png';
 	static const contract = '/front/agreement.html';
+	static const arc_arrow = 'assets/images/arc-arrow.png';
+
 }

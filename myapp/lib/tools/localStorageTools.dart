@@ -23,8 +23,6 @@ class LocalStorageTools {
 
 	static void saveUpperInviteCode() {
 		var url = window.location.href;
-		var userAgent = window.navigator.userAgent;
-		print("userAgent is $userAgent");
 		print("url is $url");
 		Uri uri = Uri.parse(url.replaceAll("#/", ""));
 

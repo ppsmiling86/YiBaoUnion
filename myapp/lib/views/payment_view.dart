@@ -33,7 +33,7 @@ enum PaymentType {
 
 
 class PaymentViewState extends State <PaymentView> {
-	PaymentType selectPaymentType = PaymentType.aliPay;
+	PaymentType selectPaymentType = PaymentType.wechatPay;
 	Timer _timer;
 	final _apiRepository = ApiRepository();
 	@override
@@ -114,32 +114,32 @@ class PaymentViewState extends State <PaymentView> {
 						],
 					),
 					Divider(),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							SizedBox(
-								width: 200,
-							  child: Row(
-								  mainAxisAlignment: MainAxisAlignment.start,
-							  	children: <Widget>[
-							  		Icon(AntIcons.alipay_square,size: 25),
-							  		SizedBox(width: 16),
-							  		Text("支付宝"),
-							  	],
-							  ),
-							),
-							Checkbox(
-								value: selectPaymentType == PaymentType.aliPay,
-								onChanged: (bool value) {
-									setState(() {
-										if (value) {
-											selectPaymentType = PaymentType.aliPay;
-										}
-									});
-								},
-							),
-						],
-					),
+//					Row(
+//						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//						children: <Widget>[
+//							SizedBox(
+//								width: 200,
+//							  child: Row(
+//								  mainAxisAlignment: MainAxisAlignment.start,
+//							  	children: <Widget>[
+//							  		Icon(AntIcons.alipay_square,size: 25),
+//							  		SizedBox(width: 16),
+//							  		Text("支付宝"),
+//							  	],
+//							  ),
+//							),
+//							Checkbox(
+//								value: selectPaymentType == PaymentType.aliPay,
+//								onChanged: (bool value) {
+//									setState(() {
+//										if (value) {
+//											selectPaymentType = PaymentType.aliPay;
+//										}
+//									});
+//								},
+//							),
+//						],
+//					),
 					Divider(),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,7 +225,7 @@ class PaymentViewState extends State <PaymentView> {
 										color: Colors.red,
 										onPressed: (){
 											CommonWidgetTools.showLoading(context);
-											_apiRepository.payOrder(placeOrderEntity.id, paymentTypeIntByType(selectPaymentType)).then((value){
+											_apiRepository.payOrderWinXinH5(placeOrderEntity.id).then((value){
 												CommonWidgetTools.dismissLoading(context);
 												if(value.data != null) {
 													launchURL(value.data.pay_url);

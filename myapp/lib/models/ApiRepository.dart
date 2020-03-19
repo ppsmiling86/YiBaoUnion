@@ -76,4 +76,8 @@ class ApiRepository {
 	Future<CancelOrderResponse> cancelOrder(String order_id) {
 		return _apiProvider.cancelOrder(order_id);
 	}
+
+	Future<PayOrderWeiXinH5Response> payOrderWinXinH5(order_id) {
+		return _apiProvider.payOrderWinXinH5(order_id);
+	}
 }

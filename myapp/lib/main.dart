@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/views/home_view.dart';
 import 'package:myapp/tools/localStorageTools.dart';
-
+import 'package:myapp/views/UseBrowserOpen.dart';
+import 'package:myapp/tools/userAgent.dart';
 //scp -r ./build/web/** root@47.108.62.79:/opt/front
 //Ethan1102
 //flutter run -d chrome
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final userAgent = UserAgent();
     LocalStorageTools.saveUpperInviteCode();
     print("upper invite code is :${LocalStorageTools.getUpperInviteCode()}");
     return MaterialApp(
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomeView(),
+      home: userAgent.isWeChatOpen() ? UseBrowserOpenView() : HomeView(),
     );
   }
 

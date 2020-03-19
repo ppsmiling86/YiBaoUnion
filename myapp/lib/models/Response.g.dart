@@ -531,6 +531,25 @@ Map<String, dynamic> _$UserInfoEntityToJson(UserInfoEntity instance) =>
       'today_score': instance.today_score,
     };
 
+PayOrderWeiXinH5Response _$PayOrderWeiXinH5ResponseFromJson(
+    Map<String, dynamic> json) {
+  return PayOrderWeiXinH5Response(
+    json['msg'] as String,
+    json['code'] as String,
+    json['data'] == null
+        ? null
+        : PayOrderEntity.fromJson(json['data'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$PayOrderWeiXinH5ResponseToJson(
+        PayOrderWeiXinH5Response instance) =>
+    <String, dynamic>{
+      'msg': instance.msg,
+      'code': instance.code,
+      'data': instance.data,
+    };
+
 PayOrderResponse _$PayOrderResponseFromJson(Map<String, dynamic> json) {
   return PayOrderResponse(
     json['msg'] as String,

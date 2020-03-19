@@ -225,6 +225,18 @@ class ApiProvider {
 		}
 	}
 
+	Future<PayOrderWeiXinH5Response> payOrderWinXinH5(String order_id) async {
+		try {
+			var data = {"order_id": order_id};
+			Response response = await dio().post(ServerConfig.baseUrl() + ServerConfig.payOrderWeixinh5,data: data);
+			printResponse(response);
+			return PayOrderWeiXinH5Response.fromJson(response.data);
+		} catch (error, stacktrace) {
+			print('Exception occured:$error stackTrace: $stacktrace');
+			return PayOrderWeiXinH5Response.withError('$error');
+		}
+	}
+
 	void printResponse(Response response) {
 		print("[${response.request.method} ${response.statusCode} :${response.request.path}]");
 		print("[request data : ${response.request.data}]");

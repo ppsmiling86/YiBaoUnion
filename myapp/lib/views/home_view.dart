@@ -31,9 +31,6 @@ class HomeViewState extends State<HomeView> {
 
 	@override
 	Widget build(BuildContext context) {
-		Use1rAgent.isWeChatOpen().then((bool value) {
-			print("is wechat open = $value");
-		});
 		return Scaffold(
 			appBar: CommonWidgetTools.appBarWithBuilder(context, "首页"),
 			drawer: UserProfilePage(),

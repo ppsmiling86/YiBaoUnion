@@ -19,6 +19,7 @@ class ServerConfig {
 	static const String withdrawAvailable = '/withdraw/available';
 	static const String userInfo = '/user/info';
 	static const String payOrder = '/pay/order';
+	static const String payOrderWeixinh5 = '/pay/order/weixinh5';
 
 	static final ServerConfig _sharedInstance = ServerConfig._internal();
 	factory ServerConfig() {
@@ -30,7 +31,8 @@ class ServerConfig {
 		if (kReleaseMode) {
 			return LocalStorageTools.getOrigin()+"/api";
 		} else {
-			return "http://47.108.62.79/api";
+//			return "http://47.108.62.79/api";
+		return "http://www.longmonrent.com/api";
 		}
 	}
 }
