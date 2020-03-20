@@ -1,4 +1,6 @@
 import 'dart:html';
+
+import 'package:universal_html/html.dart';
 final kUpperInviteCode = "UpperInviteCode";
 final kOrigin = "urlOrigin";
 class LocalStorageTools {
@@ -40,16 +42,15 @@ class LocalStorageTools {
 
 	static bool isRediretToOrderList() {
 		var url = window.location.href;
-		print("isRediretToOrderList url is $url");
+		print("redirect url is $url");
 		Uri uri = Uri.parse(url.replaceAll("#/", ""));
-
-		var urlOrigin = uri.origin;
-		print("isRediretToOrderList urlOrigin is ${urlOrigin}");
-		var redirectPath = uri.queryParameters["reidrect"];
+		var redirectPath = uri.queryParameters["redirect"];
 		if (redirectPath is String) {
 			if (redirectPath.isNotEmpty) {
 				print("redirectPath is $redirectPath");
-				return redirectPath == "order_list";
+				bool isOrderList = (redirectPath == "order_list");
+				print("this is order list redirect, will show order list");
+				return isOrderList;
 			}
 		}
 		return false;

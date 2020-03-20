@@ -3,9 +3,14 @@ import 'package:myapp/views/home_view.dart';
 import 'package:myapp/tools/localStorageTools.dart';
 import 'package:myapp/views/UseBrowserOpen.dart';
 import 'package:myapp/tools/userAgent.dart';
+import 'package:myapp/models/AppData.dart';
 //scp -r ./build/web/** root@47.108.62.79:/opt/front
 //Ethan1102
 //flutter run -d chrome
+//
+//http://www.longmonrent.com:8888/dc5cd39c/
+//username: fsb5xghy
+//password: fa70dbd8
 
 void main() => runApp(MyApp());
 
@@ -15,6 +20,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final userAgent = UserAgent();
     LocalStorageTools.saveUpperInviteCode();
+    AppData().isRedirectToOrderList = false;
+    if (LocalStorageTools.isRediretToOrderList()) {
+      AppData().isRedirectToOrderList = true;
+    }
     print("upper invite code is :${LocalStorageTools.getUpperInviteCode()}");
     return MaterialApp(
       title: '龙门算力租赁',

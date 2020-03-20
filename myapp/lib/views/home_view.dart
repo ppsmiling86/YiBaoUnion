@@ -18,6 +18,7 @@ import 'package:myapp/tools/localStorageTools.dart';
 import 'orderlist_view.dart';
 import 'dart:async';
 
+
 class HomeView extends StatefulWidget {
 	final bool isInWechat;
 
@@ -100,11 +101,11 @@ class HomeViewState extends State<HomeView> {
 						],
 					),
 					Opacity(
-						opacity: 0,
+						opacity: 1,
 					  child: Row(
 					  	mainAxisAlignment: MainAxisAlignment.center,
 					  	children: <Widget>[
-					  		Text("Copyright@2020 成都易程信息技术有限公司版权所有"),
+					  		Text("Build version v1.0.0.1"),
 					  	],
 					  ),
 					),
@@ -115,8 +116,9 @@ class HomeViewState extends State<HomeView> {
 
 
 	void showOrderList() {
-		if (LocalStorageTools.isRediretToOrderList()) {
+		if (AppData().isRedirectToOrderList) {
 			if (AppData().loginUser().isLoggedIn) {
+				AppData().isRedirectToOrderList = false;
 				Navigator.push(
 					context,
 					MaterialPageRoute(builder: (context) => OrderListView()),

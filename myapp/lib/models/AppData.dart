@@ -12,6 +12,7 @@ class AppData {
 	WithdrawRequest withdrawRequest = WithdrawRequest("", 0,"");
 	OrderRequest orderRequest = OrderRequest();
 	User currentLoginUser = null;
+	bool isRedirectToOrderList = false;
 	static final AppData sharedInstance = AppData._internal();
 
 	factory AppData() {
