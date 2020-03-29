@@ -39,6 +39,7 @@ dependencies:
   webview_flutter: ^0.3.4
   interactive_webview: ^0.1.2
   user_agent: ^2.0.0
+#  theme_provider: ^0.3.3
 
 dev_dependencies:
   json_serializable: ^3.2.3

@@ -70,11 +70,11 @@ class UseBrowserOpenViewState extends State <UseBrowserOpenView> {
 								children: <Widget>[
 									CircleAvatar(
 										backgroundColor: Colors.deepOrange,
-										child: Text("1",style: TextStyle(fontSize: 24,color: Colors.white))),
+										child: Text("1",style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor))),
 									SizedBox(width: 10),
-									Text("点击右上角的",style: TextStyle(fontSize: 16,color: Colors.white)),
+									Text("点击右上角的",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor)),
 									Icon(Icons.more_horiz,size: 30,color: Colors.white),
-									Text("按钮",style: TextStyle(fontSize: 16,color: Colors.white)),
+									Text("按钮",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor)),
 									SizedBox(width: 45),
 								],
 							),
@@ -83,10 +83,12 @@ class UseBrowserOpenViewState extends State <UseBrowserOpenView> {
 								children: <Widget>[
 									CircleAvatar(
 										backgroundColor: Colors.deepOrange,
-										child: Text("2",style: TextStyle(fontSize: 24,color: Colors.white))),
+										child: Text("2",style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor))),
 									SizedBox(width: 10),
-									Text("选择",style: TextStyle(fontSize: 16,color: Colors.white)),
-									FlatButton.icon(onPressed: (){}, icon: Icon(Icons.language,size:30,color: Colors.white), label: Text("在浏览器中打开",style: TextStyle(fontSize: 16,color: Colors.white))),
+									Text("选择",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor)),
+									FlatButton.icon(
+										shape: StadiumBorder(),
+										onPressed: (){}, icon: Icon(Icons.language,size:30,color: Colors.white), label: Text("在浏览器中打开",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor))),
 								],
 							),
 						],

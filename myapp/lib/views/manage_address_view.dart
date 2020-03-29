@@ -41,13 +41,13 @@ class ManageAddressViewState extends State<ManageAddressView> {
 					child: SizedBox(
 						width: 80,
 						child: Container(
-							child: Center(child: isEditingMode ? Text("完成") : Text("编辑")),
+							child: Center(child: isEditingMode ? Text("完成",style: Theme.of(context).textTheme.button) : Text("编辑",style: Theme.of(context).textTheme.button)),
 						),
 					),
 				),
 			]),
 			body: buildStreamBuilderView(),
-			bottomNavigationBar: CommonWidgetTools.buildBottomButton("新增", (){
+			bottomNavigationBar: CommonWidgetTools.buildBottomButton(context,"新增", (){
 
 				showDialog(
 					context: context,
@@ -155,8 +155,8 @@ class ManageAddressViewState extends State<ManageAddressView> {
 		return Column(
 			crossAxisAlignment: CrossAxisAlignment.start,
 			children: <Widget>[
-				Text(title),
-				Text(value,style: TextStyle(color: Colors.grey)),
+				Text(title,style: Theme.of(context).textTheme.subtitle1),
+				Text(value,style: Theme.of(context).textTheme.bodyText2),
 			],
 		);
 	}
@@ -207,10 +207,14 @@ class ManageAddressViewState extends State<ManageAddressView> {
 				),
 			),
 			actions: <Widget>[
-				FlatButton(onPressed: (){
+				FlatButton(
+					shape: StadiumBorder(),
+					onPressed: (){
 					Navigator.pop(context);
-				}, child: Text("取消")),
-				FlatButton(onPressed: (){
+				}, child: Text("取消",style: Theme.of(context).textTheme.button)),
+				FlatButton(
+					shape: StadiumBorder(),
+					onPressed: (){
 					if (_formKey.currentState.validate()) {
 						CommonWidgetTools.showLoading(context);
 						bool isEditAddress = withdrawAddressEntity.id.length > 1;
@@ -242,7 +246,7 @@ class ManageAddressViewState extends State<ManageAddressView> {
 							});
 						}
 					}
-				}, child: Text("确认")),
+				}, child: Text("确认",style: Theme.of(context).textTheme.button)),
 			],
 		);
 	}

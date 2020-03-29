@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/models/AppData.dart';
+import 'package:myapp/tools/colorTools.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 import 'package:myapp/models/WithdrawApplyListBloc.dart';
 import 'package:myapp/models/Response.dart';
@@ -58,7 +59,7 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 		if (snapshot.data.data.length > 0) {
 			return ListView.separated(
 				itemBuilder: (contest,index) => buildWithdrawRecord(snapshot.data.data[index]),
-				separatorBuilder: (context, index) => Divider(color: Colors.black),
+				separatorBuilder: (context, index) => Divider(color: ColorTools.greyA1A6B3),
 				itemCount: snapshot.data.data.length,
 			);
 		}
@@ -85,8 +86,8 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 											mainAxisAlignment: MainAxisAlignment.spaceBetween,
 											crossAxisAlignment: CrossAxisAlignment.start,
 											children: <Widget>[
-												Text("提现积分"),
-												Text("${withdrawEntity.value}"),
+												Text("提现积分",style: Theme.of(context).textTheme.subtitle1),
+												Text("${withdrawEntity.value}",style: Theme.of(context).textTheme.bodyText2),
 											],
 										),
 									),
@@ -99,8 +100,8 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 											mainAxisAlignment: MainAxisAlignment.spaceBetween,
 											crossAxisAlignment: CrossAxisAlignment.start,
 											children: <Widget>[
-												Text("提现地址"),
-												Text("${withdrawEntity.address}"),
+												Text("提现地址",style: Theme.of(context).textTheme.subtitle1),
+												Text("${withdrawEntity.address}",style: Theme.of(context).textTheme.bodyText2),
 											],
 										),
 									),
@@ -110,14 +111,14 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 									child: SizedBox(
 										height: 40,
 										child: Container(
-											child: Center(child: Text(withdrawEntity.buildStatusStr()))
+											child: Center(child: Text(withdrawEntity.buildStatusStr(),style: Theme.of(context).textTheme.bodyText2))
 										),
 									),
 								),
 							],
 						),
 						SizedBox(height: 16),
-						Text("${DateTools.ConvertDateToString(withdrawEntity.created_at)}"),
+						Text("${DateTools.ConvertDateToString(withdrawEntity.created_at)}",style: Theme.of(context).textTheme.bodyText2),
 					],
 				),
 			)

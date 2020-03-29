@@ -178,17 +178,13 @@ class UserProfilePageState extends State <UserProfilePage> {
 						child: Icon(Icons.person),
 					),
 					SizedBox(width: 16),
-					isLogin ? Text(userInfoEntity.uid) :
+					isLogin ? Text(userInfoEntity.uid,style: Theme.of(context).textTheme.subtitle1) :
 					OutlineButton(
-						borderSide: BorderSide(
-							color: Colors.grey,
-							style: BorderStyle.solid,
-							width: 2,
-						),
+						shape: StadiumBorder(),
 						onPressed: (){
 							gotoRegistrationPage();
 						},
-						child: Text("登录")
+						child: Text("登录",style: Theme.of(context).textTheme.button)
 					),
 				],
 			),
@@ -212,9 +208,10 @@ class UserProfilePageState extends State <UserProfilePage> {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("我的共创积分: ${NumberTools.DoubleToFixedString(userInfoEntity.balance, 2)}"),
+							Text("我的共创积分: ${NumberTools.DoubleToFixedString(userInfoEntity.balance, 2)}",style: Theme.of(context).textTheme.subtitle2),
 							OutlineButton(
-								child: Text("提现"),
+								shape: StadiumBorder(),
+								child: Text("提现",style: Theme.of(context).textTheme.button),
 								onPressed: (){
 									if(AppData().loginUser().isLoggedIn) {
 										Navigator.push(
@@ -228,9 +225,9 @@ class UserProfilePageState extends State <UserProfilePage> {
 							),
 						],
 					),
-					Text("我的总算力: ${userInfoEntity.today_rent_power} U"),
+					Text("我的总算力: ${userInfoEntity.today_rent_power} U",style: Theme.of(context).textTheme.subtitle2),
 					SizedBox(height: 16),
-					Expanded(child: Text("大约还可产生${NumberTools.DoubleToFixedString(userInfoEntity.today_score, 2)}共创积分")),
+					Expanded(child: Text("大约还可产生${NumberTools.DoubleToFixedString(userInfoEntity.today_score, 2)}共创积分",style: Theme.of(context).textTheme.subtitle2)),
 				],
 			),
 		);
@@ -245,7 +242,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 				child: Row(
 					mainAxisAlignment: MainAxisAlignment.spaceBetween,
 					children: <Widget>[
-						Text(title),
+						Text(title,style: Theme.of(context).textTheme.subtitle1),
 						Icon(AntIcons.right_outline,color: ColorTools.greyA1A6B3,size: 12,),
 					],
 				),
@@ -261,12 +258,13 @@ class UserProfilePageState extends State <UserProfilePage> {
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				width: width,
 				child: FlatButton(
+					shape: StadiumBorder(),
 					color: Colors.red,
 					onPressed: (){
 						setState(() {
 							AppData().loginUser().logout();
 						});
-					}, child: Text("退出登录", style: TextStyle(color: Colors.white),)
+					}, child: Text("退出登录", style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
 				),
 			),
 		) : Container();

@@ -62,14 +62,11 @@ class RegistrationPageState extends State <RegistrationPage> {
 										textAlign: TextAlign.end,
 										text: TextSpan(
 								    	text: "未注册的手机验证成功后将自动注册,注册视为同意 ",
-								    	style: TextStyle(
-											color: Colors.black),
+								    	style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor),
 								    	children: [
 								    		TextSpan(
 								    			text: "龙门算力租赁服务条款 ",
-								    			style: TextStyle(
-								    				decoration: TextDecoration.underline,
-								    				color: ColorTools.greyA1A6B3),
+								    			style: Theme.of(context).textTheme.caption.copyWith(decoration: TextDecoration.underline),
 								    		)
 								    	]
 								    )
@@ -143,7 +140,8 @@ class RegistrationPageState extends State <RegistrationPage> {
 						),
 					),
 					OutlineButton(
-						child: Text("发送验证码"),
+						shape: StadiumBorder(),
+						child: Text("发送验证码",style: Theme.of(context).textTheme.button),
 						onPressed: (){
 							if(_mobileFormKey.currentState.validate()) {
 								if (lastSendSmsTime != null) {
@@ -153,7 +151,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 											context: context,
 											builder: (BuildContext context){
 												return AlertDialog(
-													content: Text("1分钟之内请勿连续操作"),
+													content: Text("1分钟之内请勿连续操作",style: Theme.of(context).textTheme.button),
 												);
 											}
 										);
@@ -206,12 +204,15 @@ class RegistrationPageState extends State <RegistrationPage> {
 						});
 					}
 				},
-				child: Container(
-					height: 50,
-					color: Colors.blueAccent,
-					child: Center(
-						child: Text("登录",style: TextStyle(color: Colors.white)),
-					),
+				child: ClipRRect(
+					borderRadius: BorderRadius.circular(25.0),
+				  child: Container(
+				  	height: 50,
+				  	color: Colors.blueAccent,
+				  	child: Center(
+				  		child: Text("登录",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+				  	),
+				  ),
 				),
 			),
 		);

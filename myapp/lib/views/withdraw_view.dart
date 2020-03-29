@@ -59,13 +59,13 @@ class WithdrawViewState extends State <WithdrawView> {
 					child: SizedBox(
 						width: 80,
 						child: Container(
-							child: Center(child: Text("管理地址")),
+							child: Center(child: Text("管理地址",style: Theme.of(context).textTheme.button)),
 						),
 					),
 				),
 			]),
 			body: buildBodyBuilderView(),
-			bottomNavigationBar: CommonWidgetTools.buildBottomButton("提现", (){
+			bottomNavigationBar: CommonWidgetTools.buildBottomButton(context,"提现", (){
 				if (_mainFormKey.currentState.validate()) {
 					AppData().withdrawRequest.amount = double.parse(amountController.text.trim());
 					AppData().withdrawRequest.walletAddress = walletController.text.trim();
@@ -105,7 +105,9 @@ class WithdrawViewState extends State <WithdrawView> {
 								SizedBox(
 									width: 80,
 									height: 30,
-									child: Container(child: Center(child: OutlineButton(onPressed: (){
+									child: Container(child: Center(child: OutlineButton(
+										shape: StadiumBorder(),
+										onPressed: (){
 										listBloc.getWithdrawAddress();
 										showDialog(
 											barrierDismissible: true,
@@ -114,7 +116,7 @@ class WithdrawViewState extends State <WithdrawView> {
 												return buildWithdrawListStreamBuilderView();
 											}
 										);
-									},child: Text("选择"))))
+									},child: Text("选择",style: Theme.of(context).textTheme.button))))
 								),
 							],
 						),
@@ -131,7 +133,7 @@ class WithdrawViewState extends State <WithdrawView> {
 				print(snapshot);
 				if (snapshot.hasData) {
 					return AlertDialog(
-						title: Text("请选择提现地址"),
+						title: Text("请选择提现地址",style: Theme.of(context).textTheme.button),
 						content: Center(
 							child: SizedBox(
 								width: 300,
@@ -198,8 +200,8 @@ class WithdrawViewState extends State <WithdrawView> {
 		return Column(
 			crossAxisAlignment: CrossAxisAlignment.start,
 			children: <Widget>[
-				Text(title),
-				Text(value,style: TextStyle(color: Colors.grey)),
+				Text(title,style: Theme.of(context).textTheme.subtitle1,),
+				Text(value,style: Theme.of(context).textTheme.bodyText2),
 			],
 		);
 	}
@@ -277,15 +279,17 @@ class WithdrawViewState extends State <WithdrawView> {
 								SizedBox(
 									width: 80,
 									height: 30,
-									child: Container(child: Center(child: OutlineButton(onPressed: (){
+									child: Container(child: Center(child: OutlineButton(
+										shape: StadiumBorder(),
+										onPressed: (){
 										setState(() {
 											amountController.text = "${withdrawAvailableEntity.available}";
 										});
-									},child: Text("全部"))))
+									},child: Text("全部",style: Theme.of(context).textTheme.button))))
 								),
 							],
 						),
-						Text("可提现积分: ${withdrawAvailableEntity.available}"),
+						Text("可提现积分: ${withdrawAvailableEntity.available}",style: Theme.of(context).textTheme.caption),
 					],
 				),
 			),
@@ -300,7 +304,7 @@ class WithdrawViewState extends State <WithdrawView> {
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				child: Row(
 					children: <Widget>[
-						Expanded(child: Text("请务必输入正确的共创医保钱包地址，若因为个人失误导致资金丢失，平台概不负责。为了保证您的资金安全，我们会对提现申请进行人工审核，请耐心等待！")),
+						Expanded(child: Text("请务必输入正确的共创医保钱包地址，若因为个人失误导致资金丢失，平台概不负责。为了保证您的资金安全，我们会对提现申请进行人工审核，请耐心等待！",style: Theme.of(context).textTheme.bodyText2)),
 					],
 				),
 			),
@@ -322,7 +326,7 @@ class WithdrawViewState extends State <WithdrawView> {
 						Row(
 							mainAxisAlignment: MainAxisAlignment.start,
 							children: <Widget>[
-								Text("短信验证码"),
+								Text("短信验证码",style: Theme.of(context).textTheme.subtitle1),
 							],
 						),
 						SizedBox(height: 16),
@@ -357,7 +361,7 @@ class WithdrawViewState extends State <WithdrawView> {
 										padding: EdgeInsets.only(left: 16,right: 16),
 										child: FlatButton(
 											color: ColorTools.blue5677FC,
-											shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+											shape: StadiumBorder(),
 											onPressed: (){
 												if (lastSendSmsTime != null) {
 													var oneMinutesAgo = DateTime.now().subtract( Duration(seconds: 60));
@@ -366,7 +370,7 @@ class WithdrawViewState extends State <WithdrawView> {
 															context: context,
 															builder: (BuildContext context){
 																return AlertDialog(
-																	content: Text("1分钟之内请勿连续操作"),
+																	content: Text("1分钟之内请勿连续操作",style: Theme.of(context).textTheme.button),
 																);
 															}
 														);
@@ -386,7 +390,7 @@ class WithdrawViewState extends State <WithdrawView> {
 													}
 												});
 											},
-											child: Text("发送",style: TextStyle(color: Colors.white),)
+											child: Text("发送",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
 										),
 									),
 								),
@@ -402,12 +406,8 @@ class WithdrawViewState extends State <WithdrawView> {
 										height: 40,
 										padding: EdgeInsets.only(right: 8),
 										child: OutlineButton(
-											borderSide: BorderSide(
-												color: ColorTools.green1AAD19,
-												style: BorderStyle.solid,
-												width: 2,
-											),
-											child: Text("取消",style: TextStyle(color: ColorTools.green1AAD19)),
+											shape: StadiumBorder(),
+											child: Text("取消",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).buttonColor)),
 											onPressed: (){
 												Navigator.pop(context);
 											}),
@@ -419,6 +419,7 @@ class WithdrawViewState extends State <WithdrawView> {
 										height: 40,
 										padding: EdgeInsets.only(left: 8),
 										child: FlatButton(
+											shape: StadiumBorder(),
 											color: ColorTools.green1AAD19,
 											onPressed: (){
 												if (_dialogFormKey.currentState.validate()) {
@@ -442,7 +443,7 @@ class WithdrawViewState extends State <WithdrawView> {
 														}
 													});
 												}
-											}, child: Text("确认",style: TextStyle(color: Colors.white),))
+											}, child: Text("确认",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)))
 									),
 								),
 							],

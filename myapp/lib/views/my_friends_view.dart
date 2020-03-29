@@ -55,7 +55,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 				child: Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
-						Text("总佣金"),
+						Text("总佣金",style: Theme.of(context).textTheme.subtitle1),
 						Text("${downlinkUserPackage.total_received_commission}"),
 						Divider(),
 					],
@@ -109,8 +109,8 @@ class MyFriendsViewState extends State<MyFriendsView> {
 		  child: Column(
 		  	crossAxisAlignment: CrossAxisAlignment.start,
 		  	children: <Widget>[
-		  		Text(label),
-		  		Text(value),
+		  		Text(label,style: Theme.of(context).textTheme.subtitle1),
+		  		Text(value,style: Theme.of(context).textTheme.bodyText2),
 		  	],
 		  ),
 		);

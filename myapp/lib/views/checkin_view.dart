@@ -62,8 +62,8 @@ class CheckInViewState extends State<CheckInView> {
 		  			  				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 		  			  				crossAxisAlignment: CrossAxisAlignment.start,
 		  			  				children: <Widget>[
-		  			  					Text("已签到 ${numberOfCheckedInDay} 天"),
-		  			  					Text("已奖励 ${checkedInPrize} U 算力"),
+		  			  					Text("已签到 ${numberOfCheckedInDay} 天",style: Theme.of(context).textTheme.bodyText2),
+		  			  					Text("已奖励 ${checkedInPrize} U 算力",style: Theme.of(context).textTheme.bodyText2),
 		  			  				],
 		  			  			),
 		  			  			SizedBox(
@@ -72,6 +72,7 @@ class CheckInViewState extends State<CheckInView> {
 		  			  				child: Container(
 		  			  					padding: EdgeInsets.all(8),
 		  			  					child: FlatButton(
+											shape: StadiumBorder(),
 		  			  						color: ColorTools.green1AAD19,
 		  			  						onPressed: (){
 												if (tapCount++ % 2 == 1) {
@@ -79,7 +80,7 @@ class CheckInViewState extends State<CheckInView> {
 												} else {
 													showContinueCheckPrizeDialog(context);
 												}
-											}, child: Text("签到",style: TextStyle(color: ColorTools.whiteFFFFFF),))
+											}, child: Text("签到",style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).accentColor)))
 		  			  				)
 		  			  			),
 		  			  		],
@@ -92,7 +93,7 @@ class CheckInViewState extends State<CheckInView> {
 						width: double.infinity,
 					  height: 100,
 					  child: Container(
-					  	child: Center(child: Text("签到送算力,体验挖矿的乐趣!")),
+					  	child: Center(child: Text("签到送算力,体验挖矿的乐趣!",style: Theme.of(context).textTheme.bodyText2)),
 					  ),
 					),
 		  		],
@@ -107,7 +108,7 @@ class CheckInViewState extends State<CheckInView> {
 	  	context: context,
 	  	builder: (BuildContext context){
 	  		return AlertDialog(
-	  			title: Text("恭喜您"),
+	  			title: Text("恭喜您",style: Theme.of(context).textTheme.bodyText2),
 	  			content: SizedBox(
 	  				width: 300,
 	  			  height: 80,
@@ -116,17 +117,21 @@ class CheckInViewState extends State<CheckInView> {
 	  			    child: Column(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 	  			    	children: <Widget>[
-	  			    		Text("已签到成功!"),
-	  			    		Text("获得0.01U算力,挖矿正在进行中!"),
+	  			    		Text("已签到成功!",style: Theme.of(context).textTheme.bodyText2),
+	  			    		Text("获得0.01U算力,挖矿正在进行中!",style: Theme.of(context).textTheme.bodyText2),
 	  			    	],
 	  			    ),
 	  			  ),
 	  			),
 	  			actions: <Widget>[
-	  				FlatButton(onPressed: (){
+	  				FlatButton(
+						shape: StadiumBorder(),
+						onPressed: (){
 	  					Navigator.pop(context);
-	  				}, child: Text("确认")),
-	  				FlatButton(onPressed: (){
+	  				}, child: Text("确认",style: Theme.of(context).textTheme.button)),
+	  				FlatButton(
+						shape: StadiumBorder(),
+						onPressed: (){
 	  					Navigator.pop(context);
 	  					Navigator. pushReplacement(
 	  						context,
@@ -134,7 +139,7 @@ class CheckInViewState extends State<CheckInView> {
 	  							builder: (context) => OrderListView(),
 	  						),
 	  					);
-	  				}, child: Text("查看算力")),
+	  				}, child: Text("查看算力",style: Theme.of(context).textTheme.button)),
 	  			],
 	  		);
 	  	}
@@ -162,7 +167,9 @@ class CheckInViewState extends State<CheckInView> {
 						),
 					),
 					actions: <Widget>[
-						FlatButton(onPressed: (){
+						FlatButton(
+							shape: StadiumBorder(),
+							onPressed: (){
 							Navigator.pop(context);
 						}, child: Text("确认")),
 					],

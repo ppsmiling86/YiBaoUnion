@@ -27,11 +27,13 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 					height: 40,
 					child: Container(
 						padding: EdgeInsets.symmetric(horizontal: 16),
-						child: OutlineButton(onPressed: (){
+						child: OutlineButton(
+							shape: StadiumBorder(),
+							onPressed: (){
 							Navigator.push(context, MaterialPageRoute(builder: (context) => PrizeRuleView())
 							);
 						},
-							child: Text("佣金规则"),),
+							child: Text("佣金规则",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))),
 					),
 				),
 			),
@@ -46,7 +48,7 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 							children: <Widget>[
 								buildInviteCodeQrImage(AppData().loginUser().userProfileEntity.invite_url),
 								SizedBox(height: 50),
-								Text("邀请好友赚佣金"),
+								Text("邀请好友赚佣金",style: Theme.of(context).textTheme.bodyText2),
 							],
 						),
 					),
@@ -78,12 +80,8 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 							child: Container(
 								padding: EdgeInsets.only(right: 8),
 								child: OutlineButton(
-									borderSide: BorderSide(
-										color: ColorTools.green1AAD19,
-										style: BorderStyle.solid,
-										width: 2,
-									),
-									child: Text("我的团队",style: TextStyle(color: ColorTools.green1AAD19)),
+									shape: StadiumBorder(),
+									child: Text("我的团队",style: Theme.of(context).textTheme.button),
 									onPressed: (){
 										Navigator.push(
 											context,
@@ -97,11 +95,13 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 							child: Container(
 								padding: EdgeInsets.only(left: 8),
 								child: FlatButton(
-									color: ColorTools.green1AAD19,
+									shape: StadiumBorder(),
+									color: Theme.of(context).buttonColor,
 									onPressed: () {
 										clippy.write(AppData().loginUser().userProfileEntity.invite_url);
 										CommonWidgetTools.showToastView(context, "复制成功");
-									}, child: Text("复制邀请链接",style: TextStyle(color: Colors.white),)),
+									}, child: Text("复制邀请链接",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
+							),
 							)
 						),
 					],

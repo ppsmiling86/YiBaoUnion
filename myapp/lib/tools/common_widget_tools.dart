@@ -15,10 +15,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: TextStyle(
-					fontWeight: FontWeight.w500,
-					fontSize: 18,
-					color: ColorTools.whiteFFFFFF)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -37,10 +34,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: TextStyle(
-					fontWeight: FontWeight.w500,
-					fontSize: 18,
-					color: ColorTools.whiteFFFFFF)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -59,10 +53,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: TextStyle(
-					fontWeight: FontWeight.w500,
-					fontSize: 18,
-					color: ColorTools.whiteFFFFFF)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -79,10 +70,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: TextStyle(
-					fontWeight: FontWeight.w500,
-					fontSize: 18,
-					color: ColorTools.whiteFFFFFF)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -99,26 +87,24 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: TextStyle(
-					fontWeight: FontWeight.w500,
-					fontSize: 18,
-					color: ColorTools.whiteFFFFFF)),
+				style:Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 			actions: actions,
 		);
 	}
 
-	static Widget buildBottomButton(String title,VoidCallback onTap) {
+	static Widget buildBottomButton(BuildContext context,String title,VoidCallback onTap) {
 		return SizedBox(
 			width: double.infinity,
 			height: 72,
 			child: Container(
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				child: FlatButton(
-					color: ColorTools.green1AAD19,
+					shape: StadiumBorder(),
+					color: Theme.of(context).buttonColor,
 					onPressed: onTap,
-					child: Text(title,style: TextStyle(color: Colors.white))
+					child: Text(title,style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
 				),
 			),
 		);
@@ -129,11 +115,13 @@ class CommonWidgetTools {
 			context: context,
 			builder: (BuildContext context){
 				return AlertDialog(
-					content: Text(msg),
+					content: Text(msg,style: Theme.of(context).textTheme.bodyText2),
 					actions: <Widget>[
-						FlatButton(onPressed: (){
+						FlatButton(
+							shape: StadiumBorder(),
+							onPressed: (){
 							Navigator.pop(context);
-						}, child: Text("确定")),
+						}, child: Text("确定",style: Theme.of(context).textTheme.button)),
 					],
 				);
 			}
@@ -145,12 +133,14 @@ class CommonWidgetTools {
 			context: context,
 			builder: (BuildContext context){
 				return AlertDialog(
-					content: Text(msg),
+					content: Text(msg,style: Theme.of(context).textTheme.bodyText2),
 					actions: <Widget>[
-						FlatButton(onPressed: (){
+						FlatButton(
+							shape: StadiumBorder(),
+							onPressed: (){
 							Navigator.pop(context);
 							onTap();
-						}, child: Text("确定")),
+						}, child: Text("确定",style: Theme.of(context).textTheme.button)),
 					],
 				);
 			}
@@ -162,15 +152,19 @@ class CommonWidgetTools {
 			context: context,
 			builder: (BuildContext context){
 				return AlertDialog(
-					content: Text(msg),
+					content: Text(msg,style: Theme.of(context).textTheme.bodyText2),
 					actions: <Widget>[
-						FlatButton(onPressed: (){
+						FlatButton(
+							shape: StadiumBorder(),
+							onPressed: (){
 							Navigator.pop(context);
-						}, child: Text("取消")),
-						FlatButton(onPressed: (){
+						}, child: Text("取消",style: Theme.of(context).textTheme.button)),
+						FlatButton(
+							shape: StadiumBorder(),
+							onPressed: (){
 							onConfirm();
 							Navigator.pop(context);
-						}, child: Text("确定")),
+						}, child: Text("确定",style: Theme.of(context).textTheme.button)),
 					],
 				);
 			}
@@ -240,7 +234,7 @@ class CommonWidgetTools {
 							height: 88),
 						SizedBox(height: 4),
 						Text(t,
-							style: TextStyle(fontSize: 14, color: ColorTools.greyA1A6B3)),
+							style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
 					],
 				)),
 		);

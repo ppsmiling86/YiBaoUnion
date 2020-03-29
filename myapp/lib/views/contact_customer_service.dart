@@ -44,8 +44,8 @@ class ContactCustomerServiceViewState extends State<ContactCustomerServiceView> 
 		return Column(
 			crossAxisAlignment: CrossAxisAlignment.start,
 			children: <Widget>[
-				Text(title),
-				Text(value),
+				Text(title,style: Theme.of(context).textTheme.subtitle1),
+				Text(value,style: Theme.of(context).textTheme.bodyText2),
 				image.isNotEmpty ? buildImage(image) : Container()
 			],
 		);

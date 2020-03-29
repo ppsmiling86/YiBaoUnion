@@ -105,144 +105,151 @@ class CheckoutPageState extends State <CheckoutPage> {
 	Widget buildProductDetail(ProductEntity productEntity) {
 		var width = MediaQuery.of(context).size.width - 32;
 		return Container(
-			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-			width: width,
-			height: 346,
-			child: Form(
-				key: _formKey,
-				child: Column(
-					mainAxisAlignment: MainAxisAlignment.start,
-					children: <Widget>[
-						Container(
-							height: 40,
-							child: Row(
-								mainAxisAlignment: MainAxisAlignment.spaceBetween,
-								children: <Widget>[
-									Text("算力单价"),
-									Text("¥ ${productEntity.price} / U"),
-								],
-							),
-						),
-						Container(
-							height: 40,
-							child: Row(
-								mainAxisAlignment: MainAxisAlignment.spaceBetween,
-								children: <Widget>[
-									Text("数量 (U)"),
-									Container(
-										width: 200,
-										child: Row(
-											crossAxisAlignment: CrossAxisAlignment.center,
-											mainAxisAlignment: MainAxisAlignment.end,
-											children: <Widget>[
-												IconButton(icon: Icon(AntIcons.minus_circle_outline,size: 24), onPressed: (){
-													if (StringTools.ValidateNumber(amountController.text)) {
-														var current = int.parse(amountController.text);
-														if (current > 0) {
-															var sub = current - 1;
-															setState(() {
-																amountController.text = "$sub";
-															});
-														}
-													}
-												}),
-												SizedBox(
-													width: 40,
-													child: Container(
-														decoration: BoxDecoration(
-															borderRadius: BorderRadius.circular(1),
-														),
-														child: TextFormField(
-															controller: amountController,
-															textAlign: TextAlign.center,
-															validator: (String value) {
-																value = value.trim();
-																if (!StringTools.ValidateNumber(value)) {
-																	CommonWidgetTools.showAlertController(context, "请输入正确的数字");
-																	return null;
-																}
-																int amount = int.parse(value);
-																if (amount < 1 || amount > productEntity.limit_per_user) {
-																	CommonWidgetTools.showAlertController(context, "超出最大购买量");
-																	return null;
-																}
-
-																print("${amount}");
-																AppData().orderRequest.amount = amount;
-																return null;
-															},
-														),
-													),
-												),
-												IconButton(icon: Icon(AntIcons.plus_circle_outline,size: 24), onPressed: (){
-													if (StringTools.ValidateNumber(amountController.text)) {
-														var current = int.parse(amountController.text);
-														if (current < productEntity.limit_per_user) {
-															var add = current+1;
-															setState(() {
-																amountController.text = "$add";
-															});
-														}
-													}
-												}),
-											],
-										),
-									)
-								],
-							),
-						),
-						Row(
-							mainAxisAlignment: MainAxisAlignment.end,
-							children: <Widget>[
-								Text("每人限购${productEntity.limit_per_user}U")
-							],
-						),
-						Row(
-							mainAxisAlignment: MainAxisAlignment.spaceBetween,
-							children: <Widget>[
-								Text("每日总额 ${productEntity.total_supply} U"),
-								Text("租赁进度: ${NumberTools.DoubleToFixedString(productEntity.sold_progress * 100, 2)}%"),
-							],
-						),
-						SizedBox(height: 6),
-						SizedBox(
-							width: double.infinity,
-							child: Container(
-								child: LinearPercentIndicator(
-									lineHeight: 8.0,
-									percent: productEntity.sold_progress,
-									progressColor: Colors.blue,
-								),
-							),
-						),
-						SizedBox(height: 10),
-						Container(
-							height: 40,
-							child: Row(
-								children: <Widget>[
-									Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.score_per_unithour}个共创积分,整点发放",style: TextStyle(color: Colors.red))),
-								],
-							),
-						),
-						SizedBox(height: 30),
-						Container(
-							height: 40,
-							child: Row(
-								mainAxisAlignment: MainAxisAlignment.spaceBetween,
-								children: <Widget>[
-									Text("合计: ¥ ${productEntity.price * int.parse(amountController.text)}"),
-									Column(
-										children: <Widget>[
-											Text("总额: ${productEntity.price * int.parse(amountController.text)}"),
-										],
-									),
-								],
-							),
-						),
-						buildBottomButtons(productEntity),
-					],
-				),
+			decoration: BoxDecoration(
+				border: Border(
+					top: BorderSide(width: 1.0, color: Colors.grey)
+				)
 			),
+		  child: Container(
+		  	padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+		  	width: width,
+		  	height: 346,
+		  	child: Form(
+		  		key: _formKey,
+		  		child: Column(
+		  			mainAxisAlignment: MainAxisAlignment.start,
+		  			children: <Widget>[
+		  				Container(
+		  					height: 40,
+		  					child: Row(
+		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+		  						children: <Widget>[
+		  							Text("算力单价"),
+		  							Text("¥ ${productEntity.price} / U"),
+		  						],
+		  					),
+		  				),
+		  				Container(
+		  					height: 40,
+		  					child: Row(
+		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+		  						children: <Widget>[
+		  							Text("数量 (U)"),
+		  							Container(
+		  								width: 200,
+		  								child: Row(
+		  									crossAxisAlignment: CrossAxisAlignment.center,
+		  									mainAxisAlignment: MainAxisAlignment.end,
+		  									children: <Widget>[
+		  										IconButton(icon: Icon(AntIcons.minus_circle_outline,size: 24), onPressed: (){
+		  											if (StringTools.ValidateNumber(amountController.text)) {
+		  												var current = int.parse(amountController.text);
+		  												if (current > 0) {
+		  													var sub = current - 1;
+		  													setState(() {
+		  														amountController.text = "$sub";
+		  													});
+		  												}
+		  											}
+		  										}),
+		  										SizedBox(
+		  											width: 40,
+		  											child: Container(
+		  												decoration: BoxDecoration(
+		  													borderRadius: BorderRadius.circular(1),
+		  												),
+		  												child: TextFormField(
+		  													controller: amountController,
+		  													textAlign: TextAlign.center,
+		  													validator: (String value) {
+		  														value = value.trim();
+		  														if (!StringTools.ValidateNumber(value)) {
+		  															CommonWidgetTools.showAlertController(context, "请输入正确的数字");
+		  															return null;
+		  														}
+		  														int amount = int.parse(value);
+		  														if (amount < 1 || amount > productEntity.limit_per_user) {
+		  															CommonWidgetTools.showAlertController(context, "超出最大购买量");
+		  															return null;
+		  														}
+
+		  														print("${amount}");
+		  														AppData().orderRequest.amount = amount;
+		  														return null;
+		  													},
+		  												),
+		  											),
+		  										),
+		  										IconButton(icon: Icon(AntIcons.plus_circle_outline,size: 24), onPressed: (){
+		  											if (StringTools.ValidateNumber(amountController.text)) {
+		  												var current = int.parse(amountController.text);
+		  												if (current < productEntity.limit_per_user) {
+		  													var add = current+1;
+		  													setState(() {
+		  														amountController.text = "$add";
+		  													});
+		  												}
+		  											}
+		  										}),
+		  									],
+		  								),
+		  							)
+		  						],
+		  					),
+		  				),
+		  				Row(
+		  					mainAxisAlignment: MainAxisAlignment.end,
+		  					children: <Widget>[
+		  						Text("每人限购${productEntity.limit_per_user}U")
+		  					],
+		  				),
+		  				Row(
+		  					mainAxisAlignment: MainAxisAlignment.spaceBetween,
+		  					children: <Widget>[
+		  						Text("每日总额 ${productEntity.total_supply} U"),
+		  						Text("租赁进度: ${NumberTools.DoubleToFixedString(productEntity.sold_progress * 100, 2)}%"),
+		  					],
+		  				),
+		  				SizedBox(height: 6),
+		  				SizedBox(
+		  					width: double.infinity,
+		  					child: Container(
+		  						child: LinearPercentIndicator(
+		  							lineHeight: 8.0,
+		  							percent: productEntity.sold_progress,
+		  							progressColor: Colors.blue,
+		  						),
+		  					),
+		  				),
+		  				SizedBox(height: 10),
+		  				Container(
+		  					height: 40,
+		  					child: Row(
+		  						children: <Widget>[
+		  							Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.score_per_unithour}个共创积分,整点发放",style: TextStyle(color: Colors.red))),
+		  						],
+		  					),
+		  				),
+		  				SizedBox(height: 30),
+		  				Container(
+		  					height: 40,
+		  					child: Row(
+		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+		  						children: <Widget>[
+		  							Text("合计: ¥ ${productEntity.price * int.parse(amountController.text)}"),
+		  							Column(
+		  								children: <Widget>[
+		  									Text("总额: ${productEntity.price * int.parse(amountController.text)}"),
+		  								],
+		  							),
+		  						],
+		  					),
+		  				),
+		  				buildBottomButtons(productEntity),
+		  			],
+		  		),
+		  	),
+		  ),
 		);
 	}
 
@@ -256,11 +263,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 				children: <Widget>[
 					Expanded(
 						child: OutlineButton(
-							borderSide: BorderSide(
-								color: Colors.grey,
-								style: BorderStyle.solid,
-								width: 2,
-							),
+							shape: StadiumBorder(),
 							textColor: Colors.grey,
 							child: Text("取消"),
 							onPressed: (){
@@ -273,7 +276,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 						child: Container(
 							child: FlatButton(
 								color: ColorTools.green1AAD19,
-								shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+								shape: StadiumBorder(),
 								onPressed: (){
 									if (_formKey.currentState.validate()) {
 										if (AppData().orderRequest.amount > 0 && AppData().orderRequest.amount <= productEntity.limit_per_user) {
@@ -296,7 +299,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 										}
 									}
 								},
-								child: Text("确认租赁",style: TextStyle(color: Colors.white),)
+								child: Text("确认租赁",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
 							)
 						),
 					),

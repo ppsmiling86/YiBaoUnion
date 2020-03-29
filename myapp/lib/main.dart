@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/tools/colorTools.dart';
 import 'package:myapp/views/home_view.dart';
 import 'package:myapp/tools/localStorageTools.dart';
 import 'package:myapp/views/UseBrowserOpen.dart';
@@ -20,11 +21,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final userAgent = UserAgent();
     LocalStorageTools.saveUpperInviteCode();
-    AppData().isRedirectToOrderList = false;
-    if (LocalStorageTools.isRediretToOrderList()) {
-      AppData().isRedirectToOrderList = true;
-    }
     print("upper invite code is :${LocalStorageTools.getUpperInviteCode()}");
+    final newTextTheme = Theme.of(context).textTheme.apply(
+      bodyColor: Colors.black54,
+      displayColor: Colors.black54,
+    );
     return MaterialApp(
       title: '龙门算力租赁',
       theme: ThemeData(
@@ -38,6 +39,10 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+        accentColor: ColorTools.whiteFFFFFF,
+        buttonColor: ColorTools.green1AAD19,
+        errorColor: ColorTools.redE64340,
+        textTheme: newTextTheme,
       ),
       home: userAgent.isWeChatOpen() ? UseBrowserOpenView() : HomeView(),
     );

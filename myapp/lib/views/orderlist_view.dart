@@ -92,7 +92,123 @@ class OrderListViewState extends State <OrderListView>{
 		}
 		return CommonWidgetTools.buildEmptyListPlaceholder(context);
 	}
-	
+
+	Widget buildOrderRow() {
+		return Row(
+			children: <Widget>[
+				Text("共创算力订单",style: Theme.of(context).textTheme.subtitle1)
+			],
+		);
+	}
+
+	Widget build24Hours() {
+		return Text("共创算力租赁 * 24小时",style: Theme.of(context).textTheme.bodyText2);
+	}
+
+	Widget buildOrderStatus(String status) {
+		return Text(status,style: Theme.of(context).textTheme.bodyText1);
+	}
+
+	Widget buildPriceText(PlaceOrderEntity placeOrderEntity) {
+		return Text("¥ ${placeOrderEntity.price}", style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).errorColor));
+	}
+
+	Widget buildCreditTest(PlaceOrderEntity placeOrderEntity) {
+		return Text(" x ${placeOrderEntity.amount} U",style: Theme.of(context).textTheme.bodyText1);
+	}
+
+	Widget buildOrderNumber(PlaceOrderEntity placeOrderEntity) {
+		return Row(
+			mainAxisAlignment: MainAxisAlignment.spaceBetween,
+			children: <Widget>[
+				Text("订单号: ${placeOrderEntity.id}",style: Theme.of(context).textTheme.subtitle1),
+				Text("总计",style: Theme.of(context).textTheme.subtitle1),
+			],
+		);
+	}
+
+	Widget buildOrderCreatedAt(PlaceOrderEntity placeOrderEntity) {
+		return Row(
+			mainAxisAlignment: MainAxisAlignment.spaceBetween,
+			children: <Widget>[
+				Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}",style: Theme.of(context).textTheme.bodyText2),
+				Text("¥ ${placeOrderEntity.value}",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).errorColor)),
+			],
+		);
+	}
+
+	Widget buildAlreadyGenerateCredit(PlaceOrderEntity placeOrderEntity) {
+		return Row(
+			children: <Widget>[
+				RichText(text: TextSpan(
+					text: "已挖矿生产共创积分:",
+					style: Theme.of(context).textTheme.subtitle1,
+					children: [
+						TextSpan(
+							text: "${placeOrderEntity.mined_score}",
+							style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).errorColor),
+						)
+					]
+				)),
+			],
+		);
+	}
+
+	Widget buildPersentage(PlaceOrderEntity placeOrderEntity) {
+		return Row(
+			mainAxisAlignment: MainAxisAlignment.spaceBetween,
+			children: <Widget>[
+				LinearPercentIndicator(
+					width: 100.0,
+					lineHeight: 8.0,
+					percent: placeOrderEntity.progress,
+					progressColor: Theme.of(context).primaryColor,
+				),
+				Text("${placeOrderEntity.progress * 100}%",style: Theme.of(context).textTheme.bodyText2),
+			],
+		);
+	}
+
+	Widget buildPendingToPay(PlaceOrderEntity placeOrderEntity) {
+		return Row(
+			children: <Widget>[
+				Expanded(
+					child: FlatButton(
+						color: ColorTools.redE64340,
+						shape: StadiumBorder(),
+						onPressed: (){
+							CommonWidgetTools.showLoading(context);
+							_apiRepository.cancelOrder(placeOrderEntity.id).then((value){
+								CommonWidgetTools.dismissLoading(context);
+								if (value.msg == null) {
+									setState(() {
+
+									});
+								} else {
+									CommonWidgetTools.showAlertController(context, value.msg);
+								}
+							});
+						},
+						child: Text("取消",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+					)
+				),
+				SizedBox(width: 16),
+				Expanded(
+					child: FlatButton(
+						color: ColorTools.green1AAD19,
+						shape: StadiumBorder(),
+						onPressed: (){
+							Navigator.push(
+								context,
+								MaterialPageRoute(builder: (context) => PaymentView(placeOrderEntity)),
+							);
+						},
+						child: Text("去支付",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+					)
+				)
+			],
+		);
+	}
 
   Widget buildOrderInProgress(PlaceOrderEntity placeOrderEntity) {
 		return Container(
@@ -101,11 +217,7 @@ class OrderListViewState extends State <OrderListView>{
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 				children: <Widget>[
-					Row(
-						children: <Widget>[
-							Text("共创算力订单")
-						],
-					),
+					buildOrderRow(),
 					Divider(),
 					Row(
 						children: <Widget>[
@@ -121,15 +233,15 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.spaceBetween,
 										children: <Widget>[
-											Text("共创算力租赁 * 24小时"),
-											Text("挖矿中"),
+											build24Hours(),
+											buildOrderStatus("挖矿中"),
 										],
 									),
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text(" x ${placeOrderEntity.amount} U")
+											buildPriceText(placeOrderEntity),
+											buildCreditTest(placeOrderEntity),
 										],
 									)
 								],
@@ -137,45 +249,10 @@ class OrderListViewState extends State <OrderListView>{
 							),
 						],
 					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("订单号: ${placeOrderEntity.id}"),
-							Text("总计"),
-						],
-					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
-						],
-					),
-					Row(
-						children: <Widget>[
-							RichText(text: TextSpan(
-								text: "已挖矿生产共创积分:",
-								children: [
-									TextSpan(
-										text: "${placeOrderEntity.mined_score}",
-										style: TextStyle(color: Colors.red),
-									)
-								]
-							)),
-						],
-					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							LinearPercentIndicator(
-								width: 100.0,
-								lineHeight: 8.0,
-								percent: placeOrderEntity.progress,
-								progressColor: Colors.blue,
-							),
-							Text("${placeOrderEntity.progress * 100}%"),
-						],
-					),
+					buildOrderNumber(placeOrderEntity),
+					buildOrderCreatedAt(placeOrderEntity),
+					buildAlreadyGenerateCredit(placeOrderEntity),
+					buildPersentage(placeOrderEntity),
 				],
 			),
 		);
@@ -188,11 +265,7 @@ class OrderListViewState extends State <OrderListView>{
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 				children: <Widget>[
-					Row(
-						children: <Widget>[
-							Text("共创算力订单")
-						],
-					),
+					buildOrderRow(),
 					Divider(),
 					Row(
 						children: <Widget>[
@@ -208,15 +281,16 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.spaceBetween,
 										children: <Widget>[
-											Text("共创算力租赁 * 24小时"),
-											Text("积分已发放"),
+											build24Hours(),
+											buildOrderStatus("积分已发放"),
+
 										],
 									),
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text(" x ${placeOrderEntity.amount} U")
+											buildPriceText(placeOrderEntity),
+											buildCreditTest(placeOrderEntity),
 										],
 									)
 								],
@@ -224,45 +298,10 @@ class OrderListViewState extends State <OrderListView>{
 							),
 						],
 					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("订单号: ${placeOrderEntity.id}"),
-							Text("总计"),
-						],
-					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
-						],
-					),
-					Row(
-						children: <Widget>[
-							RichText(text: TextSpan(
-								text: "已挖矿生产共创积分:",
-								children: [
-									TextSpan(
-										text: "${placeOrderEntity.mined_score}",
-										style: TextStyle(color: Colors.red),
-									)
-								]
-							)),
-						],
-					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							LinearPercentIndicator(
-								width: 100.0,
-								lineHeight: 8.0,
-								percent: placeOrderEntity.progress,
-								progressColor: Colors.blue,
-							),
-							Text("${placeOrderEntity.progress * 100}%"),
-						],
-					),
+					buildOrderNumber(placeOrderEntity),
+					buildOrderCreatedAt(placeOrderEntity),
+					buildAlreadyGenerateCredit(placeOrderEntity),
+					buildPersentage(placeOrderEntity),
 				],
 			),
 		);
@@ -275,11 +314,7 @@ class OrderListViewState extends State <OrderListView>{
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 				children: <Widget>[
-					Row(
-						children: <Widget>[
-							Text("共创算力订单")
-						],
-					),
+					buildOrderRow(),
 					Divider(),
 					Row(
 						children: <Widget>[
@@ -295,15 +330,15 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.spaceBetween,
 										children: <Widget>[
-											Text("共创算力租赁 * 24小时"),
-											Text("待支付"),
+											build24Hours(),
+											buildOrderStatus("待支付"),
 										],
 									),
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text(" x ${placeOrderEntity.amount} U")
+											buildPriceText(placeOrderEntity),
+											buildCreditTest(placeOrderEntity),
 										],
 									)
 								],
@@ -311,62 +346,9 @@ class OrderListViewState extends State <OrderListView>{
 							),
 						],
 					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("订单号: ${placeOrderEntity.id}"),
-							Text("总计"),
-						],
-					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
-						],
-					),
-					Row(
-						children: <Widget>[
-							Expanded(
-								child: FlatButton(
-									color: ColorTools.redE64340,
-									shape: RoundedRectangleBorder(
-										borderRadius: BorderRadius.circular(2)
-									),
-									onPressed: (){
-										CommonWidgetTools.showLoading(context);
-										_apiRepository.cancelOrder(placeOrderEntity.id).then((value){
-											CommonWidgetTools.dismissLoading(context);
-											if (value.msg == null) {
-												setState(() {
-
-												});
-											} else {
-												CommonWidgetTools.showAlertController(context, value.msg);
-											}
-										});
-									},
-									child: Text("取消",style: TextStyle(color: ColorTools.whiteFFFFFF)),
-								)
-							),
-							SizedBox(width: 16),
-							Expanded(
-								child: FlatButton(
-									color: ColorTools.green1AAD19,
-									shape: RoundedRectangleBorder(
-										borderRadius: BorderRadius.circular(2)
-									),
-									onPressed: (){
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => PaymentView(placeOrderEntity)),
-										);
-									},
-									child: Text("去支付",style: TextStyle(color: Colors.white)),
-								)
-							)
-						],
-					)
+					buildOrderNumber(placeOrderEntity),
+					buildOrderCreatedAt(placeOrderEntity),
+					buildPendingToPay(placeOrderEntity),
 				],
 			),
 		);
@@ -379,11 +361,7 @@ class OrderListViewState extends State <OrderListView>{
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 				children: <Widget>[
-					Row(
-						children: <Widget>[
-							Text("共创算力订单")
-						],
-					),
+					buildOrderRow(),
 					Divider(),
 					Row(
 						children: <Widget>[
@@ -399,15 +377,15 @@ class OrderListViewState extends State <OrderListView>{
 									Row(
 										mainAxisAlignment: MainAxisAlignment.spaceBetween,
 										children: <Widget>[
-											Text("共创算力租赁 * 24小时"),
-											Text("已取消"),
+											build24Hours(),
+											buildOrderStatus("已取消"),
 										],
 									),
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text(" x ${placeOrderEntity.amount} U")
+											buildPriceText(placeOrderEntity),
+											buildCreditTest(placeOrderEntity),
 										],
 									)
 								],
@@ -415,20 +393,8 @@ class OrderListViewState extends State <OrderListView>{
 							),
 						],
 					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("订单号: ${placeOrderEntity.id}"),
-							Text("总计"),
-						],
-					),
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-						children: <Widget>[
-							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
-							Text("¥ ${placeOrderEntity.value}",style: TextStyle(color: Colors.red)),
-						],
-					),
+					buildOrderNumber(placeOrderEntity),
+					buildOrderCreatedAt(placeOrderEntity),
 				],
 			),
 		);

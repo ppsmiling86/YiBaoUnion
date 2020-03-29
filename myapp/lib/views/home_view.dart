@@ -64,7 +64,7 @@ class HomeViewState extends State<HomeView> {
 
 	Widget buildBottomButtons() {
 		return Container(
-			height: 120,
+			height: 100,
 			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 			child: Column(
 				children: <Widget>[
@@ -75,8 +75,8 @@ class HomeViewState extends State<HomeView> {
 								child: SizedBox(
 									height: 60,
 									child: FlatButton(
-										color: ColorTools.green1AAD19,
-										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
+										shape: StadiumBorder(),
+										color: Theme.of(context).buttonColor,
 										onPressed: (){
 											if (widget.isInWechat) {
 												MyNotification(true).dispatch(context);
@@ -94,20 +94,11 @@ class HomeViewState extends State<HomeView> {
 												);
 											}
 										},
-										child: Text("立即租赁算力",style: TextStyle(color: Colors.white))
+										child: Text("立即租赁算力",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
 									),
 								),
 							),
 						],
-					),
-					Opacity(
-						opacity: 1,
-					  child: Row(
-					  	mainAxisAlignment: MainAxisAlignment.center,
-					  	children: <Widget>[
-					  		Text("Build version v1.0.0.1"),
-					  	],
-					  ),
 					),
 				],
 			),
@@ -116,9 +107,9 @@ class HomeViewState extends State<HomeView> {
 
 
 	void showOrderList() {
-		if (AppData().isRedirectToOrderList) {
+		if (LocalStorageTools.isRediretToOrderList()) {
+			LocalStorageTools.clearRedirectUrl();
 			if (AppData().loginUser().isLoggedIn) {
-				AppData().isRedirectToOrderList = false;
 				Navigator.push(
 					context,
 					MaterialPageRoute(builder: (context) => OrderListView()),

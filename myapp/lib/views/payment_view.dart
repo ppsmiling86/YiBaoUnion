@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/tools/colorTools.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'package:ant_icons/ant_icons.dart';
+import 'package:myapp/tools/localStorageTools.dart';
 import 'package:myapp/views/orderlist_view.dart';
 import 'contact_customer_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,7 +60,7 @@ class PaymentViewState extends State <PaymentView> {
 				children: <Widget>[
 					Row(
 						children: <Widget>[
-							Text("共创算力订单")
+							Text("共创算力订单",style: Theme.of(context).textTheme.headline6)
 						],
 					),
 					Divider(),
@@ -76,15 +78,15 @@ class PaymentViewState extends State <PaymentView> {
 									Row(
 										mainAxisAlignment: MainAxisAlignment.spaceBetween,
 										children: <Widget>[
-											Text("共创算力租赁 * 24小时"),
-											Text("待支付"),
+											Text("共创算力租赁 * 24小时",style: Theme.of(context).textTheme.caption),
+											Text("待支付",style: Theme.of(context).textTheme.caption),
 										],
 									),
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ ${placeOrderEntity.price}", style: TextStyle(color: Colors.red)),
-											Text(" x ${placeOrderEntity.amount} U")
+											Text("¥ ${placeOrderEntity.price}", style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor)),
+											Text(" x ${placeOrderEntity.amount} U",style: Theme.of(context).textTheme.caption)
 										],
 									)
 								],
@@ -95,22 +97,22 @@ class PaymentViewState extends State <PaymentView> {
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("订单号: ${placeOrderEntity.id}"),
+							Text("订单号: ${placeOrderEntity.id}",style: Theme.of(context).textTheme.bodyText2),
 						],
 					),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}"),
+							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}",style: Theme.of(context).textTheme.bodyText2),
 						],
 					),
 					Divider(),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.start,
 						children: <Widget>[
-							Text("支付方式",style: TextStyle(color: Colors.grey),),
+							Text("支付方式",style: Theme.of(context).textTheme.subtitle1),
 							SizedBox(width: 16),
-							Text(paymentTypeStringByType(selectPaymentType),style: TextStyle(color: Colors.black))
+							Text(paymentTypeStringByType(selectPaymentType),style: Theme.of(context).textTheme.subtitle2)
 						],
 					),
 					Divider(),
@@ -150,7 +152,7 @@ class PaymentViewState extends State <PaymentView> {
 							  	children: <Widget>[
 							  		Icon(AntIcons.wechat,size: 25),
 							  		SizedBox(width: 16),
-							  		Text("微信支付"),
+							  		Text("微信支付",style: Theme.of(context).textTheme.subtitle1),
 							  	],
 							  ),
 							),
@@ -209,11 +211,12 @@ class PaymentViewState extends State <PaymentView> {
 							mainAxisAlignment: MainAxisAlignment.spaceBetween,
 							children: <Widget>[
 								RichText(text: TextSpan(
-									text: "总计:",
+									text: "总计: ",
+									style: Theme.of(context).textTheme.subtitle1,
 									children: [
 										TextSpan(
 											text: "¥ ${placeOrderEntity.value}",
-											style: TextStyle(color: Colors.red),
+											style: Theme.of(context).textTheme.bodyText1.copyWith(color: Theme.of(context).errorColor),
 										)
 									]
 								)
@@ -221,19 +224,20 @@ class PaymentViewState extends State <PaymentView> {
 								Container(
 									width: 170,
 									child: FlatButton(
-										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+										shape: StadiumBorder(),
 										color: Colors.red,
 										onPressed: (){
 											CommonWidgetTools.showLoading(context);
 											_apiRepository.payOrderWinXinH5(placeOrderEntity.id).then((value){
 												CommonWidgetTools.dismissLoading(context);
 												if(value.data != null) {
+													LocalStorageTools.saveRedirectUrl("http://www.longmonrent.com?redirect=order_list");
 													launchURL(value.data.url);
 													poolingPaymentResponse(placeOrderEntity);
 													showDialog(context: context,
 														barrierDismissible: false,
 														builder: (_) => AlertDialog(
-															title: Text("等待支付结果"),
+															title: Text("等待支付结果",style: Theme.of(context).textTheme.button),
 															content: SizedBox(
 																width: 40,
 																height: 40,
@@ -246,20 +250,24 @@ class PaymentViewState extends State <PaymentView> {
 																),
 															),
 															actions: <Widget>[
-																FlatButton(onPressed: (){
+																FlatButton(
+																	shape: StadiumBorder(),
+																	onPressed: (){
 																	_timer.cancel();
 																	Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 																	Navigator.push(context,
 																		MaterialPageRoute(builder: (context) => OrderListView())
 																	);
-																}, child: Text("支付成功")),
-																FlatButton(onPressed: (){
+																}, child: Text("支付成功",style: Theme.of(context).textTheme.button)),
+																FlatButton(
+																	shape: StadiumBorder(),
+																	onPressed: (){
 																	_timer.cancel();
 																	Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 																	Navigator.push(context,
 																		MaterialPageRoute(builder: (context) => ContactCustomerServiceView())
 																	);
-																}, child: Text("支付遇到问题?")),
+																}, child: Text("支付遇到问题?",style: Theme.of(context).textTheme.button)),
 															],
 														),
 													);
@@ -268,7 +276,7 @@ class PaymentViewState extends State <PaymentView> {
 												}
 											});
 										},
-										child: Text("立即支付",style: TextStyle(color: Colors.white)),
+										child: Text("立即支付",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
 									),
 								),
 							],

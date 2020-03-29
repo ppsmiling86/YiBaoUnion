@@ -40,6 +40,10 @@ class AppData {
 		return currentLoginUser;
 	}
 
+	String getCopyright() {
+		return "Copyright \u00a9 2020 成都祺泽科技有限责任公司";
+	}
+
 }
 
 class User {
