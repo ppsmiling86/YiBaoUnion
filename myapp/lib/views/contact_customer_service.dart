@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/tools/callAndMessageService.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'package:myapp/tools/common_widget_tools.dart';
 class ContactCustomerServiceView extends StatefulWidget {
@@ -20,17 +21,29 @@ class ContactCustomerServiceViewState extends State<ContactCustomerServiceView> 
 			  padding: EdgeInsets.symmetric(horizontal: 32,vertical: 32),
 		  	child: Column(
 		  		children: <Widget>[
-		  			buildListItem("官方客服电话", "1838838888", ""),
+		  			GestureDetector(
+						onTap: (){
+							CallsAndMessagesService().call("1838838888");
+						},
+						child: buildListItem("官方客服电话", "1838838888", "")),
 		  			SizedBox(height: 30),
 		  			Row(
 						mainAxisAlignment: MainAxisAlignment.start,
 						children: <Widget>[
 							Expanded(
 								flex: 1,
-								child: buildListItem("客服QQ", "999999999", ImageTools.placeholder_qrcode)),
+								child: GestureDetector(
+									onTap: (){
+										CallsAndMessagesService().sendQQ("999999999");
+									},
+									child: buildListItem("客服QQ", "999999999", ImageTools.placeholder_qrcode))),
 							Expanded(
 								flex: 1,
-								child: buildListItem("客服微信", "999999999", ImageTools.placeholder_qrcode)),
+								child: GestureDetector(
+									onTap: (){
+										CallsAndMessagesService().sendWechat("999999999");
+									},
+									child: buildListItem("客服微信", "999999999", ImageTools.placeholder_qrcode))),
 						],
 					)
 		  		],
@@ -45,7 +58,7 @@ class ContactCustomerServiceViewState extends State<ContactCustomerServiceView> 
 			crossAxisAlignment: CrossAxisAlignment.start,
 			children: <Widget>[
 				Text(title,style: Theme.of(context).textTheme.subtitle1),
-				Text(value,style: Theme.of(context).textTheme.bodyText2),
+				Text(value,style: Theme.of(context).textTheme.bodyText2.copyWith(decoration: TextDecoration.underline)),
 				image.isNotEmpty ? buildImage(image) : Container()
 			],
 		);

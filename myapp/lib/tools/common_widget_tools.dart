@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ant_icons/ant_icons.dart';
+import 'package:myapp/models/AppData.dart';
 import 'package:myapp/models/MyNotification.dart';
 import 'package:myapp/tools/imageTools.dart';
 import 'colorTools.dart';
@@ -15,7 +16,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -34,7 +35,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -53,7 +54,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -70,7 +71,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
+				style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 		);
@@ -87,7 +88,7 @@ class CommonWidgetTools {
 			),
 			centerTitle: true,
 			title: Text(title,
-				style:Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
+				style:Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor)),
 //			backgroundColor: ColorTools.bkgMainColor,
 			elevation: 0.0,
 			actions: actions,
@@ -100,11 +101,14 @@ class CommonWidgetTools {
 			height: 72,
 			child: Container(
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-				child: FlatButton(
-					shape: StadiumBorder(),
-					color: Theme.of(context).buttonColor,
-					onPressed: onTap,
-					child: Text(title,style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
+				child: SizedBox(
+					height: 40,
+				  child: FlatButton(
+				  	shape: StadiumBorder(),
+				  	color: Theme.of(context).buttonColor,
+				  	onPressed: onTap,
+				  	child: Text(title,style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))
+				  ),
 				),
 			),
 		);
@@ -117,11 +121,15 @@ class CommonWidgetTools {
 				return AlertDialog(
 					content: Text(msg,style: Theme.of(context).textTheme.bodyText2),
 					actions: <Widget>[
-						FlatButton(
-							shape: StadiumBorder(),
-							onPressed: (){
-							Navigator.pop(context);
-						}, child: Text("确定",style: Theme.of(context).textTheme.button)),
+						SizedBox(
+							height: 40,
+						  child: FlatButton(
+						  	color: Theme.of(context).buttonColor,
+						  	shape: StadiumBorder(),
+						  	onPressed: (){
+						  	Navigator.pop(context);
+						  }, child: Text("确定",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
+						),
 					],
 				);
 			}
@@ -135,12 +143,16 @@ class CommonWidgetTools {
 				return AlertDialog(
 					content: Text(msg,style: Theme.of(context).textTheme.bodyText2),
 					actions: <Widget>[
-						FlatButton(
-							shape: StadiumBorder(),
-							onPressed: (){
-							Navigator.pop(context);
-							onTap();
-						}, child: Text("确定",style: Theme.of(context).textTheme.button)),
+						SizedBox(
+							height: 40,
+						  child: FlatButton(
+						  	color: Theme.of(context).buttonColor,
+						  	shape: StadiumBorder(),
+						  	onPressed: (){
+						  	Navigator.pop(context);
+						  	onTap();
+						  }, child: Text("确定",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
+						),
 					],
 				);
 			}
@@ -154,17 +166,25 @@ class CommonWidgetTools {
 				return AlertDialog(
 					content: Text(msg,style: Theme.of(context).textTheme.bodyText2),
 					actions: <Widget>[
-						FlatButton(
-							shape: StadiumBorder(),
-							onPressed: (){
-							Navigator.pop(context);
-						}, child: Text("取消",style: Theme.of(context).textTheme.button)),
-						FlatButton(
-							shape: StadiumBorder(),
-							onPressed: (){
-							onConfirm();
-							Navigator.pop(context);
-						}, child: Text("确定",style: Theme.of(context).textTheme.button)),
+						SizedBox(
+							height: 40,
+						  child: OutlineButton(
+						  	shape: StadiumBorder(),
+						  	borderSide: BorderSide(color: Theme.of(context).buttonColor),
+						  	onPressed: (){
+						  	Navigator.pop(context);
+						  }, child: Text("取消",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).buttonColor))),
+						),
+						SizedBox(
+							height: 40,
+						  child: FlatButton(
+						  	color: Theme.of(context).buttonColor,
+						  	shape: StadiumBorder(),
+						  	onPressed: (){
+						  	onConfirm();
+						  	Navigator.pop(context);
+						  }, child: Text("确定",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
+						),
 					],
 				);
 			}
@@ -234,9 +254,39 @@ class CommonWidgetTools {
 							height: 88),
 						SizedBox(height: 4),
 						Text(t,
-							style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor)),
+							style: Theme.of(context).textTheme.bodyText2),
 					],
 				)),
+		);
+	}
+
+	static Widget buildCopyright(BuildContext context) {
+		return SizedBox(
+			width: double.infinity,
+			height: 40,
+			child: Column(
+				children: [
+					Container(
+						child: Center(
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.center,
+								children: <Widget>[
+									Text(AppData().getCopyright(),style: Theme.of(context).textTheme.bodyText2),
+								],
+							),
+						),
+					),
+//				Opacity(
+//					opacity: 1,
+//					child: Row(
+//						mainAxisAlignment: MainAxisAlignment.center,
+//						children: <Widget>[
+//							Text("Build version v1.0.0.3",style: Theme.of(context).textTheme.bodyText2),
+//						],
+//					),
+//				),
+				]
+			),
 		);
 	}
 }

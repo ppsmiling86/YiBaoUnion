@@ -86,12 +86,12 @@ class UserProfilePageState extends State <UserProfilePage> {
 	Widget buildBody(UserInfoEntity userInfoEntity) {
 		bool isLogin = AppData().loginUser().isLoggedIn;
 		return Container(
-			padding: EdgeInsets.symmetric(horizontal: 16),
+			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
 			child: ListView(
 				children: <Widget>[
 					buildUserAvatar(userInfoEntity),
 					buildUserSummary(userInfoEntity),
-					Divider(),
+					Divider(thickness: 1),
 					buildSingleRow("租赁订单", (){
 						if (isLogin) {
 							Navigator.push(
@@ -102,7 +102,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 							gotoRegistrationPage();
 						}
 					}),
-					Divider(),
+					Divider(thickness: 1),
 					buildSingleRow("提现记录", (){
 						if(isLogin) {
 							Navigator.push(
@@ -113,7 +113,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 							gotoRegistrationPage();
 						}
 					}),
-					Divider(),
+					Divider(thickness: 1),
 					buildSingleRow("邀请好友", (){
 						if(isLogin) {
 							Navigator.push(
@@ -124,7 +124,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 							gotoRegistrationPage();
 						}
 					}),
-					Divider(),
+					Divider(thickness: 1),
 					buildSingleRow("我的团队", (){
 						if(isLogin) {
 							Navigator.push(
@@ -135,7 +135,7 @@ class UserProfilePageState extends State <UserProfilePage> {
 							gotoRegistrationPage();
 						}
 					}),
-					Divider(),
+					Divider(thickness: 1),
 					buildSingleRow("签到有礼", (){
 						if(isLogin) {
 							Navigator.push(
@@ -146,21 +146,21 @@ class UserProfilePageState extends State <UserProfilePage> {
 							gotoRegistrationPage();
 						}
 					}),
-					Divider(),
+					Divider(thickness: 1),
 					buildSingleRow("关于我们", (){
 						Navigator.push(
 							context,
 							MaterialPageRoute(builder: (context) => AboutUsView()),
 						);
 					}),
-					Divider(),
+					Divider(thickness: 1),
 					buildSingleRow("联系客服", (){
 						Navigator.push(
 							context,
 							MaterialPageRoute(builder: (context) => ContactCustomerServiceView()),
 						);
 					}),
-					SizedBox(height: 500),
+					SizedBox(height: 100),
 				],
 			),
 		);
@@ -179,12 +179,16 @@ class UserProfilePageState extends State <UserProfilePage> {
 					),
 					SizedBox(width: 16),
 					isLogin ? Text(userInfoEntity.uid,style: Theme.of(context).textTheme.subtitle1) :
-					OutlineButton(
-						shape: StadiumBorder(),
-						onPressed: (){
-							gotoRegistrationPage();
-						},
-						child: Text("登录",style: Theme.of(context).textTheme.button)
+					SizedBox(
+						height: 30,
+					  child: OutlineButton(
+					  	shape: StadiumBorder(),
+					  	borderSide: BorderSide(color: Theme.of(context).primaryColor),
+					  	onPressed: (){
+					  		gotoRegistrationPage();
+					  	},
+					  	child: Text("登录",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).primaryColor))
+					  ),
 					),
 				],
 			),
@@ -205,27 +209,33 @@ class UserProfilePageState extends State <UserProfilePage> {
 			child: Column(
 				crossAxisAlignment: CrossAxisAlignment.start,
 				children: <Widget>[
+					SizedBox(height: 10),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
-							Text("我的共创积分: ${NumberTools.DoubleToFixedString(userInfoEntity.balance, 2)}",style: Theme.of(context).textTheme.subtitle2),
-							OutlineButton(
-								shape: StadiumBorder(),
-								child: Text("提现",style: Theme.of(context).textTheme.button),
-								onPressed: (){
-									if(AppData().loginUser().isLoggedIn) {
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => WithdrawView()),
-										);
-									} else {
-										gotoRegistrationPage();
-									}
-								},
+							Text("我的积分: ${NumberTools.DoubleToFixedString(userInfoEntity.balance, 2)}",style: Theme.of(context).textTheme.subtitle2),
+							SizedBox(
+								height: 30,
+							  child: OutlineButton(
+							  	shape: StadiumBorder(),
+							  	borderSide: BorderSide(color: Theme.of(context).primaryColor),
+							  	color: Theme.of(context).buttonColor,
+							  	child: Text("提现",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).primaryColor)),
+							  	onPressed: (){
+							  		if(AppData().loginUser().isLoggedIn) {
+							  			Navigator.push(
+							  				context,
+							  				MaterialPageRoute(builder: (context) => WithdrawView()),
+							  			);
+							  		} else {
+							  			gotoRegistrationPage();
+							  		}
+							  	},
+							  ),
 							),
 						],
 					),
-					Text("我的总算力: ${userInfoEntity.today_rent_power} U",style: Theme.of(context).textTheme.subtitle2),
+					Text("我的算力: ${userInfoEntity.today_rent_power} U",style: Theme.of(context).textTheme.subtitle2),
 					SizedBox(height: 16),
 					Expanded(child: Text("大约还可产生${NumberTools.DoubleToFixedString(userInfoEntity.today_score, 2)}共创积分",style: Theme.of(context).textTheme.subtitle2)),
 				],
@@ -257,14 +267,17 @@ class UserProfilePageState extends State <UserProfilePage> {
 			child: Container(
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				width: width,
-				child: FlatButton(
-					shape: StadiumBorder(),
-					color: Colors.red,
-					onPressed: (){
-						setState(() {
-							AppData().loginUser().logout();
-						});
-					}, child: Text("退出登录", style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
+				child: SizedBox(
+					height: 40,
+				  child: FlatButton(
+				  	shape: StadiumBorder(),
+				  	color: Colors.red,
+				  	onPressed: (){
+				  		setState(() {
+				  			AppData().loginUser().logout();
+				  		});
+				  	}, child: Text("退出登录", style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))
+				  ),
 				),
 			),
 		) : Container();

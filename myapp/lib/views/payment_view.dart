@@ -60,16 +60,16 @@ class PaymentViewState extends State <PaymentView> {
 				children: <Widget>[
 					Row(
 						children: <Widget>[
-							Text("共创算力订单",style: Theme.of(context).textTheme.headline6)
+							Text("共创算力订单",style: Theme.of(context).textTheme.subtitle1)
 						],
 					),
-					Divider(),
+					Divider(thickness: 1),
 					Row(
 						children: <Widget>[
 							Container(
 								width: 70,
 								height: 70,
-								child: Image(image: AssetImage(ImageTools.placeholder1)),
+								child: Image(image: AssetImage(ImageTools.product)),
 							),
 							SizedBox(width: 30),
 							Expanded(child: Column(
@@ -78,15 +78,15 @@ class PaymentViewState extends State <PaymentView> {
 									Row(
 										mainAxisAlignment: MainAxisAlignment.spaceBetween,
 										children: <Widget>[
-											Text("共创算力租赁 * 24小时",style: Theme.of(context).textTheme.caption),
-											Text("待支付",style: Theme.of(context).textTheme.caption),
+											Text("共创算力租赁 * 24小时",style: Theme.of(context).textTheme.bodyText2),
+											Text("待支付",style: Theme.of(context).textTheme.bodyText2),
 										],
 									),
 									Row(
 										mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text("¥ ${placeOrderEntity.price}", style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor)),
-											Text(" x ${placeOrderEntity.amount} U",style: Theme.of(context).textTheme.caption)
+											Text("¥ ${placeOrderEntity.price}", style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).errorColor)),
+											Text(" x ${placeOrderEntity.amount} U",style: Theme.of(context).textTheme.bodyText2)
 										],
 									)
 								],
@@ -106,16 +106,15 @@ class PaymentViewState extends State <PaymentView> {
 							Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}",style: Theme.of(context).textTheme.bodyText2),
 						],
 					),
-					Divider(),
+					Divider(thickness: 1),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.start,
 						children: <Widget>[
 							Text("支付方式",style: Theme.of(context).textTheme.subtitle1),
 							SizedBox(width: 16),
-							Text(paymentTypeStringByType(selectPaymentType),style: Theme.of(context).textTheme.subtitle2)
+							Text(paymentTypeStringByType(selectPaymentType),style: Theme.of(context).textTheme.caption),
 						],
 					),
-					Divider(),
 //					Row(
 //						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //						children: <Widget>[
@@ -142,7 +141,6 @@ class PaymentViewState extends State <PaymentView> {
 //							),
 //						],
 //					),
-					Divider(),
 					Row(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 						children: <Widget>[
@@ -150,13 +148,14 @@ class PaymentViewState extends State <PaymentView> {
 								width: 200,
 							  child: Row(
 							  	children: <Widget>[
-							  		Icon(AntIcons.wechat,size: 25),
+							  		Icon(AntIcons.wechat,size: 25,color: Theme.of(context).buttonColor),
 							  		SizedBox(width: 16),
 							  		Text("微信支付",style: Theme.of(context).textTheme.subtitle1),
 							  	],
 							  ),
 							),
 							Checkbox(
+								activeColor: Theme.of(context).accentColor,
 								value: selectPaymentType == PaymentType.wechatPay,
 								onChanged: (bool value) {
 									setState(() {
@@ -199,20 +198,20 @@ class PaymentViewState extends State <PaymentView> {
 
 	Widget buildBottomButton(PlaceOrderEntity placeOrderEntity) {
 		return Container(
-			height: 100,
+			height: 88,
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.start,
 				children: <Widget>[
-					Divider(),
+					Divider(thickness: 1),
 					Container(
 						padding: EdgeInsets.symmetric(horizontal: 16),
-						height: 60,
+						height: 72,
 						child: Row(
 							mainAxisAlignment: MainAxisAlignment.spaceBetween,
 							children: <Widget>[
 								RichText(text: TextSpan(
 									text: "总计: ",
-									style: Theme.of(context).textTheme.subtitle1,
+									style: Theme.of(context).textTheme.bodyText1,
 									children: [
 										TextSpan(
 											text: "¥ ${placeOrderEntity.value}",
@@ -222,7 +221,8 @@ class PaymentViewState extends State <PaymentView> {
 								)
 								),
 								Container(
-									width: 170,
+									width: 100,
+									height: 40,
 									child: FlatButton(
 										shape: StadiumBorder(),
 										color: Colors.red,
@@ -276,13 +276,12 @@ class PaymentViewState extends State <PaymentView> {
 												}
 											});
 										},
-										child: Text("立即支付",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+										child: Text("立即支付",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor)),
 									),
 								),
 							],
 						),
 					),
-					Divider(),
 				],
 			),
 		);

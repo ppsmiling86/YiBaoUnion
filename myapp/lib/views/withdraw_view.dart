@@ -59,7 +59,7 @@ class WithdrawViewState extends State <WithdrawView> {
 					child: SizedBox(
 						width: 80,
 						child: Container(
-							child: Center(child: Text("管理地址",style: Theme.of(context).textTheme.button)),
+							child: Center(child: Text("管理地址",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
 						),
 					),
 				),
@@ -88,10 +88,11 @@ class WithdrawViewState extends State <WithdrawView> {
 							children: <Widget>[
 								Expanded(
 								  child: TextFormField(
+									  style: Theme.of(context).textTheme.bodyText2,
 								  	controller: walletController,
 								  	decoration: InputDecoration(
 								  		icon: Icon(Icons.account_balance_wallet),
-								  		labelText: '共创钱包地址:',
+								  		labelText: '共创钱包地址',
 								  		hintText: "请输入或长按粘贴地址"
 								  	),
 								  	validator: (String value) {
@@ -104,9 +105,11 @@ class WithdrawViewState extends State <WithdrawView> {
 								),
 								SizedBox(
 									width: 80,
-									height: 30,
-									child: Container(child: Center(child: OutlineButton(
+									height: 40,
+									child: Container(child: Center(child:
+									OutlineButton(
 										shape: StadiumBorder(),
+										borderSide: BorderSide(color: Theme.of(context).primaryColor),
 										onPressed: (){
 										listBloc.getWithdrawAddress();
 										showDialog(
@@ -116,7 +119,7 @@ class WithdrawViewState extends State <WithdrawView> {
 												return buildWithdrawListStreamBuilderView();
 											}
 										);
-									},child: Text("选择",style: Theme.of(context).textTheme.button))))
+									},child: Text("选择",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).primaryColor)))))
 								),
 							],
 						),
@@ -165,7 +168,7 @@ class WithdrawViewState extends State <WithdrawView> {
 		if (snapshot.data.data.length > 0) {
 			return ListView.separated(
 				itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
-				separatorBuilder: (context, index) => Divider(),
+				separatorBuilder: (context, index) => Divider(thickness: 1),
 				itemCount: snapshot.data.data.length,
 			);
 		}
@@ -256,10 +259,11 @@ class WithdrawViewState extends State <WithdrawView> {
 							children: <Widget>[
 								Expanded(
 								  child: TextFormField(
+									  style: Theme.of(context).textTheme.bodyText2,
 									  controller: amountController,
 								  	decoration: InputDecoration(
 								  		icon: Icon(Icons.monetization_on),
-								  		labelText: '数量:',
+								  		labelText: '数量',
 								  		hintText: "最小提现积分数量为10"
 								  	),
 								  	validator: (String value) {
@@ -278,18 +282,20 @@ class WithdrawViewState extends State <WithdrawView> {
 								),
 								SizedBox(
 									width: 80,
-									height: 30,
-									child: Container(child: Center(child: OutlineButton(
+									height: 40,
+									child: Container(child: Center(child:
+									OutlineButton(
 										shape: StadiumBorder(),
+										borderSide: BorderSide(color: Theme.of(context).primaryColor),
 										onPressed: (){
 										setState(() {
 											amountController.text = "${withdrawAvailableEntity.available}";
 										});
-									},child: Text("全部",style: Theme.of(context).textTheme.button))))
+									},child: Text("全部",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).primaryColor)))))
 								),
 							],
 						),
-						Text("可提现积分: ${withdrawAvailableEntity.available}",style: Theme.of(context).textTheme.caption),
+						Text("可提现积分: ${withdrawAvailableEntity.available}",style: Theme.of(context).textTheme.bodyText2),
 					],
 				),
 			),
@@ -304,7 +310,8 @@ class WithdrawViewState extends State <WithdrawView> {
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				child: Row(
 					children: <Widget>[
-						Expanded(child: Text("请务必输入正确的共创医保钱包地址，若因为个人失误导致资金丢失，平台概不负责。为了保证您的资金安全，我们会对提现申请进行人工审核，请耐心等待！",style: Theme.of(context).textTheme.bodyText2)),
+						Expanded(child: Text("请务必输入正确的共创医保钱包地址，若因为个人失误导致资金丢失，平台概不负责。为了保证您的资金安全，我们会对提现申请进行人工审核，请耐心等待！",
+							style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor))),
 					],
 				),
 			),
@@ -321,7 +328,7 @@ class WithdrawViewState extends State <WithdrawView> {
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				child: Column(
 					children: <Widget>[
-						Divider(),
+						Divider(thickness: 1),
 						SizedBox(height: 16),
 						Row(
 							mainAxisAlignment: MainAxisAlignment.start,
@@ -390,7 +397,7 @@ class WithdrawViewState extends State <WithdrawView> {
 													}
 												});
 											},
-											child: Text("发送",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
+											child: Text("发送",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))
 										),
 									),
 								),
@@ -443,7 +450,7 @@ class WithdrawViewState extends State <WithdrawView> {
 														}
 													});
 												}
-											}, child: Text("确认",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)))
+											}, child: Text("确认",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor)))
 									),
 								),
 							],

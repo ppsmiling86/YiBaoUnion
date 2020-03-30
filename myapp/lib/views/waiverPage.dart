@@ -67,7 +67,7 @@ class WaiverPageState extends State <WaiverPage> {
 					height: 50,
 					color: ColorTools.green1AAD19,
 					child: Center(
-						child: Text("同意",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+						child: Text("同意",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor)),
 					),
 				),
 			),

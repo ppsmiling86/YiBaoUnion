@@ -41,12 +41,23 @@ class CheckoutPageState extends State <CheckoutPage> {
 				Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 			}),
 			drawer: UserProfilePage(),
-			body: CenterView(),
+			body: Stack(
+				children: <Widget>[
+					CenterView(),
+					buildMask(),
+				],
+			),
 			bottomNavigationBar: SingleChildScrollView(
 				child: buildBottomView(),
 			),
 			resizeToAvoidBottomInset: false,
 			resizeToAvoidBottomPadding: false,
+		);
+	}
+	
+	Widget buildMask() {
+		return Container(
+			color: Colors.black.withOpacity(0.5),
 		);
 	}
 
@@ -106,14 +117,13 @@ class CheckoutPageState extends State <CheckoutPage> {
 		var width = MediaQuery.of(context).size.width - 32;
 		return Container(
 			decoration: BoxDecoration(
-				border: Border(
-					top: BorderSide(width: 1.0, color: Colors.grey)
-				)
+				borderRadius: BorderRadius.only(topRight:  Radius.circular(10),topLeft:  Radius.circular(10)),
+				border: Border.all(color: Colors.grey,style: BorderStyle.solid)
 			),
 		  child: Container(
-		  	padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+		  	padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
 		  	width: width,
-		  	height: 346,
+		  	height: 273,
 		  	child: Form(
 		  		key: _formKey,
 		  		child: Column(
@@ -124,8 +134,8 @@ class CheckoutPageState extends State <CheckoutPage> {
 		  					child: Row(
 		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 		  						children: <Widget>[
-		  							Text("算力单价"),
-		  							Text("¥ ${productEntity.price} / U"),
+		  							Text("单价",style: Theme.of(context).textTheme.subtitle1),
+		  							Text("¥ ${productEntity.price}",style: Theme.of(context).textTheme.bodyText2),
 		  						],
 		  					),
 		  				),
@@ -134,24 +144,26 @@ class CheckoutPageState extends State <CheckoutPage> {
 		  					child: Row(
 		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 		  						children: <Widget>[
-		  							Text("数量 (U)"),
+		  							Text("数量 (U)",style: Theme.of(context).textTheme.subtitle1),
 		  							Container(
 		  								width: 200,
 		  								child: Row(
 		  									crossAxisAlignment: CrossAxisAlignment.center,
 		  									mainAxisAlignment: MainAxisAlignment.end,
 		  									children: <Widget>[
-		  										IconButton(icon: Icon(AntIcons.minus_circle_outline,size: 24), onPressed: (){
-		  											if (StringTools.ValidateNumber(amountController.text)) {
-		  												var current = int.parse(amountController.text);
-		  												if (current > 0) {
-		  													var sub = current - 1;
-		  													setState(() {
-		  														amountController.text = "$sub";
-		  													});
-		  												}
-		  											}
-		  										}),
+												GestureDetector(
+													onTap: (){
+														if (StringTools.ValidateNumber(amountController.text)) {
+															var current = int.parse(amountController.text);
+															if (current > 0) {
+																var sub = current - 1;
+																setState(() {
+																	amountController.text = "$sub";
+																});
+															}
+														}
+													},
+													child: Icon(Icons.remove,size: 18,color: Theme.of(context).indicatorColor)),
 		  										SizedBox(
 		  											width: 40,
 		  											child: Container(
@@ -165,11 +177,13 @@ class CheckoutPageState extends State <CheckoutPage> {
 		  														value = value.trim();
 		  														if (!StringTools.ValidateNumber(value)) {
 		  															CommonWidgetTools.showAlertController(context, "请输入正确的数字");
+																	AppData().orderRequest.amount = 0;
 		  															return null;
 		  														}
 		  														int amount = int.parse(value);
 		  														if (amount < 1 || amount > productEntity.limit_per_user) {
 		  															CommonWidgetTools.showAlertController(context, "超出最大购买量");
+																	AppData().orderRequest.amount = 0;
 		  															return null;
 		  														}
 
@@ -180,17 +194,19 @@ class CheckoutPageState extends State <CheckoutPage> {
 		  												),
 		  											),
 		  										),
-		  										IconButton(icon: Icon(AntIcons.plus_circle_outline,size: 24), onPressed: (){
-		  											if (StringTools.ValidateNumber(amountController.text)) {
-		  												var current = int.parse(amountController.text);
-		  												if (current < productEntity.limit_per_user) {
-		  													var add = current+1;
-		  													setState(() {
-		  														amountController.text = "$add";
-		  													});
-		  												}
-		  											}
-		  										}),
+												GestureDetector(
+													onTap: (){
+														if (StringTools.ValidateNumber(amountController.text)) {
+															var current = int.parse(amountController.text);
+															if (current < productEntity.limit_per_user) {
+																var add = current+1;
+																setState(() {
+																	amountController.text = "$add";
+																});
+															}
+														}
+													},
+													child: Icon(Icons.add,size: 18,color: Theme.of(context).indicatorColor)),
 		  									],
 		  								),
 		  							)
@@ -200,14 +216,13 @@ class CheckoutPageState extends State <CheckoutPage> {
 		  				Row(
 		  					mainAxisAlignment: MainAxisAlignment.end,
 		  					children: <Widget>[
-		  						Text("每人限购${productEntity.limit_per_user}U")
+		  						Text("每日限购${productEntity.limit_per_user}",style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor))
 		  					],
 		  				),
 		  				Row(
 		  					mainAxisAlignment: MainAxisAlignment.spaceBetween,
 		  					children: <Widget>[
-		  						Text("每日总额 ${productEntity.total_supply} U"),
-		  						Text("租赁进度: ${NumberTools.DoubleToFixedString(productEntity.sold_progress * 100, 2)}%"),
+		  						Text("今日剩余 ${(1 - productEntity.sold_progress) * productEntity.total_supply} / ${productEntity.total_supply}",style: Theme.of(context).textTheme.subtitle1),
 		  					],
 		  				),
 		  				SizedBox(height: 6),
@@ -217,31 +232,24 @@ class CheckoutPageState extends State <CheckoutPage> {
 		  						child: LinearPercentIndicator(
 		  							lineHeight: 8.0,
 		  							percent: productEntity.sold_progress,
-		  							progressColor: Colors.blue,
+		  							progressColor: Theme.of(context).primaryColor,
 		  						),
 		  					),
 		  				),
-		  				SizedBox(height: 10),
 		  				Container(
 		  					height: 40,
 		  					child: Row(
 		  						children: <Widget>[
-		  							Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.score_per_unithour}个共创积分,整点发放",style: TextStyle(color: Colors.red))),
+		  							Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.score_per_unithour}个共创积分,整点发放",style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor))),
 		  						],
 		  					),
 		  				),
-		  				SizedBox(height: 30),
 		  				Container(
 		  					height: 40,
 		  					child: Row(
 		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
 		  						children: <Widget>[
-		  							Text("合计: ¥ ${productEntity.price * int.parse(amountController.text)}"),
-		  							Column(
-		  								children: <Widget>[
-		  									Text("总额: ${productEntity.price * int.parse(amountController.text)}"),
-		  								],
-		  							),
+		  							Text("合计: ¥ ${productEntity.price * int.parse(amountController.text)}",style: Theme.of(context).textTheme.subtitle1),
 		  						],
 		  					),
 		  				),
@@ -256,7 +264,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 	Widget buildBottomButtons(ProductEntity productEntity) {
 		var width = MediaQuery.of(context).size.width - 32;
 		return Container(
-			height: 60,
+			height: 40,
 			width: width,
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -264,8 +272,8 @@ class CheckoutPageState extends State <CheckoutPage> {
 					Expanded(
 						child: OutlineButton(
 							shape: StadiumBorder(),
-							textColor: Colors.grey,
-							child: Text("取消"),
+							borderSide: BorderSide(color: Theme.of(context).buttonColor),
+							child: Text("取消",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).buttonColor)),
 							onPressed: (){
 								Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 							},
@@ -275,7 +283,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 					Expanded(
 						child: Container(
 							child: FlatButton(
-								color: ColorTools.green1AAD19,
+								color: Theme.of(context).buttonColor,
 								shape: StadiumBorder(),
 								onPressed: (){
 									if (_formKey.currentState.validate()) {
@@ -299,7 +307,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 										}
 									}
 								},
-								child: Text("确认租赁",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
+								child: Text("确认租赁",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))
 							)
 						),
 					),

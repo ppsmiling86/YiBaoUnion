@@ -61,7 +61,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 								    child: RichText(
 										textAlign: TextAlign.end,
 										text: TextSpan(
-								    	text: "未注册的手机验证成功后将自动注册,注册视为同意 ",
+								    	text: "未注册的手机验证成功后将自动注册,\n注册视为同意 ",
 								    	style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor),
 								    	children: [
 								    		TextSpan(
@@ -120,6 +120,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 			height: 110,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Row(
+				crossAxisAlignment: CrossAxisAlignment.center,
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				children: <Widget>[
 					Container(
@@ -139,39 +140,43 @@ class RegistrationPageState extends State <RegistrationPage> {
 							},
 						),
 					),
-					OutlineButton(
-						shape: StadiumBorder(),
-						child: Text("发送验证码",style: Theme.of(context).textTheme.button),
-						onPressed: (){
-							if(_mobileFormKey.currentState.validate()) {
-								if (lastSendSmsTime != null) {
-									var oneMinutesAgo = DateTime.now().subtract( Duration(seconds: 60));
-									if (!lastSendSmsTime.isBefore(oneMinutesAgo)) {
-										showDialog(
-											context: context,
-											builder: (BuildContext context){
-												return AlertDialog(
-													content: Text("1分钟之内请勿连续操作",style: Theme.of(context).textTheme.button),
-												);
-											}
-										);
-										return;
-									}
-								}
+					SizedBox(
+						height: 30,
+					  child: OutlineButton(
+					  	shape: StadiumBorder(),
+					  	borderSide: BorderSide(color: Theme.of(context).primaryColor),
+					  	child: Text("发送验证码",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).primaryColor)),
+					  	onPressed: (){
+					  		if(_mobileFormKey.currentState.validate()) {
+					  			if (lastSendSmsTime != null) {
+					  				var oneMinutesAgo = DateTime.now().subtract( Duration(seconds: 60));
+					  				if (!lastSendSmsTime.isBefore(oneMinutesAgo)) {
+					  					showDialog(
+					  						context: context,
+					  						builder: (BuildContext context){
+					  							return AlertDialog(
+					  								content: Text("1分钟之内请勿连续操作",style: Theme.of(context).textTheme.button),
+					  							);
+					  						}
+					  					);
+					  					return;
+					  				}
+					  			}
 
-								lastSendSmsTime = DateTime.now();
-								CommonWidgetTools.showLoading(context);
-								AppData().loginUser().sms(AppData().tempRegistration).then((value){
-									Navigator.pop(context);
-									if(value.data != null) {
-										smsEntity = value.data;
-										CommonWidgetTools.showAlertController(context, "验证码发送成功");
-									} else {
-										CommonWidgetTools.showAlertController(context, value.msg);
-									}
-								});
-							}
-						}),
+					  			lastSendSmsTime = DateTime.now();
+					  			CommonWidgetTools.showLoading(context);
+					  			AppData().loginUser().sms(AppData().tempRegistration).then((value){
+					  				Navigator.pop(context);
+					  				if(value.data != null) {
+					  					smsEntity = value.data;
+					  					CommonWidgetTools.showAlertController(context, "验证码发送成功");
+					  				} else {
+					  					CommonWidgetTools.showAlertController(context, value.msg);
+					  				}
+					  			});
+					  		}
+					  	}),
+					),
 				],
 			),
 		);
@@ -210,7 +215,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 				  	height: 50,
 				  	color: Colors.blueAccent,
 				  	child: Center(
-				  		child: Text("登录",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+				  		child: Text("登录",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor)),
 				  	),
 				  ),
 				),

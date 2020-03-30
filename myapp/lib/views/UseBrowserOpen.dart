@@ -70,11 +70,11 @@ class UseBrowserOpenViewState extends State <UseBrowserOpenView> {
 								children: <Widget>[
 									CircleAvatar(
 										backgroundColor: Colors.deepOrange,
-										child: Text("1",style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor))),
+										child: Text("1",style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor))),
 									SizedBox(width: 10),
-									Text("点击右上角的",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor)),
+									Text("点击右上角的",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor)),
 									Icon(Icons.more_horiz,size: 30,color: Colors.white),
-									Text("按钮",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor)),
+									Text("按钮",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor)),
 									SizedBox(width: 45),
 								],
 							),
@@ -83,12 +83,12 @@ class UseBrowserOpenViewState extends State <UseBrowserOpenView> {
 								children: <Widget>[
 									CircleAvatar(
 										backgroundColor: Colors.deepOrange,
-										child: Text("2",style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).accentColor))),
+										child: Text("2",style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor))),
 									SizedBox(width: 10),
-									Text("选择",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor)),
+									Text("选择",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor)),
 									FlatButton.icon(
 										shape: StadiumBorder(),
-										onPressed: (){}, icon: Icon(Icons.language,size:30,color: Colors.white), label: Text("在浏览器中打开",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor))),
+										onPressed: (){}, icon: Icon(Icons.language,size:30,color: Colors.white), label: Text("在浏览器中打开",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor))),
 								],
 							),
 						],

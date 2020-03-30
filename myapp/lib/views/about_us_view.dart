@@ -25,37 +25,7 @@ class AboutUsViewState extends State<AboutUsView> {
 		  	),
 		  ),
 		),
-		bottomNavigationBar: buildBottom(),
+		bottomNavigationBar: CommonWidgetTools.buildCopyright(context),
 	);
-  }
-
-  Widget buildBottom() {
-		return SizedBox(
-			width: double.infinity,
-			height: 120,
-		  child: Column(
-		    children: [
-				Container(
-					child: Center(
-						child: Row(
-							mainAxisAlignment: MainAxisAlignment.center,
-							children: <Widget>[
-								Text(AppData().getCopyright(),style: Theme.of(context).textTheme.bodyText2),
-							],
-						),
-					),
-				),
-				Opacity(
-					opacity: 1,
-					child: Row(
-						mainAxisAlignment: MainAxisAlignment.center,
-						children: <Widget>[
-							Text("Build version v1.0.0.3",style: Theme.of(context).textTheme.bodyText2),
-						],
-					),
-				),
-			]
-		  ),
-		);
   }
 }

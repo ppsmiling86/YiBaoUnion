@@ -1,5 +1,6 @@
 class ImageTools {
 	ImageTools._();
+	static const product = 'assets/images/product.jpg';
 	static const placeholder1 = 'assets/images/img_1.gif';
 	static const placeholder2 = 'assets/images/img_2.gif';
 	static const placeholder3 = 'assets/images/img_3.gif';
@@ -9,7 +10,7 @@ class ImageTools {
 	static const placeholder7 = 'assets/images/img_7.gif';
 	static const placeholder_qrcode = 'assets/images/qrcode.png';
 	static const empty_order_list = 'assets/images/empty-order-list.png';
-	static const contract = '/front/agreement.html';
+	static const contract = '/agreement.html';
 	static const arc_arrow = 'assets/images/arc-arrow.png';
 
 }

@@ -64,8 +64,8 @@ class HomeViewState extends State<HomeView> {
 
 	Widget buildBottomButtons() {
 		return Container(
-			height: 100,
-			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+			height: 60,
+			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
 			child: Column(
 				children: <Widget>[
 					Row(
@@ -73,7 +73,7 @@ class HomeViewState extends State<HomeView> {
 						children: <Widget>[
 							Expanded(
 								child: SizedBox(
-									height: 60,
+									height: 40,
 									child: FlatButton(
 										shape: StadiumBorder(),
 										color: Theme.of(context).buttonColor,
@@ -94,7 +94,7 @@ class HomeViewState extends State<HomeView> {
 												);
 											}
 										},
-										child: Text("立即租赁算力",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
+										child: Text("立即租赁算力",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))
 									),
 								),
 							),

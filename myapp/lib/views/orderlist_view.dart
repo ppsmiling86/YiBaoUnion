@@ -93,20 +93,12 @@ class OrderListViewState extends State <OrderListView>{
 		return CommonWidgetTools.buildEmptyListPlaceholder(context);
 	}
 
-	Widget buildOrderRow() {
-		return Row(
-			children: <Widget>[
-				Text("共创算力订单",style: Theme.of(context).textTheme.subtitle1)
-			],
-		);
-	}
-
 	Widget build24Hours() {
 		return Text("共创算力租赁 * 24小时",style: Theme.of(context).textTheme.bodyText2);
 	}
 
 	Widget buildOrderStatus(String status) {
-		return Text(status,style: Theme.of(context).textTheme.bodyText1);
+		return Text(status,style: Theme.of(context).textTheme.bodyText2);
 	}
 
 	Widget buildPriceText(PlaceOrderEntity placeOrderEntity) {
@@ -114,15 +106,15 @@ class OrderListViewState extends State <OrderListView>{
 	}
 
 	Widget buildCreditTest(PlaceOrderEntity placeOrderEntity) {
-		return Text(" x ${placeOrderEntity.amount} U",style: Theme.of(context).textTheme.bodyText1);
+		return Text(" x ${placeOrderEntity.amount} U",style: Theme.of(context).textTheme.bodyText2);
 	}
 
 	Widget buildOrderNumber(PlaceOrderEntity placeOrderEntity) {
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: <Widget>[
-				Text("订单号: ${placeOrderEntity.id}",style: Theme.of(context).textTheme.subtitle1),
-				Text("总计",style: Theme.of(context).textTheme.subtitle1),
+				Text("订单号: ${placeOrderEntity.id}",style: Theme.of(context).textTheme.bodyText2),
+				Text("总计",style: Theme.of(context).textTheme.bodyText2),
 			],
 		);
 	}
@@ -131,8 +123,8 @@ class OrderListViewState extends State <OrderListView>{
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: <Widget>[
-				Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}",style: Theme.of(context).textTheme.bodyText2),
-				Text("¥ ${placeOrderEntity.value}",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).errorColor)),
+				Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}",style: Theme.of(context).textTheme.caption),
+				Text("¥ ${placeOrderEntity.value}",style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).errorColor)),
 			],
 		);
 	}
@@ -142,7 +134,7 @@ class OrderListViewState extends State <OrderListView>{
 			children: <Widget>[
 				RichText(text: TextSpan(
 					text: "已挖矿生产共创积分:",
-					style: Theme.of(context).textTheme.subtitle1,
+					style: Theme.of(context).textTheme.bodyText2,
 					children: [
 						TextSpan(
 							text: "${placeOrderEntity.mined_score}",
@@ -173,37 +165,43 @@ class OrderListViewState extends State <OrderListView>{
 		return Row(
 			children: <Widget>[
 				Expanded(
-					child: FlatButton(
-						color: ColorTools.redE64340,
-						shape: StadiumBorder(),
-						onPressed: (){
-							CommonWidgetTools.showLoading(context);
-							_apiRepository.cancelOrder(placeOrderEntity.id).then((value){
-								CommonWidgetTools.dismissLoading(context);
-								if (value.msg == null) {
-									setState(() {
+					child: SizedBox(
+						height: 30,
+					  child: FlatButton(
+					  	color: ColorTools.redE64340,
+					  	shape: StadiumBorder(),
+					  	onPressed: (){
+					  		CommonWidgetTools.showLoading(context);
+					  		_apiRepository.cancelOrder(placeOrderEntity.id).then((value){
+					  			CommonWidgetTools.dismissLoading(context);
+					  			if (value.msg == null) {
+					  				setState(() {
 
-									});
-								} else {
-									CommonWidgetTools.showAlertController(context, value.msg);
-								}
-							});
-						},
-						child: Text("取消",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+					  				});
+					  			} else {
+					  				CommonWidgetTools.showAlertController(context, value.msg);
+					  			}
+					  		});
+					  	},
+					  	child: Text("取消",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor)),
+					  ),
 					)
 				),
 				SizedBox(width: 16),
 				Expanded(
-					child: FlatButton(
-						color: ColorTools.green1AAD19,
-						shape: StadiumBorder(),
-						onPressed: (){
-							Navigator.push(
-								context,
-								MaterialPageRoute(builder: (context) => PaymentView(placeOrderEntity)),
-							);
-						},
-						child: Text("去支付",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor)),
+					child: SizedBox(
+						height: 30,
+					  child: FlatButton(
+					  	color: ColorTools.green1AAD19,
+					  	shape: StadiumBorder(),
+					  	onPressed: (){
+					  		Navigator.push(
+					  			context,
+					  			MaterialPageRoute(builder: (context) => PaymentView(placeOrderEntity)),
+					  		);
+					  	},
+					  	child: Text("去支付",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor)),
+					  ),
 					)
 				)
 			],
@@ -212,19 +210,17 @@ class OrderListViewState extends State <OrderListView>{
 
   Widget buildOrderInProgress(PlaceOrderEntity placeOrderEntity) {
 		return Container(
-			height: 200,
+			height: 172,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Column(
-				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+				mainAxisAlignment: MainAxisAlignment.start,
 				children: <Widget>[
-					buildOrderRow(),
-					Divider(),
 					Row(
 						children: <Widget>[
 							Container(
 								width: 70,
 								height: 70,
-								child: Image(image: AssetImage(ImageTools.placeholder1)),
+								child: Image(image: AssetImage(ImageTools.product)),
 							),
 							SizedBox(width: 30),
 							Expanded(child: Column(
@@ -253,6 +249,8 @@ class OrderListViewState extends State <OrderListView>{
 					buildOrderCreatedAt(placeOrderEntity),
 					buildAlreadyGenerateCredit(placeOrderEntity),
 					buildPersentage(placeOrderEntity),
+					SizedBox(height: 10),
+					Divider(thickness: 1),
 				],
 			),
 		);
@@ -260,19 +258,17 @@ class OrderListViewState extends State <OrderListView>{
 
 	Widget buildOrderCompleted(PlaceOrderEntity placeOrderEntity) {
 		return Container(
-			height: 200,
+			height: 172,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Column(
-				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+				mainAxisAlignment: MainAxisAlignment.start,
 				children: <Widget>[
-					buildOrderRow(),
-					Divider(),
 					Row(
 						children: <Widget>[
 							Container(
 								width: 70,
 								height: 70,
-								child: Image(image: AssetImage(ImageTools.placeholder1)),
+								child: Image(image: AssetImage(ImageTools.product)),
 							),
 							SizedBox(width: 30),
 							Expanded(child: Column(
@@ -302,6 +298,8 @@ class OrderListViewState extends State <OrderListView>{
 					buildOrderCreatedAt(placeOrderEntity),
 					buildAlreadyGenerateCredit(placeOrderEntity),
 					buildPersentage(placeOrderEntity),
+					SizedBox(height: 10),
+					Divider(thickness: 1),
 				],
 			),
 		);
@@ -309,19 +307,17 @@ class OrderListViewState extends State <OrderListView>{
 
 	Widget buildOrderPendingToPay(PlaceOrderEntity placeOrderEntity) {
 		return Container(
-			height: 200,
+			height: 172,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Column(
-				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+				mainAxisAlignment: MainAxisAlignment.start,
 				children: <Widget>[
-					buildOrderRow(),
-					Divider(),
 					Row(
 						children: <Widget>[
 							Container(
 								width: 70,
 								height: 70,
-								child: Image(image: AssetImage(ImageTools.placeholder1)),
+								child: Image(image: AssetImage(ImageTools.product)),
 							),
 							SizedBox(width: 30),
 							Expanded(child: Column(
@@ -348,7 +344,10 @@ class OrderListViewState extends State <OrderListView>{
 					),
 					buildOrderNumber(placeOrderEntity),
 					buildOrderCreatedAt(placeOrderEntity),
+					SizedBox(height: 10),
 					buildPendingToPay(placeOrderEntity),
+					SizedBox(height: 10),
+					Divider(thickness: 1),
 				],
 			),
 		);
@@ -356,19 +355,17 @@ class OrderListViewState extends State <OrderListView>{
 
 	Widget buildOrderCanceled(PlaceOrderEntity placeOrderEntity) {
 		return Container(
-			height: 200,
+			height: 140,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Column(
-				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+				mainAxisAlignment: MainAxisAlignment.start,
 				children: <Widget>[
-					buildOrderRow(),
-					Divider(),
 					Row(
 						children: <Widget>[
 							Container(
 								width: 70,
 								height: 70,
-								child: Image(image: AssetImage(ImageTools.placeholder1)),
+								child: Image(image: AssetImage(ImageTools.product)),
 							),
 							SizedBox(width: 30),
 							Expanded(child: Column(
@@ -395,6 +392,8 @@ class OrderListViewState extends State <OrderListView>{
 					),
 					buildOrderNumber(placeOrderEntity),
 					buildOrderCreatedAt(placeOrderEntity),
+					SizedBox(height: 10),
+					Divider(thickness: 1),
 				],
 			),
 		);

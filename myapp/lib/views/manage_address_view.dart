@@ -41,7 +41,8 @@ class ManageAddressViewState extends State<ManageAddressView> {
 					child: SizedBox(
 						width: 80,
 						child: Container(
-							child: Center(child: isEditingMode ? Text("完成",style: Theme.of(context).textTheme.button) : Text("编辑",style: Theme.of(context).textTheme.button)),
+							child: Center(child: isEditingMode ? Text("完成",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor)) :
+							Text("编辑",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
 						),
 					),
 				),
@@ -93,7 +94,7 @@ class ManageAddressViewState extends State<ManageAddressView> {
 			if (snapshot.data.data.length > 0) {
 				return ListView.separated(
 					itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
-					separatorBuilder: (context, index) => Divider(),
+					separatorBuilder: (context, index) => Divider(thickness: 1),
 					itemCount: snapshot.data.data.length,
 				);
 			}
@@ -124,7 +125,7 @@ class ManageAddressViewState extends State<ManageAddressView> {
 	Widget buildEditAndDelete(WithdrawAddressEntity withdrawAddressEntity) {
 		return Row(
 			children: <Widget>[
-				IconButton(icon: Icon(Icons.edit), onPressed: (){
+				IconButton(icon: Icon(Icons.edit,color: Theme.of(context).primaryColor), onPressed: (){
 					showDialog(
 						context: context,
 						builder: (BuildContext context){
@@ -132,7 +133,7 @@ class ManageAddressViewState extends State<ManageAddressView> {
 						}
 					);
 				}),
-				IconButton(icon: Icon(Icons.delete), onPressed: (){
+				IconButton(icon: Icon(Icons.delete,color: Theme.of(context).errorColor), onPressed: (){
 					CommonWidgetTools.showConfirmAlertController(context, "确认删除？", (){
 						CommonWidgetTools.showLoading(context);
 						_apiRepository.deleteWithdrawAddress(withdrawAddressEntity).then((value){
@@ -207,12 +208,14 @@ class ManageAddressViewState extends State<ManageAddressView> {
 				),
 			),
 			actions: <Widget>[
-				FlatButton(
+				OutlineButton(
 					shape: StadiumBorder(),
+					borderSide: BorderSide(color: Theme.of(context).buttonColor),
 					onPressed: (){
 					Navigator.pop(context);
-				}, child: Text("取消",style: Theme.of(context).textTheme.button)),
+				}, child: Text("取消",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).buttonColor))),
 				FlatButton(
+					color: Theme.of(context).buttonColor,
 					shape: StadiumBorder(),
 					onPressed: (){
 					if (_formKey.currentState.validate()) {
@@ -246,7 +249,7 @@ class ManageAddressViewState extends State<ManageAddressView> {
 							});
 						}
 					}
-				}, child: Text("确认",style: Theme.of(context).textTheme.button)),
+				}, child: Text("确认",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
 			],
 		);
 	}

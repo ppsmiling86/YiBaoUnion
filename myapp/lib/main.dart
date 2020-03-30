@@ -39,15 +39,13 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
-        accentColor: ColorTools.whiteFFFFFF,
+        toggleableActiveColor:ColorTools.whiteFFFFFF,
         buttonColor: ColorTools.green1AAD19,
         errorColor: ColorTools.redE64340,
+        indicatorColor:ColorTools.greyA1A6B3,
         textTheme: newTextTheme,
       ),
       home: userAgent.isWeChatOpen() ? UseBrowserOpenView() : HomeView(),
     );
   }
-
-
-
 }

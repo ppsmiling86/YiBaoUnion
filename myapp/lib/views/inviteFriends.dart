@@ -33,7 +33,7 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 							Navigator.push(context, MaterialPageRoute(builder: (context) => PrizeRuleView())
 							);
 						},
-							child: Text("佣金规则",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))),
+							child: Text("佣金规则",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
 					),
 				),
 			),
@@ -79,29 +79,36 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 							flex: 1,
 							child: Container(
 								padding: EdgeInsets.only(right: 8),
-								child: OutlineButton(
-									shape: StadiumBorder(),
-									child: Text("我的团队",style: Theme.of(context).textTheme.button),
-									onPressed: (){
-										Navigator.push(
-											context,
-											MaterialPageRoute(builder: (context) => MyFriendsView()),
-										);
-									}),
+								child: SizedBox(
+									height: 40,
+								  child: OutlineButton(
+								  	shape: StadiumBorder(),
+									  borderSide: BorderSide(color: Theme.of(context).buttonColor),
+								  	child: Text("我的团队",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).buttonColor)),
+								  	onPressed: (){
+								  		Navigator.push(
+								  			context,
+								  			MaterialPageRoute(builder: (context) => MyFriendsView()),
+								  		);
+								  	}),
+								),
 							),
 						),
 						Expanded(
 							flex: 1,
 							child: Container(
 								padding: EdgeInsets.only(left: 8),
-								child: FlatButton(
-									shape: StadiumBorder(),
-									color: Theme.of(context).buttonColor,
-									onPressed: () {
-										clippy.write(AppData().loginUser().userProfileEntity.invite_url);
-										CommonWidgetTools.showToastView(context, "复制成功");
-									}, child: Text("复制邀请链接",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).accentColor))
+								child: SizedBox(
+									height: 40,
+								  child: FlatButton(
+								  	shape: StadiumBorder(),
+								  	color: Theme.of(context).buttonColor,
+								  	onPressed: () {
+								  		clippy.write(AppData().loginUser().userProfileEntity.invite_url);
+								  		CommonWidgetTools.showToastView(context, "复制成功");
+								  	}, child: Text("复制邀请链接",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))
 							),
+								),
 							)
 						),
 					],

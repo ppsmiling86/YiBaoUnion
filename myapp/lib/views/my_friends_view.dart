@@ -35,7 +35,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 
 		if(response.data.records.length > 0) {
 			response.data.records.forEach((f) {
-				container.add(Divider());
+				container.add(Divider(thickness: 1));
 				container.add(buildListItem(f));
 			});
 		} else {
@@ -48,7 +48,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 
 	Widget buildSummary(DownlinkUserPackage downlinkUserPackage) {
 		return SizedBox(
-			height: 68,
+			height: 70,
 			width: double.infinity,
 			child: Container(
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
@@ -57,7 +57,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 					children: <Widget>[
 						Text("总佣金",style: Theme.of(context).textTheme.subtitle1),
 						Text("${downlinkUserPackage.total_received_commission}"),
-						Divider(),
+						Divider(thickness: 1),
 					],
 				),
 			),
@@ -73,7 +73,7 @@ class MyFriendsViewState extends State<MyFriendsView> {
 					buildListItemLevel1(downlinkUserEntity),
 					SizedBox(height: 16),
 					buildListItemLevel2(downlinkUserEntity),
-					Divider(),
+					Divider(thickness: 1),
 				],
 			),
 		);

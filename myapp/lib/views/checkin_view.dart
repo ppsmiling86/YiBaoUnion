@@ -80,7 +80,7 @@ class CheckInViewState extends State<CheckInView> {
 												} else {
 													showContinueCheckPrizeDialog(context);
 												}
-											}, child: Text("签到",style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).accentColor)))
+											}, child: Text("签到",style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).toggleableActiveColor)))
 		  			  				)
 		  			  			),
 		  			  		],
