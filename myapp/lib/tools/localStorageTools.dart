@@ -24,6 +24,15 @@ class LocalStorageTools {
 		return "";
 	}
 
+	static void saveInitRedirectUrl() {
+		var url = window.location.href;
+		if (url is String) {
+			if (url == "http://www.longmonrent.com/?redirect=order_list#/") {
+				LocalStorageTools.saveRedirectUrl(url);
+			}
+		}
+	}
+
 	static void saveUpperInviteCode() {
 		var url = window.location.href;
 		print("url is $url");
@@ -43,32 +52,10 @@ class LocalStorageTools {
 
 	static bool isRediretToOrderList() {
 		var url = LocalStorageTools.object(kRedirectUrl);
-		print("redirect url is $url");
-		if (url == null) {
-			print("url is null");
-			return false;
-		}
-
-		Uri uri = Uri.parse(url.replaceAll("#/", ""));
-		print("uri.queryParameters ${uri.queryParameters}");
-		var redirectPath = uri.queryParameters["redirect"];
-		print("redirectPath is $redirectPath");
-		if (redirectPath == null) {
-			print("redirectPath is null");
-			return false;
-		}
-
-		if (redirectPath is String) {
-			if (redirectPath.isNotEmpty) {
-				print("redirectPath is $redirectPath");
-				bool isOrderList = (redirectPath == "order_list");
-				print("this is order list redirect, will show order list");
-				return isOrderList;
-			} else {
-				print("redirectPath is $redirectPath");
+		if (url is String) {
+			if (url == "http://www.longmonrent.com/?redirect=order_list#/") {
+				return true;
 			}
-		} else {
-			print("redirectPath is $redirectPath");
 		}
 		return false;
 	}

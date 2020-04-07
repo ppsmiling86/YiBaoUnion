@@ -20,25 +20,19 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: CommonWidgetTools.appBarWithTitleActions(context, "邀请好友", [
-				Center(
-				child: SizedBox(
-					width: 120,
-					height: 40,
-					child: Container(
-						padding: EdgeInsets.symmetric(horizontal: 16),
-						child: OutlineButton(
-							shape: StadiumBorder(),
-							onPressed: (){
-							Navigator.push(context, MaterialPageRoute(builder: (context) => PrizeRuleView())
-							);
-						},
-							child: Text("佣金规则",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
+			appBar: CommonWidgetTools.appBarWithTitleActions(context, "提现", [
+				GestureDetector(
+					onTap: (){
+						Navigator.of(context).push(MaterialPageRoute(builder: (context) => PrizeRuleView()));
+					},
+					child: SizedBox(
+						width: 80,
+						child: Container(
+							child: Center(child: Text("规则",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))),
+						),
 					),
 				),
-			),
 			]),
-
 			body: Container(
 				child:   Center(
 					child: SizedBox(
@@ -48,7 +42,7 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 							children: <Widget>[
 								buildInviteCodeQrImage(AppData().loginUser().userProfileEntity.invite_url),
 								SizedBox(height: 50),
-								Text("邀请好友赚佣金",style: Theme.of(context).textTheme.bodyText2),
+								Text("共创医保计划，首个国民级民生区块链项目！",style: Theme.of(context).textTheme.subtitle1),
 							],
 						),
 					),
@@ -104,7 +98,7 @@ class InviteFriendsViewState extends State<InviteFriendsView> {
 								  	shape: StadiumBorder(),
 								  	color: Theme.of(context).buttonColor,
 								  	onPressed: () {
-								  		clippy.write(AppData().loginUser().userProfileEntity.invite_url);
+								  		clippy.write("共创医保计划，首个国民级民生区块链项目！快来看看吧：${AppData().loginUser().userProfileEntity.invite_url}");
 								  		CommonWidgetTools.showToastView(context, "复制成功");
 								  	}, child: Text("复制邀请链接",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))
 							),

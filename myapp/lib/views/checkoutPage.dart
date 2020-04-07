@@ -116,41 +116,43 @@ class CheckoutPageState extends State <CheckoutPage> {
 	Widget buildProductDetail(ProductEntity productEntity) {
 		var width = MediaQuery.of(context).size.width - 32;
 		return Container(
-			decoration: BoxDecoration(
-				borderRadius: BorderRadius.only(topRight:  Radius.circular(10),topLeft:  Radius.circular(10)),
-				border: Border.all(color: Colors.grey,style: BorderStyle.solid)
-			),
-		  child: Container(
-		  	padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-		  	width: width,
-		  	height: 273,
-		  	child: Form(
-		  		key: _formKey,
-		  		child: Column(
-		  			mainAxisAlignment: MainAxisAlignment.start,
-		  			children: <Widget>[
-		  				Container(
-		  					height: 40,
-		  					child: Row(
-		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-		  						children: <Widget>[
-		  							Text("单价",style: Theme.of(context).textTheme.subtitle1),
-		  							Text("¥ ${productEntity.price}",style: Theme.of(context).textTheme.bodyText2),
-		  						],
-		  					),
-		  				),
-		  				Container(
-		  					height: 40,
-		  					child: Row(
-		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-		  						children: <Widget>[
-		  							Text("数量 (U)",style: Theme.of(context).textTheme.subtitle1),
-		  							Container(
-		  								width: 200,
-		  								child: Row(
-		  									crossAxisAlignment: CrossAxisAlignment.center,
-		  									mainAxisAlignment: MainAxisAlignment.end,
-		  									children: <Widget>[
+			padding:  EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+			width: width,
+			height: 285,
+			child: Form(
+				key: _formKey,
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.start,
+					children: <Widget>[
+						Container(
+							height: 40,
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.spaceBetween,
+								children: <Widget>[
+									Text("单价",style: Theme.of(context).textTheme.subtitle1),
+									Row(
+										mainAxisAlignment: MainAxisAlignment.end,
+										children: <Widget>[
+											Text("¥ ${productEntity.price}",style: Theme.of(context).textTheme.bodyText2),
+											SizedBox(width: 5),
+										],
+									)
+								],
+							),
+						),
+						Container(
+							height: 40,
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.spaceBetween,
+								crossAxisAlignment: CrossAxisAlignment.center,
+								children: <Widget>[
+									Text("数量 (U)",style: Theme.of(context).textTheme.subtitle1),
+									Container(
+										width: 200,
+										child: Row(
+											crossAxisAlignment: CrossAxisAlignment.center,
+											mainAxisAlignment: MainAxisAlignment.end,
+											children: <Widget>[
 												GestureDetector(
 													onTap: (){
 														if (StringTools.ValidateNumber(amountController.text)) {
@@ -163,37 +165,39 @@ class CheckoutPageState extends State <CheckoutPage> {
 															}
 														}
 													},
-													child: Icon(Icons.remove,size: 18,color: Theme.of(context).indicatorColor)),
-		  										SizedBox(
-		  											width: 40,
-		  											child: Container(
-		  												decoration: BoxDecoration(
-		  													borderRadius: BorderRadius.circular(1),
-		  												),
-		  												child: TextFormField(
-		  													controller: amountController,
-		  													textAlign: TextAlign.center,
-		  													validator: (String value) {
-		  														value = value.trim();
-		  														if (!StringTools.ValidateNumber(value)) {
-		  															CommonWidgetTools.showAlertController(context, "请输入正确的数字");
+													child: Image(image: AssetImage(ImageTools.minus),width: 36,height: 36,color: Theme.of(context).indicatorColor)
+												),
+												SizedBox(
+													width: 40,
+													child: Container(
+														decoration: BoxDecoration(
+															borderRadius: BorderRadius.circular(1),
+														),
+														padding: EdgeInsets.only(bottom: 7),
+														child: TextFormField(
+															controller: amountController,
+															textAlign: TextAlign.center,
+															validator: (String value) {
+																value = value.trim();
+																if (!StringTools.ValidateNumber(value)) {
+																	CommonWidgetTools.showAlertController(context, "请输入正确的数字");
 																	AppData().orderRequest.amount = 0;
-		  															return null;
-		  														}
-		  														int amount = int.parse(value);
-		  														if (amount < 1 || amount > productEntity.limit_per_user) {
-		  															CommonWidgetTools.showAlertController(context, "超出最大购买量");
+																	return null;
+																}
+																int amount = int.parse(value);
+																if (amount < 1 || amount > productEntity.limit_per_user) {
+																	CommonWidgetTools.showAlertController(context, "购买量必须大于0，小于最大可购买量");
 																	AppData().orderRequest.amount = 0;
-		  															return null;
-		  														}
+																	return null;
+																}
 
-		  														print("${amount}");
-		  														AppData().orderRequest.amount = amount;
-		  														return null;
-		  													},
-		  												),
-		  											),
-		  										),
+																print("${amount}");
+																AppData().orderRequest.amount = amount;
+																return null;
+															},
+														),
+													),
+												),
 												GestureDetector(
 													onTap: (){
 														if (StringTools.ValidateNumber(amountController.text)) {
@@ -206,64 +210,76 @@ class CheckoutPageState extends State <CheckoutPage> {
 															}
 														}
 													},
-													child: Icon(Icons.add,size: 18,color: Theme.of(context).indicatorColor)),
-		  									],
-		  								),
-		  							)
-		  						],
-		  					),
-		  				),
-		  				Row(
-		  					mainAxisAlignment: MainAxisAlignment.end,
-		  					children: <Widget>[
-		  						Text("每日限购${productEntity.limit_per_user}",style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor))
-		  					],
-		  				),
-		  				Row(
-		  					mainAxisAlignment: MainAxisAlignment.spaceBetween,
-		  					children: <Widget>[
-		  						Text("今日剩余 ${(1 - productEntity.sold_progress) * productEntity.total_supply} / ${productEntity.total_supply}",style: Theme.of(context).textTheme.subtitle1),
-		  					],
-		  				),
-		  				SizedBox(height: 6),
-		  				SizedBox(
-		  					width: double.infinity,
-		  					child: Container(
-		  						child: LinearPercentIndicator(
-		  							lineHeight: 8.0,
-		  							percent: productEntity.sold_progress,
-		  							progressColor: Theme.of(context).primaryColor,
-		  						),
-		  					),
-		  				),
-		  				Container(
-		  					height: 40,
-		  					child: Row(
-		  						children: <Widget>[
-		  							Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.score_per_unithour}个共创积分,整点发放",style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor))),
-		  						],
-		  					),
-		  				),
-		  				Container(
-		  					height: 40,
-		  					child: Row(
-		  						mainAxisAlignment: MainAxisAlignment.spaceBetween,
-		  						children: <Widget>[
-		  							Text("合计: ¥ ${productEntity.price * int.parse(amountController.text)}",style: Theme.of(context).textTheme.subtitle1),
-		  						],
-		  					),
-		  				),
-		  				buildBottomButtons(productEntity),
-		  			],
-		  		),
-		  	),
-		  ),
+													child: Image(image: AssetImage(ImageTools.plus),width: 36,height: 36,color: Theme.of(context).indicatorColor)),
+											],
+										),
+									)
+								],
+							),
+						),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.end,
+							children: <Widget>[
+								Text("每日限购${productEntity.limit_per_user}",style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor)),
+								SizedBox(width: 20),
+							],
+						),
+						SizedBox(height: 6),
+						Row(
+							mainAxisAlignment: MainAxisAlignment.spaceBetween,
+							children: <Widget>[
+								Text("今日剩余 ${(1 - productEntity.sold_progress) * productEntity.total_supply} / ${productEntity.total_supply}",style: Theme.of(context).textTheme.subtitle1),
+							],
+						),
+						SizedBox(height: 6),
+						SizedBox(
+							width: double.infinity,
+							child: Container(
+								child: LinearPercentIndicator(
+									lineHeight: 8.0,
+									percent: productEntity.sold_progress,
+									progressColor: Theme.of(context).primaryColor,
+								),
+							),
+						),
+						SizedBox(height: 6),
+						Container(
+							height: 40,
+							child: Row(
+								children: <Widget>[
+									Expanded(child: Text("租赁周期为24小时,每U算力每小时大约可产生${productEntity.score_per_unithour}个共创积分,整点发放",style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor))),
+								],
+							),
+						),
+						Container(
+							height: 40,
+							child: Row(
+								mainAxisAlignment: MainAxisAlignment.spaceBetween,
+								children: <Widget>[
+									RichText(text: TextSpan(
+										text: "合计: ",
+										style: Theme.of(context).textTheme.subtitle1,
+										children: [
+											TextSpan(
+												text: "¥ ${productEntity.price * int.parse(amountController.text)}",
+												style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).errorColor)
+											)
+										]
+									))
+								],
+							),
+						),
+						buildBottomButtons(productEntity),
+					],
+				),
+			),
 		);
 	}
 
 	Widget buildBottomButtons(ProductEntity productEntity) {
 		var width = MediaQuery.of(context).size.width - 32;
 		return Container(
+			padding: EdgeInsets.symmetric(horizontal: 3),
 			height: 40,
 			width: width,
 			child: Row(

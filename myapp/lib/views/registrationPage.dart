@@ -49,31 +49,34 @@ class RegistrationPageState extends State <RegistrationPage> {
 						SizedBox(
 							height: 40,
 						),
-						Row(
-							mainAxisAlignment: MainAxisAlignment.end,
-							mainAxisSize: MainAxisSize.min,
-							children: <Widget>[
-								Expanded(
-								  child: GestureDetector(
-									  onTap: (){
-										launchURL(ImageTools.contract);
-									  },
-								    child: RichText(
-										textAlign: TextAlign.end,
-										text: TextSpan(
-								    	text: "未注册的手机验证成功后将自动注册,\n注册视为同意 ",
-								    	style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor),
-								    	children: [
-								    		TextSpan(
-								    			text: "龙门算力租赁服务条款 ",
-								    			style: Theme.of(context).textTheme.caption.copyWith(decoration: TextDecoration.underline),
-								    		)
-								    	]
-								    )
-								    ),
-								  ),
-								),
-							],
+						Padding(
+						  padding: const EdgeInsets.symmetric(horizontal: 16),
+						  child: Row(
+						  	mainAxisAlignment: MainAxisAlignment.end,
+						  	mainAxisSize: MainAxisSize.min,
+						  	children: <Widget>[
+						  		Expanded(
+						  		  child: GestureDetector(
+						  			  onTap: (){
+						  				launchURL(ImageTools.contract);
+						  			  },
+						  		    child: RichText(
+						  				textAlign: TextAlign.end,
+						  				text: TextSpan(
+						  		    	text: "未注册的手机验证成功后将自动注册,\n注册视为同意 ",
+						  		    	style: Theme.of(context).textTheme.caption.copyWith(color: Theme.of(context).errorColor),
+						  		    	children: [
+						  		    		TextSpan(
+						  		    			text: "龙门算力租赁服务条款 ",
+						  		    			style: Theme.of(context).textTheme.caption.copyWith(decoration: TextDecoration.underline),
+						  		    		)
+						  		    	]
+						  		    )
+						  		    ),
+						  		  ),
+						  		),
+						  	],
+						  ),
 						)
 					],
 				),
@@ -98,7 +101,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 							controller: phoneController,
 							decoration: InputDecoration(
 								icon: Icon(Icons.phone),
-								labelText: '手机号:',
+								labelText: '手机号',
 							),
 							validator: (String value) {
 								if (!StringTools.ValidatePhoneNumber(value.trim())) {
@@ -128,7 +131,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 						child: TextFormField(
 							decoration: InputDecoration(
 								icon: Icon(Icons.sms),
-								labelText: '验证码:',
+								labelText: '验证码',
 							),
 							validator: (String value) {
 								value = value.trim();
@@ -202,7 +205,7 @@ class RegistrationPageState extends State <RegistrationPage> {
 						AppData().loginUser().login(AppData().tempRegistration).then((value){
 							Navigator.pop(context);
 							if(value.data != null) {
-								Navigator.of(context).pop();
+								Navigator.of(context).pop(true);
 							} else {
 								CommonWidgetTools.showAlertController(context, value.msg);
 							}

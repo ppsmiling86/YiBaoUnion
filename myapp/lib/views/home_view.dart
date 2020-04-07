@@ -91,7 +91,13 @@ class HomeViewState extends State<HomeView> {
 												Navigator.push(
 													context,
 													MaterialPageRoute(builder: (context) => RegistrationPage()),
-												);
+												).then((value){
+													if (value == true) {
+														setState(() {
+
+														});
+													}
+												});
 											}
 										},
 										child: Text("立即租赁算力",style: Theme.of(context).textTheme.button.copyWith(color: Theme.of(context).toggleableActiveColor))

@@ -59,65 +59,48 @@ class WithdrawHistoryViewState extends State<WithdrawHistoryView> {
 		if (snapshot.data.data.length > 0) {
 			return ListView.separated(
 				itemBuilder: (contest,index) => buildWithdrawRecord(snapshot.data.data[index]),
-				separatorBuilder: (context, index) => Divider(color: ColorTools.greyA1A6B3),
+				separatorBuilder: (context, index) => Divider(thickness: 1),
 				itemCount: snapshot.data.data.length,
 			);
 		}
 		return CommonWidgetTools.buildEmptyListPlaceholder(context);
 	}
 
+	Widget buildColumnElement(String title, String value,int flex,[CrossAxisAlignment alignment = CrossAxisAlignment.start]) {
+		return Expanded(
+			flex: flex,
+			child: SizedBox(
+				height: 40,
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.spaceBetween,
+					crossAxisAlignment: alignment,
+					children: <Widget>[
+						Text(title,style: Theme.of(context).textTheme.caption),
+						Text(value,style: Theme.of(context).textTheme.bodyText1),
+					],
+				),
+			),
+		);
+	}
+
 	Widget buildWithdrawRecord(WithdrawEntity withdrawEntity) {
 		return SizedBox(
 			width: double.infinity,
-			height: 90,
+			height: 98,
 			child: Container(
-				padding: EdgeInsets.symmetric(horizontal: 16),
+				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				child: Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
 						Row(
 							mainAxisAlignment: MainAxisAlignment.spaceBetween,
 							children: <Widget>[
-								Expanded(
-									flex: 1,
-									child: SizedBox(
-										height: 40,
-										child: Column(
-											mainAxisAlignment: MainAxisAlignment.spaceBetween,
-											crossAxisAlignment: CrossAxisAlignment.start,
-											children: <Widget>[
-												Text("提现积分",style: Theme.of(context).textTheme.subtitle1),
-												Text("${withdrawEntity.value}",style: Theme.of(context).textTheme.bodyText2),
-											],
-										),
-									),
-								),
-								Expanded(
-									flex: 1,
-									child: SizedBox(
-										height: 40,
-										child: Column(
-											mainAxisAlignment: MainAxisAlignment.spaceBetween,
-											crossAxisAlignment: CrossAxisAlignment.start,
-											children: <Widget>[
-												Text("提现地址",style: Theme.of(context).textTheme.subtitle1),
-												Text("${withdrawEntity.address}",style: Theme.of(context).textTheme.bodyText2),
-											],
-										),
-									),
-								),
-								Expanded(
-									flex: 1,
-									child: SizedBox(
-										height: 40,
-										child: Container(
-											child: Center(child: Text(withdrawEntity.buildStatusStr(),style: Theme.of(context).textTheme.bodyText2))
-										),
-									),
-								),
+								buildColumnElement("积分","${withdrawEntity.value}",5),
+								buildColumnElement("地址","${withdrawEntity.address}",3),
+								buildColumnElement("状态",withdrawEntity.buildStatusStr(),3,CrossAxisAlignment.end),
 							],
 						),
-						SizedBox(height: 16),
+						SizedBox(height: 10),
 						Text("${DateTools.ConvertDateToString(withdrawEntity.created_at)}",style: Theme.of(context).textTheme.bodyText2),
 					],
 				),

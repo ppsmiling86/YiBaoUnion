@@ -93,7 +93,10 @@ class ManageAddressViewState extends State<ManageAddressView> {
 		if (snapshot.data.data is List) {
 			if (snapshot.data.data.length > 0) {
 				return ListView.separated(
-					itemBuilder: (contest,index) => buildAddressItem(snapshot.data.data[index]),
+					itemBuilder: (contest,index) => Padding(
+					  padding:  EdgeInsets.symmetric(vertical: 10),
+					  child: buildAddressItem(snapshot.data.data[index]),
+					),
 					separatorBuilder: (context, index) => Divider(thickness: 1),
 					itemCount: snapshot.data.data.length,
 				);
@@ -156,8 +159,9 @@ class ManageAddressViewState extends State<ManageAddressView> {
 		return Column(
 			crossAxisAlignment: CrossAxisAlignment.start,
 			children: <Widget>[
-				Text(title,style: Theme.of(context).textTheme.subtitle1),
-				Text(value,style: Theme.of(context).textTheme.bodyText2),
+				Text(title,style: Theme.of(context).textTheme.caption),
+				SizedBox(height: 10),
+				Text(value,style: Theme.of(context).textTheme.bodyText1),
 			],
 		);
 	}

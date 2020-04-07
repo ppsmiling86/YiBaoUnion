@@ -123,7 +123,7 @@ class OrderListViewState extends State <OrderListView>{
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: <Widget>[
-				Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}",style: Theme.of(context).textTheme.caption),
+				Text("${DateTools.ConvertDateToString(placeOrderEntity.created_at)}",style: Theme.of(context).textTheme.bodyText2),
 				Text("¥ ${placeOrderEntity.value}",style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).errorColor)),
 			],
 		);
@@ -133,7 +133,7 @@ class OrderListViewState extends State <OrderListView>{
 		return Row(
 			children: <Widget>[
 				RichText(text: TextSpan(
-					text: "已挖矿生产共创积分:",
+					text: "已挖矿生产共创积分: ",
 					style: Theme.of(context).textTheme.bodyText2,
 					children: [
 						TextSpan(
@@ -149,10 +149,11 @@ class OrderListViewState extends State <OrderListView>{
 	Widget buildPersentage(PlaceOrderEntity placeOrderEntity) {
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
+			crossAxisAlignment: CrossAxisAlignment.center,
 			children: <Widget>[
 				LinearPercentIndicator(
-					width: 100.0,
-					lineHeight: 8.0,
+					width: MediaQuery.of(context).size.width - 63,
+					lineHeight: 6.0,
 					percent: placeOrderEntity.progress,
 					progressColor: Theme.of(context).primaryColor,
 				),
@@ -247,9 +248,9 @@ class OrderListViewState extends State <OrderListView>{
 					),
 					buildOrderNumber(placeOrderEntity),
 					buildOrderCreatedAt(placeOrderEntity),
+					SizedBox(height: 10),
 					buildAlreadyGenerateCredit(placeOrderEntity),
 					buildPersentage(placeOrderEntity),
-					SizedBox(height: 10),
 					Divider(thickness: 1),
 				],
 			),
@@ -258,7 +259,7 @@ class OrderListViewState extends State <OrderListView>{
 
 	Widget buildOrderCompleted(PlaceOrderEntity placeOrderEntity) {
 		return Container(
-			height: 172,
+			height: 182,
 			padding: EdgeInsets.symmetric(horizontal: 16),
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.start,
@@ -295,10 +296,12 @@ class OrderListViewState extends State <OrderListView>{
 						],
 					),
 					buildOrderNumber(placeOrderEntity),
+					SizedBox(height: 5),
 					buildOrderCreatedAt(placeOrderEntity),
+					SizedBox(height: 5),
 					buildAlreadyGenerateCredit(placeOrderEntity),
-					buildPersentage(placeOrderEntity),
 					SizedBox(height: 10),
+					buildPersentage(placeOrderEntity),
 					Divider(thickness: 1),
 				],
 			),
@@ -346,7 +349,6 @@ class OrderListViewState extends State <OrderListView>{
 					buildOrderCreatedAt(placeOrderEntity),
 					SizedBox(height: 10),
 					buildPendingToPay(placeOrderEntity),
-					SizedBox(height: 10),
 					Divider(thickness: 1),
 				],
 			),
@@ -391,8 +393,8 @@ class OrderListViewState extends State <OrderListView>{
 						],
 					),
 					buildOrderNumber(placeOrderEntity),
-					buildOrderCreatedAt(placeOrderEntity),
 					SizedBox(height: 10),
+					buildOrderCreatedAt(placeOrderEntity),
 					Divider(thickness: 1),
 				],
 			),

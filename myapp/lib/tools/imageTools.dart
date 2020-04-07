@@ -9,8 +9,10 @@ class ImageTools {
 	static const placeholder6 = 'assets/images/img_6.gif';
 	static const placeholder7 = 'assets/images/img_7.gif';
 	static const placeholder_qrcode = 'assets/images/qrcode.png';
+	static const plus = 'assets/images/plus.png';
+	static const minus = 'assets/images/minus.png';
 	static const empty_order_list = 'assets/images/empty-order-list.png';
 	static const contract = '/agreement.html';
 	static const arc_arrow = 'assets/images/arc-arrow.png';
-
+	static const CustomerServiceWechatQRCode = 'assets/images/CustomerServiceWechatQRCode.png';
 }

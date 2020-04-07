@@ -199,7 +199,13 @@ class UserProfilePageState extends State <UserProfilePage> {
 		Navigator.push(
 			context,
 			MaterialPageRoute(builder: (context) => RegistrationPage()),
-		);
+		).then((value) {
+			if (value == true) {
+				setState(() {
+
+				});
+			}
+		});
 	}
 
 	Widget buildUserSummary(UserInfoEntity userInfoEntity) {

@@ -135,17 +135,21 @@ class WithdrawViewState extends State <WithdrawView> {
 			builder: (context, AsyncSnapshot<WithdrawAddressListResponse> snapshot) {
 				print(snapshot);
 				if (snapshot.hasData) {
-					return AlertDialog(
-						title: Text("请选择提现地址",style: Theme.of(context).textTheme.button),
-						content: Center(
-							child: SizedBox(
-								width: 300,
-								height: 300,
-								child: Container(
-									padding: EdgeInsets.symmetric(horizontal: 16),
-									child: buildListData(snapshot),
-								),
-							),
+				return AlertDialog(
+						title: Text("请选择提现地址",style: Theme.of(context).textTheme.headline6),
+						content: Container(
+							width: 300,
+						  height: 300,
+						  child: Center(
+						  	child: SizedBox(
+						  		width: 300,
+						  		height: 300,
+						  		child: Container(
+						  			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+						  			child: buildListData(snapshot),
+						  		),
+						  	),
+						  ),
 						),
 					);
 				} else if (snapshot.hasError) {
@@ -203,8 +207,9 @@ class WithdrawViewState extends State <WithdrawView> {
 		return Column(
 			crossAxisAlignment: CrossAxisAlignment.start,
 			children: <Widget>[
-				Text(title,style: Theme.of(context).textTheme.subtitle1,),
-				Text(value,style: Theme.of(context).textTheme.bodyText2),
+				Text(title,style: Theme.of(context).textTheme.caption,),
+				SizedBox(height: 5),
+				Text(value,style: Theme.of(context).textTheme.bodyText1),
 			],
 		);
 	}
@@ -328,7 +333,6 @@ class WithdrawViewState extends State <WithdrawView> {
 				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
 				child: Column(
 					children: <Widget>[
-						Divider(thickness: 1),
 						SizedBox(height: 16),
 						Row(
 							mainAxisAlignment: MainAxisAlignment.start,
@@ -403,7 +407,7 @@ class WithdrawViewState extends State <WithdrawView> {
 								),
 							],
 						),
-						SizedBox(height: 16),
+						SizedBox(height: 76),
 						Row(
 							mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 							children: <Widget>[

@@ -31,12 +31,13 @@ class MyFriendsViewState extends State<MyFriendsView> {
 
 	Widget buildFriendsList(DownlinkUserResponse response) {
 		List<Widget>container = [];
+		container.add(SizedBox(height: 6));
 		container.add(buildSummary(response.data));
-
+		container.add(Divider(thickness: 1));
 		if(response.data.records.length > 0) {
 			response.data.records.forEach((f) {
-				container.add(Divider(thickness: 1));
 				container.add(buildListItem(f));
+				container.add(Divider(thickness: 1));
 			});
 		} else {
 			container.add(CommonWidgetTools.buildEmptyListPlaceholder(context));
@@ -48,16 +49,16 @@ class MyFriendsViewState extends State<MyFriendsView> {
 
 	Widget buildSummary(DownlinkUserPackage downlinkUserPackage) {
 		return SizedBox(
-			height: 70,
+			height: 82,
 			width: double.infinity,
 			child: Container(
-				padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+				padding: EdgeInsets.symmetric(horizontal: 20,vertical: 16),
 				child: Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: <Widget>[
-						Text("总佣金",style: Theme.of(context).textTheme.subtitle1),
-						Text("${downlinkUserPackage.total_received_commission}"),
-						Divider(thickness: 1),
+						Text("我的总佣金",style: Theme.of(context).textTheme.subtitle1),
+						SizedBox(height: 10),
+						Text("${downlinkUserPackage.total_received_commission}",style: Theme.of(context).textTheme.subtitle1),
 					],
 				),
 			),
@@ -66,14 +67,13 @@ class MyFriendsViewState extends State<MyFriendsView> {
 
 	Widget buildListItem(DownlinkUserEntity downlinkUserEntity) {
 		return Container(
-			padding: EdgeInsets.symmetric(horizontal: 16),
+			padding: EdgeInsets.symmetric(horizontal: 16,vertical: 10),
 			child: Column(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				children: <Widget>[
 					buildListItemLevel1(downlinkUserEntity),
-					SizedBox(height: 16),
+					SizedBox(height: 10),
 					buildListItemLevel2(downlinkUserEntity),
-					Divider(thickness: 1),
 				],
 			),
 		);
@@ -84,9 +84,9 @@ class MyFriendsViewState extends State<MyFriendsView> {
 			crossAxisAlignment: CrossAxisAlignment.start,
 			mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 			children: <Widget>[
-				buildListElement("用户", "${downlinkUserEntity.uid}"),
-				buildListElement("层级", "${downlinkUserEntity.level}级"),
-				buildListElement("注册时间", "${DateTools.ConvertDateToString(downlinkUserEntity.created_at)}"),
+				buildListElement("用户", "${downlinkUserEntity.uid}",5),
+				buildListElement("层级", "${downlinkUserEntity.level}级",3),
+				buildListElement("注册日期", "${DateTools.ConvertDateToYearMonthDay(downlinkUserEntity.created_at)}",3,CrossAxisAlignment.end),
 			],
 		);
 	}
@@ -96,21 +96,22 @@ class MyFriendsViewState extends State<MyFriendsView> {
 			crossAxisAlignment: CrossAxisAlignment.start,
 			mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 			children: <Widget>[
-				buildListElement("总挖矿", "${downlinkUserEntity.total_buy_score}"),
-				buildListElement("佣金比例", "${downlinkUserEntity.ratio}"),
-				buildListElement("我的佣金", "${downlinkUserEntity.commission}"),
+				buildListElement("总挖矿", "${downlinkUserEntity.total_buy_score}",5),
+				buildListElement("佣金比例", "${downlinkUserEntity.ratio}",3),
+				buildListElement("我的佣金", "${downlinkUserEntity.commission}",3,CrossAxisAlignment.end),
 			],
 		);
 	}
 
-	Widget buildListElement(String label, String value) {
+	Widget buildListElement(String label, String value,int flex,[CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start]) {
 		return Expanded(
-			flex: 1,
+			flex: flex,
 		  child: Column(
-		  	crossAxisAlignment: CrossAxisAlignment.start,
+		  	crossAxisAlignment: crossAxisAlignment,
 		  	children: <Widget>[
-		  		Text(label,style: Theme.of(context).textTheme.subtitle1),
-		  		Text(value,style: Theme.of(context).textTheme.bodyText2),
+		  		Text(label,style: Theme.of(context).textTheme.caption),
+		  		SizedBox(height: 5),
+		  		Text(value,style: Theme.of(context).textTheme.bodyText1),
 		  	],
 		  ),
 		);

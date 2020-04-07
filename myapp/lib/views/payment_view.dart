@@ -112,7 +112,7 @@ class PaymentViewState extends State <PaymentView> {
 						children: <Widget>[
 							Text("支付方式",style: Theme.of(context).textTheme.subtitle1),
 							SizedBox(width: 16),
-							Text(paymentTypeStringByType(selectPaymentType),style: Theme.of(context).textTheme.caption),
+							Text(paymentTypeStringByType(selectPaymentType),style: Theme.of(context).textTheme.subtitle1),
 						],
 					),
 //					Row(
@@ -211,11 +211,11 @@ class PaymentViewState extends State <PaymentView> {
 							children: <Widget>[
 								RichText(text: TextSpan(
 									text: "总计: ",
-									style: Theme.of(context).textTheme.bodyText1,
+									style: Theme.of(context).textTheme.subtitle1,
 									children: [
 										TextSpan(
 											text: "¥ ${placeOrderEntity.value}",
-											style: Theme.of(context).textTheme.bodyText1.copyWith(color: Theme.of(context).errorColor),
+											style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).errorColor),
 										)
 									]
 								)
@@ -231,7 +231,6 @@ class PaymentViewState extends State <PaymentView> {
 											_apiRepository.payOrderWinXinH5(placeOrderEntity.id).then((value){
 												CommonWidgetTools.dismissLoading(context);
 												if(value.data != null) {
-													LocalStorageTools.saveRedirectUrl("http://www.longmonrent.com?redirect=order_list");
 													launchURL(value.data.url);
 													poolingPaymentResponse(placeOrderEntity);
 													showDialog(context: context,

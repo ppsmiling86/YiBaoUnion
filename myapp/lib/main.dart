@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userAgent = UserAgent();
+    LocalStorageTools.saveInitRedirectUrl();
     LocalStorageTools.saveUpperInviteCode();
     print("upper invite code is :${LocalStorageTools.getUpperInviteCode()}");
     final newTextTheme = Theme.of(context).textTheme.apply(
