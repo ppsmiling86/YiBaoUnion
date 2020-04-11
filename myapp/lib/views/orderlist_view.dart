@@ -152,7 +152,7 @@ class OrderListViewState extends State <OrderListView>{
 			crossAxisAlignment: CrossAxisAlignment.center,
 			children: <Widget>[
 				LinearPercentIndicator(
-					width: MediaQuery.of(context).size.width - 63,
+					width: MediaQuery.of(context).size.width - 68,
 					lineHeight: 6.0,
 					percent: placeOrderEntity.progress,
 					progressColor: Theme.of(context).primaryColor,

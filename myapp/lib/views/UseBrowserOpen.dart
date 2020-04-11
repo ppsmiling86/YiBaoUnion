@@ -73,9 +73,9 @@ class UseBrowserOpenViewState extends State <UseBrowserOpenView> {
 										child: Text("1",style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).toggleableActiveColor))),
 									SizedBox(width: 10),
 									Text("点击右上角的",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor)),
-									Icon(Icons.more_horiz,size: 30,color: Colors.white),
+									Icon(Icons.more_horiz,color: Colors.white),
 									Text("按钮",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor)),
-									SizedBox(width: 45),
+									SizedBox(width: 53),
 								],
 							),
 							Row(
@@ -88,7 +88,7 @@ class UseBrowserOpenViewState extends State <UseBrowserOpenView> {
 									Text("选择",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor)),
 									FlatButton.icon(
 										shape: StadiumBorder(),
-										onPressed: (){}, icon: Icon(Icons.language,size:30,color: Colors.white), label: Text("在浏览器中打开",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor))),
+										onPressed: (){}, icon: Icon(Icons.language,color: Colors.white), label: Text("在浏览器中打开",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).toggleableActiveColor))),
 								],
 							),
 						],

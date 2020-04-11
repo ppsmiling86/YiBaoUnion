@@ -228,7 +228,7 @@ class CheckoutPageState extends State <CheckoutPage> {
 						Row(
 							mainAxisAlignment: MainAxisAlignment.spaceBetween,
 							children: <Widget>[
-								Text("今日剩余 ${(1 - productEntity.sold_progress) * productEntity.total_supply} / ${productEntity.total_supply}",style: Theme.of(context).textTheme.subtitle1),
+								Text("今日剩余 ${productEntity.left} / ${productEntity.total_supply}",style: Theme.of(context).textTheme.subtitle1),
 							],
 						),
 						SizedBox(height: 6),

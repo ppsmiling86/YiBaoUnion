@@ -111,6 +111,7 @@ ProductEntity _$ProductEntityFromJson(Map<String, dynamic> json) {
     json['limit_per_user'] as int,
     (json['score_per_unithour'] as num)?.toDouble(),
     json['current_user_limit'] as int,
+    json['left'] as int,
   );
 }
 
@@ -121,6 +122,7 @@ Map<String, dynamic> _$ProductEntityToJson(ProductEntity instance) =>
       'price': instance.price,
       'finished_progress': instance.finished_progress,
       'limit_per_user': instance.limit_per_user,
+      'left': instance.left,
       'score_per_unithour': instance.score_per_unithour,
       'current_user_limit': instance.current_user_limit,
     };
